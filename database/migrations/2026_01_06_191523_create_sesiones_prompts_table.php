@@ -13,7 +13,16 @@ return new class extends Migration
     {
         Schema::create('sesiones_prompts', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->json('filtros_activos')->nullable();
+            $table->json('busquedas_recientes')->nullable();
+            $table->enum('vista_preferida', ['grid', 'lista'])->default('grid');
+            $table->json('columnas_visibles')->nullable();
+            $table->string('orden_preferido', 50)->default('reciente');
+            $table->timestamp('fecha_expiracion')->nullable();
             $table->timestamps();
+            
+            $table->unique('user_id');
         });
     }
 

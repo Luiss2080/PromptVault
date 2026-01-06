@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->foreignId('role_id')->after('id')->default(2)->constrained()->onDelete('restrict');
+            $table->boolean('cuenta_activa')->after('password')->default(true);
+            $table->timestamp('ultimo_acceso')->after('cuenta_activa')->nullable();
         });
     }
 
