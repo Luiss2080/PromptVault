@@ -19,11 +19,15 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             PermisoSeeder::class,
+        ]);
+
+        // Luego crear categorías y etiquetas
+        $this->call([
             CategoriaSeeder::class,
             EtiquetaSeeder::class,
         ]);
 
-        // Luego crear usuarios con roles asignados
+        // Crear usuarios (admin y demo por defecto)
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@promptvault.com',
@@ -34,6 +38,20 @@ class DatabaseSeeder extends Seeder
             'name' => 'Usuario Demo',
             'email' => 'user@promptvault.com',
             'role_id' => 2, // User
+        ]);
+
+        // Crear usuarios adicionales
+        $this->call([
+            UserSeeder::class,
+        ]);
+
+        // Crear prompts y relaciones
+        $this->call([
+            PromptSeeder::class,
+            VersionSeeder::class,
+            CompartidoSeeder::class,
+            ActividadSeeder::class,
+            SesionPromptSeeder::class,
         ]);
     }
 }
