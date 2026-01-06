@@ -11,7 +11,7 @@ class Version extends Model
 
     protected $fillable = [
         'prompt_id',
-        'numero',
+        'numero_version',
         'contenido',
         'contenido_anterior',
         'motivo_cambio',
