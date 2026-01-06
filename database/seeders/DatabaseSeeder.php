@@ -15,16 +15,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear usuario de prueba
+        // Primero crear roles y permisos
+        $this->call([
+            RoleSeeder::class,
+            PermisoSeeder::class,
+            CategoriaSeeder::class,
+            EtiquetaSeeder::class,
+        ]);
+
+        // Luego crear usuarios con roles asignados
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@promptvault.com',
+            'role_id' => 1, // Admin
         ]);
 
-        // Ejecutar seeders
-        $this->call([
-            CategoriaSeeder::class,
-            EtiquetaSeeder::class,
+        User::factory()->create([
+            'name' => 'Usuario Demo',
+            'email' => 'user@promptvault.com',
+            'role_id' => 2, // User
         ]);
     }
 }
