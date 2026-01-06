@@ -251,13 +251,8 @@
 
                     <!-- Footer del formulario -->
                     <div class="form-footer">
-                        <p class="register-text">
-                            ¿No tienes una cuenta?
-                            <span class="highlight"><a href="{{ route('register') }}" class="register-link" id="registerLink">¡Regístrate aquí!</a></span>
-                        </p>
-
                         <!-- Sección de funcionalidades -->
-                        <div style="margin-top: 25px;">
+                        <div style="margin-top: 10px;">
                             <p style="font-size: 0.9rem; margin-bottom: 5px; text-align: center; color: #ccc;">¿Qué puedes hacer en la plataforma?</p>
                             <p style="font-size: 1.1rem; margin-bottom: 15px; text-align: center; color: #fff; font-weight: 600;">¡Explora nuestras funcionalidades!</p>
                             
@@ -298,6 +293,12 @@
                                 </a>
                             </div>
                         </div>
+
+                        <!-- Pregunta de registro -->
+                        <p class="register-text" style="margin-top: 25px; text-align: center;">
+                            ¿No tienes una cuenta?
+                            <span class="highlight"><a href="{{ route('register') }}" class="register-link" id="registerLink">¡Regístrate aquí!</a></span>
+                        </p>
 
                     </div>
                 </div>
