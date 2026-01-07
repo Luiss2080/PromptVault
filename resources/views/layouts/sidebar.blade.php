@@ -6,10 +6,11 @@
         @endphp
         <a href="{{ route($dashboardRoute) }}" class="logo-container" style="text-decoration: none;">
             <div class="logo-icon">
-                <img src="{{ asset('images/LogoLoginPrompt.png') }}" alt="PromptVault" class="sidebar-logo">
+                <img src="{{ asset('images/LogoPestañaPrompt.jpg') }}" alt="PromptVault" class="sidebar-logo">
             </div>
             <div class="logo-text">
                 <h1 class="brand-name">PromptVault</h1>
+                <span class="brand-subtitle">Gestión de Prompts IA</span>
             </div>
         </a>
     </div>
@@ -57,6 +58,26 @@
                         </span>
                         <span class="nav-text">Favoritos</span>
                         <span class="nav-badge">12</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Más Utilizados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Plantillas</span>
                     </a>
                 </li>
             </ul>
@@ -156,6 +177,43 @@
                         </span>
                         <span class="nav-text">Sesiones de Uso</span>
                         <span class="nav-badge">{{ \App\Models\SesionPrompt::count() }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Sección: Análisis y Reportes (ADMIN) -->
+        <div class="nav-section">
+            <h3 class="section-title">ANÁLISIS</h3>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Estadísticas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Reportes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Tendencias</span>
                     </a>
                 </li>
             </ul>

@@ -214,7 +214,10 @@ class FooterManager {
   }
 
   applyTheme(theme) {
+    // Apply to both data-theme and body class for compatibility
     document.documentElement.setAttribute('data-theme', theme);
+    document.body.classList.remove('light-mode', 'dark-mode');
+    document.body.classList.add(theme === 'light' ? 'light-mode' : 'dark-mode');
     localStorage.setItem('theme', theme);
     
     if (this.themeToggle) {
