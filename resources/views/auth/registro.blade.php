@@ -17,7 +17,7 @@
     <meta property="og:type" content="website">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/LogoPestañaPrompt.jpg') }}">
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/auth/registro.css') }}?v={{ time() }}">
