@@ -166,19 +166,8 @@
                 <div class="form-container">
                     <!-- Header del formulario -->
                     <div class="form-header">
-                        @if($step === 'email')
                         <h2 class="form-title">Recuperar Contraseña</h2>
                         <p class="form-subtitle">Ingresa tu correo electrónico para continuar</p>
-                        @elseif($step === 'code')
-                        <h2 class="form-title">Verificar Código</h2>
-                        <p class="form-subtitle">Ingresa el código enviado a tu correo</p>
-                        @elseif($step === 'password')
-                        <h2 class="form-title">Nueva Contraseña</h2>
-                        <p class="form-subtitle">Establece tu nueva contraseña segura</p>
-                        @else
-                        <h2 class="form-title">¡Listo!</h2>
-                        <p class="form-subtitle">Tu contraseña ha sido actualizada</p>
-                        @endif
                     </div>
 
                     <!-- Mensajes de error/éxito -->
@@ -196,116 +185,37 @@
                     </div>
                     @endif
 
-                    <?php if ($step !== 'success'): ?>
-                        <!-- Formulario de recuperación -->
-                        <form class="recovery-form" method="POST" action="" id="recoveryForm">
-                            <input type="hidden" name="step" value="<?php echo $step; ?>">
+                    <!-- Formulario de recuperación -->
+                    <form class="recovery-form" method="POST" action="{{ route('password.email') }}" id="recoveryForm">
+                        @csrf
+                        
+                        <!-- Campo Email -->
+                        <div class="input-group">
+                            <label for="email" class="input-label">Correo Electrónico</label>
+                            <div class="input-wrapper">
+                                <div class="input-icon">✉</div>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    class="form-input"
+                                    placeholder="Escribe tu email registrado..."
+                                    value="{{ old('email') }}"
+                                    required
+                                    autocomplete="email">
+                            </div>
+                            <div class="input-error" id="emailError"></div>
+                        </div>
 
-                            <?php if ($step === 'email'): ?>
-                                <!-- Campo Email -->
-                                <div class="input-group">
-                                    <label for="email" class="input-label">Correo Electrónico</label>
-                                    <div class="input-wrapper">
-                                        <div class="input-icon">✉</div>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            class="form-input"
-                                            placeholder="Escribe tu email registrado..."
-                                            value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>"
-                                            required
-                                            autocomplete="email">
-                                    </div>
-                                    <div class="input-error" id="emailError"></div>
-                                </div>
+                        <!-- Botón de submit -->
+                        <button type="submit" class="recovery-button btn-nexorium" id="recoveryButton">
+                            <span class="button-text">ENVIAR ENLACE DE RECUPERACIÓN</span>
+                            <span class="button-loader" id="buttonLoader">
+                                <div class="loader-spinner"></div>
+                            </span>
+                        </button>
 
-                            <?php elseif ($step === 'code'): ?>
-                                <!-- Campo Código -->
-                                <div class="input-group">
-                                    <label for="code" class="input-label">Código de Verificación</label>
-                                    <div class="input-wrapper">
-                                        <div class="input-icon">🔢</div>
-                                        <input
-                                            type="text"
-                                            id="code"
-                                            name="code"
-                                            class="form-input"
-                                            placeholder="Ingresa el código de 6 dígitos..."
-                                            maxlength="6"
-                                            required
-                                            autocomplete="off">
-                                    </div>
-                                    <div class="input-error" id="codeError"></div>
-                                    <div class="input-help">
-                                        <p>El código ha sido enviado a: <strong><?php echo htmlspecialchars($_SESSION['recovery_email'] ?? ''); ?></strong></p>
-                                    </div>
-                                </div>
-
-                            <?php elseif ($step === 'password'): ?>
-                                <!-- Campo Nueva Contraseña -->
-                                <div class="input-group">
-                                    <label for="password" class="input-label">Nueva Contraseña</label>
-                                    <div class="input-wrapper">
-                                        <div class="input-icon">🔒</div>
-                                        <input
-                                            type="password"
-                                            id="password"
-                                            name="password"
-                                            class="form-input"
-                                            placeholder="Escribe tu nueva contraseña..."
-                                            required
-                                            autocomplete="new-password">
-                                    </div>
-                                    <div class="input-error" id="passwordError"></div>
-                                </div>
-
-                                <!-- Campo Confirmar Contraseña -->
-                                <div class="input-group">
-                                    <label for="confirm_password" class="input-label">Confirmar Contraseña</label>
-                                    <div class="input-wrapper">
-                                        <div class="input-icon">🔐</div>
-                                        <input
-                                            type="password"
-                                            id="confirm_password"
-                                            name="confirm_password"
-                                            class="form-input"
-                                            placeholder="Confirma tu nueva contraseña..."
-                                            required
-                                            autocomplete="new-password">
-                                    </div>
-                                    <div class="input-error" id="confirmPasswordError"></div>
-                                </div>
-
-                                <!-- Requisitos de contraseña -->
-                                <div class="password-requirements">
-                                    <p class="requirements-title">Requisitos de la contraseña:</p>
-                                    <ul class="requirements-list">
-                                        <li class="requirement" id="lengthReq">Al menos 6 caracteres</li>
-                                        <li class="requirement" id="upperReq">Una letra mayúscula</li>
-                                        <li class="requirement" id="lowerReq">Una letra minúscula</li>
-                                        <li class="requirement" id="numberReq">Un número</li>
-                                    </ul>
-                                </div>
-                            <?php endif; ?>
-
-                            <!-- Botón de submit -->
-                            <button type="submit" class="recovery-button btn-nexorium" id="recoveryButton">
-                                <span class="button-text">
-                                    <?php if ($step === 'email'): ?>
-                                        ENVIAR CÓDIGO
-                                    <?php elseif ($step === 'code'): ?>
-                                        VERIFICAR CÓDIGO
-                                    <?php else: ?>
-                                        CAMBIAR CONTRASEÑA
-                                    <?php endif; ?>
-                                </span>
-                                <span class="button-loader" id="buttonLoader">
-                                    <div class="loader-spinner"></div>
-                                </span>
-                            </button>
-
-                        </form>
+                    </form>
 
                         <!-- Sección de funcionalidades -->
                         <div style="margin-top: 10px;">
@@ -348,56 +258,35 @@
                                 </a>
                             </div>
                         </div>
-                    <?php endif; ?>
 
                     <!-- Footer del formulario -->
                     <div class="form-footer" style="margin-top: 20px;">
-                        <?php if ($step === 'success'): ?>
-                            <div class="success-actions">
-                                <a href="{{ route('login') }}" class="btn-secondary">
-                                    🔐 INICIAR SESIÓN
-                                </a>
-                                <a href="http://localhost/PrimeroDeJunio/website/" class="btn-tertiary">
-                                    🏠 VOLVER AL SITIO
-                                </a>
-                            </div>
-                        <?php else: ?>
-                            <p class="back-to-login">
-                                ¿Recordaste tu contraseña?<br>
-                                <a href="{{ route('login') }}" class="login-link">
-                                    ¡Inicia sesión aquí!
-                                </a>
-                            </p>
+                        <p class="back-to-login">
+                            ¿Recordaste tu contraseña?<br>
+                            <a href="{{ route('login') }}" class="login-link">
+                                ¡Inicia sesión aquí!
+                            </a>
+                        </p>
 
-                            <?php if ($step === 'code'): ?>
-                                <p class="resend-code">
-                                    ¿No recibiste el código?
-                                    <a href="#" class="resend-link" id="resendCode">
-                                        Reenviar código
-                                    </a>
-                                </p>
-                            <?php endif; ?>
-
-                            <!-- Links de ayuda -->
-                            <div class="help-links">
-                                <a href="#" class="help-link" id="contactSupport">
-                                    <div class="help-icon">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                            <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/>
-                                        </svg>
-                                    </div>
-                                    <span>Contactar Soporte</span>
-                                </a>
-                                <a href="#" class="help-link" id="helpCenter">
-                                    <div class="help-icon">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm0-8h-2V7h2v4z"/>
-                                        </svg>
-                                    </div>
-                                    <span>Centro de Ayuda</span>
-                                </a>
-                            </div>
-                        <?php endif; ?>
+                        <!-- Links de ayuda -->
+                        <div class="help-links">
+                            <a href="#" class="help-link" id="contactSupport">
+                                <div class="help-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/>
+                                    </svg>
+                                </div>
+                                <span>Contactar Soporte</span>
+                            </a>
+                            <a href="#" class="help-link" id="helpCenter">
+                                <div class="help-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm0-8h-2V7h2v4z"/>
+                                    </svg>
+                                </div>
+                                <span>Centro de Ayuda</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
 

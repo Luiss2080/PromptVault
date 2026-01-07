@@ -28,15 +28,25 @@ class RegisterController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'apellido' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'telefono' => ['nullable', 'string', 'max:20'],
+            'ci' => ['nullable', 'string', 'max:50'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'acepta_terminos' => ['required', 'accepted'],
         ]);
 
         // Obtener el rol de usuario por defecto (user)
         $roleUser = Role::where('nombre', 'user')->first();
 
+        // Concatenar nombre y apellido si existe apellido
+        $nombreCompleto = $request->name;
+        if ($request->apellido) {
+            $nombreCompleto .= ' ' . $request->apellido;
+        }
+
         $user = User::create([
-            'name' => $request->name,
+            'name' => $nombreCompleto,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $roleUser ? $roleUser->id : null,
