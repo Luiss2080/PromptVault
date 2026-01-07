@@ -91,24 +91,23 @@
 
                 <div class="branding-content">
                     <!-- Logo completo -->
-                    <div class="brand-section">
+                    <div class="brand-section" style="margin-bottom: 20px;">
                         <div class="logo-container">
-                            <img src="{{ asset('images/LogoCompletoLogin.png') }}" alt="PromptVault" class="brand-logo" style="max-width: 100%; height: auto; margin: 0 auto; display: block;">
+                            <img src="{{ asset('images/LogoCompletoLogin.png') }}" alt="PromptVault" class="brand-logo" style="max-width: 85%; height: auto; margin: 0 auto; display: block;">
                         </div>
                     </div>
 
                     <!-- Mensaje profesional -->
-                    <div class="welcome-section">
-                        <h2 class="welcome-title" style="font-size: 1.8rem; margin-bottom: 10px;">¡Bienvenido a PROMPTVAULT!</h2>
-                        <p class="welcome-description" style="font-size: 0.95rem; line-height: 1.5;">
-                            Tu plataforma centralizada para gestionar prompts de IA. Organiza, versiona y colabora con tu equipo.
+                    <div class="welcome-section" style="margin-bottom: 25px;">
+                        <p class="welcome-description" style="font-size: 0.9rem; line-height: 1.4; text-align: center; color: #e0e0e0;">
+                            Sistema de gestión centralizada de prompts de IA con versionado automático, colaboración en tiempo real y organización inteligente por categorías y etiquetas.
                         </p>
                     </div>
 
                     <!-- Sección de redes sociales -->
                     <div class="social-section">
-                        <p class="social-text" style="font-size: 0.9rem; margin-bottom: 5px;">¿Necesitas ayuda con la plataforma?</p>
-                        <p class="social-title" style="font-size: 1.1rem; margin-bottom: 15px;">¡Contáctanos!</p>
+                        <p class="social-text" style="font-size: 0.85rem; margin-bottom: 3px;">¿Necesitas ayuda con la plataforma?</p>
+                        <p class="social-title" style="font-size: 1rem; margin-bottom: 12px;">¡Contáctanos!</p>
                         <div class="social-media-links">
                             <a href="#" class="social-link tiktok" title="TikTok">
                                 <div class="social-icon">
