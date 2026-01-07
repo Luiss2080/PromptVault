@@ -150,7 +150,7 @@
                     <div class="dashboard-card h-100">
                         <div class="card-header">
                             <h3 class="card-title">Mis Materias</h3>
-                            <a href="{{ route('docente.materias.index') }}" class="card-action-link" style="color: #fff !important;">Ver todas</a>
+                            <a href="#" class="card-action-link" style="color: #fff !important;">Ver todas</a>
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive-compact">
