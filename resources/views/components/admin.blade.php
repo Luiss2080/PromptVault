@@ -310,7 +310,7 @@
                     </div>
 
                     <!-- Row 2: Small Charts (Grades, Resources) -->
-                    <div class="analytics-row-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div class="analytics-row-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem;">
                         
                         <!-- Chart: Promedios -->
                         <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
@@ -323,7 +323,7 @@
                                 </div>
                             </div>
                             <div class="card-body" style="position: relative;">
-                                <canvas id="gradesBarChart" height="200"></canvas>
+                                <canvas id="gradesBarChart" height="250"></canvas>
                             </div>
                         </div>
 
@@ -338,7 +338,7 @@
                                 </div>
                             </div>
                             <div class="card-body" style="position: relative;">
-                                <canvas id="resourcesBarChart" height="200"></canvas>
+                                <canvas id="resourcesBarChart" height="250"></canvas>
                             </div>
                         </div>
                     </div>
