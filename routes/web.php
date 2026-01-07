@@ -28,7 +28,9 @@ Route::get('/dashboard', function () {
             'recent_users_count' => \App\Models\User::where('created_at', '>=', now()->subDays(30))->count(),
             'active_prompts' => \App\Models\Prompt::where('es_publico', true)->count(),
         ];
-    } else {
+        $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
+        return view('dashboard', compact('stats', 'recentUsers'));
+    } elseif ($user->role && in_array($user->role->nombre, ['user', 'collaborator'])) {
         $stats = [
             'prompts' => \App\Models\Prompt::where('user_id', $user->id)->count(),
             'categories' => \App\Models\Categoria::count(),
@@ -38,9 +40,21 @@ Route::get('/dashboard', function () {
                 $q->where('user_id', $user->id);
             })->count(),
         ];
+        $misMaterias = [];
+        $horarioHoy = [];
+        return view('dashboard', compact('stats', 'misMaterias', 'horarioHoy'));
+    } else {
+        // Guest
+        $stats = [
+            'prompts' => \App\Models\Prompt::where('es_publico', true)->count(),
+            'categories' => \App\Models\Categoria::count(),
+            'tags' => \App\Models\Etiqueta::count(),
+            'shared' => 0,
+            'versions' => 0,
+        ];
+        $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
+        return view('dashboard', compact('stats', 'recentUsers'));
     }
-    
-    return view('dashboard', compact('stats'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
