@@ -1,4 +1,4 @@
-{{-- Footer del Sistema - Tech Home --}}
+{{-- Footer del Sistema - PromptVault --}}
 
 
 <footer class="dashboard-footer" id="systemFooter">
@@ -15,7 +15,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                         </div>
                         <div class="card-info">
-                            <span class="card-value">Av. Tecnológica #456</span>
+                            <span class="card-value">Av. Digital #2026</span>
                             <span class="card-sub">Santa Cruz, Bolivia</span>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.44-5.15-3.75-6.59-6.59l1.97-1.57c.26-.26.35-.65.24-1.01A11.36 11.36 0 0 1 8.96 4.31c0-.55-.45-1-1-1H4.34c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.62c0-.55-.45-1-1-1z"/></svg>
                         </div>
                         <div class="card-info">
-                            <span class="card-value">+591 3 789-0123</span>
+                            <span class="card-value">+591 3 456-7890</span>
                         </div>
                     </div>
 
@@ -36,7 +36,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                         </div>
                         <div class="card-info">
-                            <span class="card-value">info@techhome.edu.bo</span>
+                            <span class="card-value">contacto@promptvault.ai</span>
                         </div>
                     </div>
 
@@ -46,8 +46,8 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
                         </div>
                         <div class="card-info">
-                            <span class="card-value">Lun - Vie: 7:00 - 19:00</span>
-                            <span class="card-sub">Sáb: 8:00 - 12:00</span>
+                            <span class="card-value">Lun - Vie: 8:00 - 18:00</span>
+                            <span class="card-sub">Soporte 24/7 en línea</span>
                         </div>
                     </div>
                 </div>

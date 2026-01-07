@@ -39,6 +39,13 @@ class LoginController extends Controller
                 'ultimo_acceso' => now()
             ]);
 
+            // Guardar información del usuario en sesión
+            $request->session()->put('user_id', $user->id);
+            $request->session()->put('user_name', $user->name);
+            $request->session()->put('user_email', $user->email);
+            $request->session()->put('user_role', $user->role?->nombre ?? 'guest');
+            $request->session()->put('user_role_id', $user->role_id);
+
             // Redirigir según el rol del usuario
             return $this->redirectByRole($user);
         }
@@ -53,18 +60,16 @@ class LoginController extends Controller
      */
     protected function redirectByRole($user)
     {
-        // Si el usuario es administrador
-        if ($user->esAdmin()) {
-            return redirect()->intended('/dashboard')->with('success', '¡Bienvenido Administrador!');
-        }
+        // Mensaje de bienvenida según el rol
+        $mensaje = match($user->role?->nombre) {
+            'admin' => '¡Bienvenido Administrador!',
+            'collaborator' => '¡Bienvenido Colaborador!',
+            'user' => '¡Bienvenido Usuario!',
+            default => '¡Bienvenido a PromptVault!',
+        };
 
-        // Si el usuario es colaborador
-        if ($user->role && $user->role->nombre === 'collaborator') {
-            return redirect()->intended('/prompts')->with('success', '¡Bienvenido Colaborador!');
-        }
-
-        // Usuarios normales
-        return redirect()->intended('/prompts')->with('success', '¡Bienvenido a PromptVault!');
+        // Todos los usuarios van al dashboard
+        return redirect()->intended('/dashboard')->with('success', $mensaje);
     }
 
     /**

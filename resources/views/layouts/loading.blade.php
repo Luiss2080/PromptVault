@@ -10,7 +10,7 @@
 
     <div class="loading-content">
         <h2 class="welcome-text">Bienvenido a</h2>
-        <h1 class="brand-text" data-text="TECH HOME">TECH HOME</h1>
+        <h1 class="brand-text" data-text="PROMPTVAULT">PROMPTVAULT</h1>
         
         <div class="spinner-container">
             <svg class="spinner" viewBox="0 0 50 50">

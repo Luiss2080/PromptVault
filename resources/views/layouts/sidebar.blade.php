@@ -2,20 +2,15 @@
     <!-- Header del Sidebar -->
     <div class="sidebar-header">
         @php
-            $dashboardRoute = match(session('user_role')) {
-                'admin' => 'admin.dashboard',
-                'docente' => 'docente.dashboard',
-                'estudiante' => 'estudiante.dashboard',
-                default => 'login'
-            };
+            $dashboardRoute = 'dashboard';
         @endphp
         <a href="{{ route($dashboardRoute) }}" class="logo-container" style="text-decoration: none;">
             <div class="logo-icon">
-                <img src="{{ asset('images/faviconTH.png') }}" alt="TECH HOME" class="sidebar-logo">
+                <img src="{{ asset('images/LogoPestañaPrompt.jpg') }}" alt="PromptVault" class="sidebar-logo">
             </div>
             <div class="logo-text">
-                <h1 class="brand-name">TECH HOME</h1>
-                <span class="brand-subtitle">Instituto de Robótica</span>
+                <h1 class="brand-name">PROMPTVAULT</h1>
+                <span class="brand-subtitle">Gestión de Prompts IA</span>
             </div>
         </a>
     </div>
@@ -23,126 +18,145 @@
     <!-- Contenedor de Navegación con Scroll -->
     <div class="sidebar-scroll-content">
         
-        @if(session('user_role_id') == 1)
-        <!-- Sección: Gestión Académica (ADMIN) -->
+        @if(session('user_role') == 'admin')
+        <!-- Sección: Biblioteca de Prompts (ADMIN) -->
         <div class="nav-section">
-            <h3 class="section-title">GESTIÓN ACADÉMICA</h3>
+            <h3 class="section-title">BIBLIOTECA</h3>
             <ul class="nav-list">
                 <li class="nav-item">
-                    <a href="{{ route('admin.docentes.index') }}" class="nav-link {{ request()->routeIs('admin.docentes.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Docentes</span>
-                        <span class="nav-badge">4</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.estudiantes.index') }}" class="nav-link {{ request()->routeIs('admin.estudiantes.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Estudiantes</span>
-                        <span class="nav-badge">6</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.colegios.index') }}" class="nav-link {{ request()->routeIs('admin.colegios.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 21h18M5 21V7l8-4 8 4v14M8 21v-4h8v4"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Colegios</span>
-                        <span class="nav-badge">2</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.cursos.index') }}" class="nav-link {{ request()->routeIs('admin.cursos.*') ? 'active' : '' }}">
+                    <a href="{{ route('prompts.index') }}" class="nav-link {{ request()->routeIs('prompts.index') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                             </svg>
                         </span>
-                        <span class="nav-text">Cursos</span>
-                        <span class="nav-badge">35</span>
+                        <span class="nav-text">Todos los Prompts</span>
+                        <span class="nav-badge">{{ \App\Models\Prompt::count() }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.materias.index') }}" class="nav-link {{ request()->routeIs('admin.materias.*') ? 'active' : '' }}">
+                    <a href="{{ route('prompts.create') }}" class="nav-link {{ request()->routeIs('prompts.create') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="12" y1="8" x2="12" y2="16"></line>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
                             </svg>
                         </span>
-                        <span class="nav-text">Materias</span>
-                        <span class="nav-badge">12</span>
+                        <span class="nav-text">Crear Prompt</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.usuarios.index') }}" class="nav-link {{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Usuarios</span>
-                        <span class="nav-badge">28</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Sección: Recursos (ADMIN) -->
-        <div class="nav-section">
-            <h3 class="section-title">RECURSOS</h3>
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="{{ route('libros.index') }}" class="nav-link {{ request()->routeIs('libros.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Biblioteca</span>
-                        <span class="nav-badge">30</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.materiales.index') }}" class="nav-link {{ request()->routeIs('admin.materiales.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Materiales</span>
-                        <span class="nav-badge">20</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.laboratorios.index') }}" class="nav-link {{ request()->routeIs('admin.laboratorios.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path><path d="M5.52 16h12.96"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Laboratorios</span>
-                        <span class="nav-badge">5</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
                         </span>
-                        <span class="nav-text">Componentes</span>
-                        <span class="nav-badge">43</span>
+                        <span class="nav-text">Favoritos</span>
+                        <span class="nav-badge">12</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Sección: Organización (ADMIN) -->
+        <div class="nav-section">
+            <h3 class="section-title">ORGANIZACIÓN</h3>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Categorías</span>
+                        <span class="nav-badge">{{ \App\Models\Categoria::count() }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Etiquetas</span>
+                        <span class="nav-badge">{{ \App\Models\Etiqueta::count() }}</span>
+                    </a>
+                </li>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Sección: Colaboración (ADMIN) -->
+        <div class="nav-section">
+            <h3 class="section-title">COLABORACIÓN</h3>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Compartidos</span>
+                        <span class="nav-badge">{{ \App\Models\Compartido::count() }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Compartir Nuevo</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Sección: Historial (ADMIN) -->
+        <div class="nav-section">
+            <h3 class="section-title">HISTORIAL</h3>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Versiones</span>
+                        <span class="nav-badge">{{ \App\Models\Version::count() }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Actividades</span>
+                        <span class="nav-badge">{{ \App\Models\Actividad::count() }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Sesiones de Uso</span>
+                        <span class="nav-badge">{{ \App\Models\SesionPrompt::count() }}</span>
                     </a>
                 </li>
             </ul>
@@ -153,48 +167,47 @@
             <h3 class="section-title">ADMINISTRACIÓN</h3>
             <ul class="nav-list">
                 <li class="nav-item">
-                    <a href="{{ route('admin.roles.index') }}" class="nav-link {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Usuarios</span>
+                        <span class="nav-badge">{{ \App\Models\User::count() }}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                             </svg>
                         </span>
                         <span class="nav-text">Roles</span>
-                        <span class="nav-badge">4</span>
+                        <span class="nav-badge">{{ \App\Models\Role::count() }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.permisos.index') }}" class="nav-link {{ request()->routeIs('admin.permisos.*') ? 'active' : '' }}">
+                    <a href="#" class="nav-link">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                             </svg>
                         </span>
                         <span class="nav-text">Permisos</span>
-                        <span class="nav-badge">{{ \App\Models\Permiso::count() }}</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('reportes.index') }}" class="nav-link {{ request()->routeIs('reportes.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Reportes</span>
-                        <span class="nav-badge">8</span>
                     </a>
                 </li>
             </ul>
         </div>
         
-        @elseif(in_array(session('user_role_id'), [2, 3, 5, 7, 8, 9]))
-        <!-- Sección: Mi Espacio (DOCENTE) -->
+        @elseif(session('user_role') == 'user')
+        <!-- Sección: Mi Biblioteca (USER) -->
         <div class="nav-section">
-            <h3 class="section-title">MI ESPACIO</h3>
+            <h3 class="section-title">MI BIBLIOTECA</h3>
             <ul class="nav-list">
                 <li class="nav-item">
-                    <a href="{{ route('docente.dashboard') }}" class="nav-link {{ request()->routeIs('docente.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
@@ -204,179 +217,253 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('docente.materias.index') }}" class="nav-link {{ request()->routeIs('docente.materias.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Mis Materias</span>
-                        <span class="nav-badge">5</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Sección: Evaluaciones (DOCENTE) -->
-        <div class="nav-section">
-            <h3 class="section-title">EVALUACIONES</h3>
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="{{ route('docente.calificaciones.index') }}" class="nav-link {{ request()->routeIs('docente.calificaciones.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Calificaciones</span>
-                        <span class="nav-badge">12</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('docente.asistencias.index') }}" class="nav-link {{ request()->routeIs('docente.asistencias.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Asistencias</span>
-                        <span class="nav-badge">85%</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Sección: Recursos (DOCENTE) -->
-        <div class="nav-section">
-            <h3 class="section-title">RECURSOS</h3>
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="{{ route('docente.materiales.index') }}" class="nav-link {{ request()->routeIs('docente.materiales.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Materiales</span>
-                        <span class="nav-badge">20</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('docente.laboratorios.index') }}" class="nav-link {{ request()->routeIs('docente.laboratorios.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path><path d="M5.52 16h12.96"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Laboratorios</span>
-                        <span class="nav-badge">5</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('libros.index') }}" class="nav-link {{ request()->routeIs('libros.*') ? 'active' : '' }}">
+                    <a href="{{ route('prompts.index') }}" class="nav-link {{ request()->routeIs('prompts.*') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                             </svg>
                         </span>
-                        <span class="nav-text">Biblioteca</span>
-                        <span class="nav-badge">30</span>
+                        <span class="nav-text">Mis Prompts</span>
+                        <span class="nav-badge">5</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('prompts.create') }}" class="nav-link {{ request()->routeIs('prompts.create') ? 'active' : '' }}">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="12" y1="8" x2="12" y2="16"></line>
+                                <line x1="8" y1="12" x2="16" y2="12"></line>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Crear Prompt</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Favoritos</span>
+                        <span class="nav-badge">8</span>
                     </a>
                 </li>
             </ul>
         </div>
-        
-        @elseif(session('user_role_id') == 4)
-        <!-- Sección: Mi Espacio (ESTUDIANTE) -->
+
+        <!-- Sección: Explorar (USER) -->
         <div class="nav-section">
-            <h3 class="section-title">MI ESPACIO</h3>
+            <h3 class="section-title">EXPLORAR</h3>
             <ul class="nav-list">
                 <li class="nav-item">
-                    <a href="{{ route('estudiante.dashboard') }}" class="nav-link {{ request()->routeIs('estudiante.dashboard') ? 'active' : '' }}">
+                    <a href="#" class="nav-link">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
                             </svg>
                         </span>
-                        <span class="nav-text">Dashboard</span>
+                        <span class="nav-text">Categorías</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('estudiante.materias.index') }}" class="nav-link {{ request()->routeIs('estudiante.materias.*') ? 'active' : '' }}">
+                    <a href="#" class="nav-link">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                <circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                             </svg>
                         </span>
-                        <span class="nav-text">Mis Materias</span>
-                        <span class="nav-badge">5</span>
+                        <span class="nav-text">Compartidos Conmigo</span>
+                        <span class="nav-badge">3</span>
                     </a>
                 </li>
+            </ul>
+        </div>
+
+        <!-- Sección: Historial (USER) -->
+        <div class="nav-section">
+            <h3 class="section-title">HISTORIAL</h3>
+            <ul class="nav-list">
                 <li class="nav-item">
-                    <a href="{{ route('estudiante.horario.index') }}" class="nav-link {{ request()->routeIs('estudiante.horario.*') ? 'active' : '' }}">
+                    <a href="#" class="nav-link">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                         </span>
-                        <span class="nav-text">Horario</span>
+                        <span class="nav-text">Recientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Mis Actividades</span>
                     </a>
                 </li>
             </ul>
         </div>
-
-        <!-- Sección: Académico (ESTUDIANTE) -->
+        
+        @elseif(session('user_role') == 'collaborator')
+        <!-- Sección: Colaboración (COLLABORATOR) -->
         <div class="nav-section">
-            <h3 class="section-title">ACADÉMICO</h3>
+            <h3 class="section-title">COLABORACIÓN</h3>
             <ul class="nav-list">
                 <li class="nav-item">
-                    <a href="{{ route('estudiante.tareas.index') }}" class="nav-link {{ request()->routeIs('estudiante.tareas.*') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>
+                                <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
                             </svg>
                         </span>
-                        <span class="nav-text">Tareas</span>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Compartidos Conmigo</span>
                         <span class="nav-badge">8</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('estudiante.calificaciones.index') }}" class="nav-link {{ request()->routeIs('estudiante.calificaciones.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Calificaciones</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Sección: Recursos (ESTUDIANTE) -->
-        <div class="nav-section">
-            <h3 class="section-title">RECURSOS</h3>
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="{{ route('estudiante.materiales.index') }}" class="nav-link {{ request()->routeIs('estudiante.materiales.*') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Materiales</span>
-                        <span class="nav-badge">15</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('libros.index') }}" class="nav-link {{ request()->routeIs('libros.*') ? 'active' : '' }}">
+                    <a href="{{ route('prompts.index') }}" class="nav-link {{ request()->routeIs('prompts.*') ? 'active' : '' }}">
                         <span class="nav-icon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                             </svg>
                         </span>
-                        <span class="nav-text">Biblioteca</span>
-                        <span class="nav-badge">30</span>
+                        <span class="nav-text">Mis Contribuciones</span>
+                        <span class="nav-badge">12</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Sección: Edición (COLLABORATOR) -->
+        <div class="nav-section">
+            <h3 class="section-title">EDICIÓN</h3>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Ediciones Pendientes</span>
+                        <span class="nav-badge">3</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Revisiones Completadas</span>
+                        <span class="nav-badge">15</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Sección: Recursos (COLLABORATOR) -->
+        <div class="nav-section">
+            <h3 class="section-title">RECURSOS</h3>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Categorías</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Historial</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        @else
+        <!-- Sección: Explorar (GUEST) -->
+        <div class="nav-section">
+            <h3 class="section-title">EXPLORAR</h3>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('prompts.index') }}" class="nav-link {{ request()->routeIs('prompts.*') ? 'active' : '' }}">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Prompts Públicos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Categorías</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Sección: Comunidad (GUEST) -->
+        <div class="nav-section">
+            <h3 class="section-title">COMUNIDAD</h3>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Más Populares</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Recientes</span>
                     </a>
                 </li>
             </ul>

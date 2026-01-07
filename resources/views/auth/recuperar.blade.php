@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recuperar Contraseña - PromptVault</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/LogoPestañaPrompt.jpg') }}">
 
     <!-- Precargar fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -1,11 +1,11 @@
-{{-- Header del Sistema - 1ro de Junio --}}
+{{-- Header del Sistema - PromptVault --}}
 <header class="dashboard-header">
     <!-- Left: Brand & Search -->
     <div class="header-left">
         <div class="header-brand">
             <h1 class="brand-text">
-                <a href="{{ route('admin.dashboard') }}" style="text-decoration: none; color: inherit;">
-                    {{ $header_title ?? '1RO DE JUNIO' }}
+                <a href="{{ route('dashboard') }}" style="text-decoration: none; color: inherit;">
+                    {{ $header_title ?? 'PROMPTVAULT' }}
                 </a>
             </h1>
         </div>
@@ -15,7 +15,7 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
-                <input type="text" name="q" id="globalSearch" placeholder="Buscar..." class="search-input" autocomplete="off">
+                <input type="text" name="q" id="globalSearch" placeholder="Buscar prompts..." class="search-input" autocomplete="off">
             </form>
         </div>
     </div>
@@ -36,45 +36,40 @@
             <div class="quick-actions-dropdown" id="quickActionsDropdown">
                 <div class="qa-header">Crear Nuevo</div>
                 <div class="qa-grid">
-                    <a href="#" class="qa-item">
+                    <a href="{{ route('prompts.create') }}" class="qa-item">
                         <div class="qa-icon blue">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="8.5" cy="7" r="4"></circle>
-                                <line x1="20" y1="8" x2="20" y2="14"></line>
-                                <line x1="23" y1="11" x2="17" y2="11"></line>
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
                             </svg>
                         </div>
-                        <span>Usuario</span>
+                        <span>Prompt</span>
                     </a>
                     <a href="#" class="qa-item">
                         <div class="qa-icon purple">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
                             </svg>
                         </div>
-                        <span>Curso</span>
+                        <span>Categoría</span>
                     </a>
                     <a href="#" class="qa-item">
                         <div class="qa-icon green">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line>
                             </svg>
                         </div>
-                        <span>Pago</span>
+                        <span>Etiqueta</span>
                     </a>
-                    <a href="{{ route('reportes.index') }}" class="qa-item">
+                    <a href="#" class="qa-item">
                         <div class="qa-icon orange">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                <polyline points="14 2 14 8 20 8"></polyline>
-                                <line x1="12" y1="18" x2="12" y2="12"></line>
-                                <line x1="9" y1="15" x2="15" y2="15"></line>
+                                <circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                             </svg>
                         </div>
-                        <span>Reporte</span>
+                        <span>Compartir</span>
                     </a>
                     <a href="#" class="qa-item">
                         <div class="qa-icon red">
@@ -107,15 +102,7 @@
 
 
 
-        <!-- Calendar Link (New) -->
-        <a href="{{ route('admin.calendario.index') }}" class="action-btn" title="Calendario Académico">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-        </a>
+
 
         <!-- Notificaciones -->
         <div class="notification-wrapper">
@@ -224,7 +211,7 @@
                 
                 <div class="pd-grid-menu">
                     <!-- 1. Perfil -->
-                    <a href="{{ route('perfil.index') }}" class="pd-grid-item" title="Ver Perfil">
+                    <a href="#" class="pd-grid-item" title="Ver Perfil">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
@@ -233,7 +220,7 @@
                     </a>
                     
                     <!-- 2. Reportes -->
-                    <a href="{{ route('reportes.index') }}" class="pd-grid-item" title="Reportes">
+                    <a href="#" class="pd-grid-item" title="Reportes">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
                             <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
@@ -269,7 +256,7 @@
                     </a>
 
                     <!-- 6. Ajustes -->
-                    <a href="{{ route('configuraciones.index') }}" class="pd-grid-item" title="Configuración">
+                    <a href="#" class="pd-grid-item" title="Configuración">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="3"></circle>
                             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
