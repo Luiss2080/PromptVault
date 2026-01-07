@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Dashboard Docente - Tech Home Books')</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/faviconTH.png') }}">
+    <title>@yield('title', 'Dashboard Docente - PromptVault')</title>
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/LogoPestañaPrompt.jpg') }}">
 
     
     <!-- Precargar fuentes -->
