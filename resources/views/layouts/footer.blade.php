@@ -15,8 +15,8 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                         </div>
                         <div class="card-info">
-                            <span class="card-value">Av. Digital #2026</span>
-                            <span class="card-sub">Santa Cruz, Bolivia</span>
+                            <span class="card-value">PromptVault HQ</span>
+                            <span class="card-sub">Servicio Global en Línea</span>
                         </div>
                     </div>
 
@@ -26,7 +26,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.44-5.15-3.75-6.59-6.59l1.97-1.57c.26-.26.35-.65.24-1.01A11.36 11.36 0 0 1 8.96 4.31c0-.55-.45-1-1-1H4.34c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.62c0-.55-.45-1-1-1z"/></svg>
                         </div>
                         <div class="card-info">
-                            <span class="card-value">+591 3 456-7890</span>
+                            <span class="card-value">Soporte en Línea 24/7</span>
                         </div>
                     </div>
 
@@ -46,18 +46,18 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
                         </div>
                         <div class="card-info">
-                            <span class="card-value">Lun - Vie: 8:00 - 18:00</span>
-                            <span class="card-sub">Soporte 24/7 en línea</span>
+                            <span class="card-value">Disponible 24/7</span>
+                            <span class="card-sub">Acceso ininterrumpido</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Columna Derecha: Info Tech Home -->
+            <!-- Columna Derecha: Info PromptVault -->
             <div class="footer-column info-column">
-                <h3 class="footer-heading">TECH HOME</h3>
+                <h3 class="footer-heading">PROMPTVAULT</h3>
                 <p class="footer-description">
-                    Instituto de excelencia en robótica y tecnología. Formamos profesionales capacitados para liderar la revolución tecnológica del futuro.
+                    Plataforma profesional para la gestión y optimización de prompts de IA. Organiza, versiona y comparte tus mejores prompts con tu equipo.
                 </p>
 
                 <div class="feature-badges">
@@ -65,13 +65,13 @@
                         <div class="badge-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
                         </div>
-                        <span>Certificado Internacional</span>
+                        <span>Seguro y Confiable</span>
                     </div>
                     <div class="badge">
                         <div class="badge-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M13.13 22.19L11.5 18.36C13.07 17.78 14.54 17 15.9 16.09L13.13 22.19M5.64 5.64l-.71-.71c-1.56 1.56-1.56 4.09 0 5.66l2.83-2.83c-.78-.78-.78-2.05 0-2.83m12.72 0l2.83 2.83c1.56-1.56 1.56-4.09 0-5.66l-.71.71c.78.78.78 2.05 0 2.83M12 2C6.47 2 2 6.5 2 12s4.47 10 9.99 10c5.52 0 10-4.5 10-10S17.52 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m-1-13h2v6h-2z"/></svg>
                         </div>
-                        <span>Innovación Constante</span>
+                        <span>Control de Versiones</span>
                     </div>
                     <div class="badge">
                         <div class="badge-icon">
@@ -83,13 +83,13 @@
                         <div class="badge-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
                         </div>
-                        <span>Comunidad Activa</span>
+                        <span>Colaboración en Equipo</span>
                     </div>
                 </div>
 
                 <div class="system-version-container">
-                    <button class="version-btn">Versión 2.0</button>
-                    <span class="build-text">Build #2025.1</span>
+                    <button class="version-btn">Versión 1.0</button>
+                    <span class="build-text">Build #2026.1</span>
                 </div>
             </div>
         </div>
@@ -98,11 +98,11 @@
             <!-- Brand -->
             <div class="footer-brand-section">
                 <div class="logo-icon-red">
-                    <img src="{{ asset('images/faviconTH.png') }}" alt="Tech Home Logo" class="logo-image">
+                    <img src="{{ asset('images/LogoPestañaPrompt.jpg') }}" alt="PromptVault Logo" class="logo-image">
                 </div>
                 <div class="brand-text">
-                    <span class="brand-title">TECH HOME</span>
-                    <span class="brand-subtitle">Instituto de Robótica y Tecnología</span>
+                    <span class="brand-title">PROMPTVAULT</span>
+                    <span class="brand-subtitle">Gestión de Prompts IA</span>
                 </div>
             </div>
 
@@ -131,7 +131,7 @@
             <!-- Copyright & Legal -->
             <div class="footer-legal-section">
                 <div class="footer-copyright">
-                    <span>&copy; {{ date('Y') }} Instituto Tech Home. Todos los derechos reservados.</span>
+                    <span>&copy; {{ date('Y') }} PromptVault. Todos los derechos reservados.</span>
                 </div>
                 <div class="footer-links-row">
                     <a href="#privacy">Política de Privacidad</a>
