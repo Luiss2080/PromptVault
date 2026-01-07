@@ -286,7 +286,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 2rem;
+    padding: 1.5rem 2rem;
 }
 
 /* ===== LOGO Y MARCA ===== */
@@ -297,7 +297,7 @@ body {
 
 .logo-container {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     position: relative;
 }
 
@@ -310,7 +310,7 @@ body {
 }
 
 .brand-logo {
-    width: 280px;
+    width: 350px;
     height: auto;
     filter: drop-shadow(0 4px 20px rgba(0, 255, 136, 0.3));
     position: relative;
@@ -353,7 +353,7 @@ body {
 /* ===== SECCIÓN DE BIENVENIDA ===== */
 .welcome-section {
     text-align: center;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
 }
 
 .welcome-title {
@@ -361,15 +361,15 @@ body {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--white);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .welcome-description {
     color: rgba(255, 255, 255, 0.8);
     font-size: 0.9rem;
-    line-height: 1.6;
+    line-height: 1.5;
     text-align: justify;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 /* ===== SECCIÓN DE SEGURIDAD ===== */
@@ -434,14 +434,14 @@ body {
 .social-text {
     color: rgba(255, 255, 255, 0.7);
     font-size: 0.85rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .social-title {
     color: var(--white);
     font-weight: 700;
     font-size: 0.95rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .social-media-links {
