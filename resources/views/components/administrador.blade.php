@@ -421,7 +421,11 @@
             rolesData: [3, 12, 5]
         };
         
+        console.log('Dashboard Data:', window.dashboardData);
+        console.log('Roles Data:', window.dashboardData.rolesData);
+        
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Loaded - Starting Charts');
             // Gráfico: Prompts Creados por Día
             const ctxAttendance = document.getElementById('attendanceChart');
             if (ctxAttendance) {
@@ -575,8 +579,11 @@
 
             // Gráfico: Distribución de Roles
             const ctxRoles = document.getElementById('userRolesChart');
+            console.log('Roles Canvas Element:', ctxRoles);
+            console.log('Roles Data to use:', window.dashboardData.rolesData);
+            
             if (ctxRoles) {
-                new Chart(ctxRoles, {
+                const rolesChart = new Chart(ctxRoles, {
                     type: 'doughnut',
                     data: {
                         labels: ['Admin', 'User', 'Collaborator'],
@@ -590,9 +597,15 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         cutout: '70%',
-                        plugins: { legend: { display: false } }
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: { enabled: true }
+                        }
                     }
                 });
+                console.log('Roles Chart Created:', rolesChart);
+            } else {
+                console.error('userRolesChart canvas not found!');
             }
         });
     </script>
