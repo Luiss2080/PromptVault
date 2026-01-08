@@ -234,11 +234,27 @@
                         </div>
                         <div class="card-body d-flex flex-column align-items-center justify-content-center pt-2 pb-4 flex-grow-1" style="gap: 2rem;">
                             
+                            @php
+                                // Contar usuarios por rol
+                                $adminCount = \App\Models\User::where('role_id', 1)->count();
+                                $userCount = \App\Models\User::where('role_id', 2)->count();
+                                $collabCount = \App\Models\User::where('role_id', 3)->count();
+                                $totalUsers = $adminCount + $userCount + $collabCount;
+                                
+                                // Si no hay usuarios, usar valores de ejemplo
+                                if ($totalUsers == 0) {
+                                    $adminCount = 3;
+                                    $userCount = 12;
+                                    $collabCount = 5;
+                                    $totalUsers = 20;
+                                }
+                            @endphp
+                            
                             <!-- Chart Area with Center Text -->
                             <div style="width: 220px; height: 220px; position: relative; margin: 0 auto !important;">
                                 <canvas id="userRolesChart"></canvas>
                                 <div class="chart-center-text">
-                                    <span class="total-number">{{ array_sum($roleDistribution ?? []) }}</span>
+                                    <span class="total-number">{{ $totalUsers }}</span>
                                     <span class="total-label">Total</span>
                                 </div>
                             </div>
@@ -246,24 +262,23 @@
 
                             <!-- Legend Grid (Compact) -->
                             <div class="legend-grid px-3">
-                                @php $total = array_sum($roleDistribution ?? []) ?: 1; @endphp
                                 
                                 <!-- Admin -->
                                 <div class="legend-item-compact">
                                     <div class="legend-box" style="background: #3b82f6;"></div>
-                                    <span class="legend-text">Admin <span style="opacity: 0.7;">({{ round(($roleDistribution['admin'] ?? 0) / $total * 100) }}%)</span></span>
+                                    <span class="legend-text">Admin <span style="opacity: 0.7;">({{ $totalUsers > 0 ? round(($adminCount / $totalUsers) * 100) : 0 }}%)</span></span>
                                 </div>
 
                                 <!-- User -->
                                 <div class="legend-item-compact">
                                     <div class="legend-box" style="background: #10b981;"></div>
-                                    <span class="legend-text">User <span style="opacity: 0.7;">({{ round(($roleDistribution['user'] ?? 0) / $total * 100) }}%)</span></span>
+                                    <span class="legend-text">User <span style="opacity: 0.7;">({{ $totalUsers > 0 ? round(($userCount / $totalUsers) * 100) : 0 }}%)</span></span>
                                 </div>
 
                                 <!-- Collaborator -->
                                 <div class="legend-item-compact">
                                     <div class="legend-box" style="background: #a855f7;"></div>
-                                    <span class="legend-text">Collab. <span style="opacity: 0.7;">({{ round(($roleDistribution['collaborator'] ?? 0) / $total * 100) }}%)</span></span>
+                                    <span class="legend-text">Collab. <span style="opacity: 0.7;">({{ $totalUsers > 0 ? round(($collabCount / $totalUsers) * 100) : 0 }}%)</span></span>
                                 </div>
                             </div>
                         </div>
@@ -406,6 +421,19 @@
     
     <!-- Gráficas Chart.js -->
     <script>
+        @php
+            // Preparar datos para JavaScript
+            $adminCount = \App\Models\User::where('role_id', 1)->count();
+            $userCount = \App\Models\User::where('role_id', 2)->count();
+            $collabCount = \App\Models\User::where('role_id', 3)->count();
+            
+            if (($adminCount + $userCount + $collabCount) == 0) {
+                $adminCount = 3;
+                $userCount = 12;
+                $collabCount = 5;
+            }
+        @endphp
+        
         // Datos estáticos de ejemplo para las gráficas
         window.dashboardData = {
             promptsPerDay: [3, 7, 5, 12, 8, 15, 10],
@@ -418,7 +446,7 @@
             topCategoriesData: [20, 15, 12, 10, 8],
             activeUsersLabels: ['Juan Pérez', 'María García', 'Carlos López', 'Ana Martínez', 'Luis Rodríguez'],
             activeUsersData: [45, 32, 28, 19, 12],
-            rolesData: [3, 12, 5]
+            rolesData: [{{ $adminCount }}, {{ $userCount }}, {{ $collabCount }}]
         };
         
         console.log('Dashboard Data:', window.dashboardData);
