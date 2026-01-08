@@ -115,11 +115,12 @@ body.dark-mode .brand-subtitle {
     font-family: var(--font-family);
     font-size: 0.65rem; /* Smaller section title */
     font-weight: 800;
-    color: var(--primary-red);
+    color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 0.8rem;
     padding-left: 0.5rem;
+    padding-bottom: 0.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -127,10 +128,27 @@ body.dark-mode .brand-subtitle {
     user-select: none;
     transition: all 0.3s ease;
     gap: 0.5rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-red);
+    transition: width 0.3s ease;
 }
 
 .section-title:hover {
-    color: #ffffff;
+    color: var(--primary-red);
+}
+
+.section-title:hover::after {
+    width: 100%;
 }
 
 .section-title-icon {
@@ -169,11 +187,11 @@ body.dark-mode .brand-subtitle {
 }
 
 body.dark-mode .section-title {
-    color: var(--primary-red);
+    color: #ffffff;
 }
 
 body.dark-mode .section-title:hover {
-    color: #ffffff;
+    color: var(--primary-red);
 }
 
 .nav-list {
