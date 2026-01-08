@@ -21,6 +21,7 @@
         <!-- Sección: Biblioteca de Prompts (ADMIN) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-book section-title-icon"></i>
                 BIBLIOTECA
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -115,6 +116,7 @@
         <!-- Sección: Contenido (ADMIN) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-file-alt section-title-icon"></i>
                 CONTENIDO
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -155,6 +157,7 @@
         <!-- Sección: Organización (ADMIN) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-sitemap section-title-icon"></i>
                 ORGANIZACIÓN
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -207,6 +210,7 @@
         <!-- Sección: Colaboración (ADMIN) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-users section-title-icon"></i>
                 COLABORACIÓN
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -238,6 +242,7 @@
         <!-- Sección: Historial (ADMIN) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-history section-title-icon"></i>
                 HISTORIAL
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -281,6 +286,7 @@
         <!-- Sección: Análisis y Reportes (ADMIN) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-chart-line section-title-icon"></i>
                 ANÁLISIS
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -322,6 +328,7 @@
         <!-- Sección: Sistema (ADMIN) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-cog section-title-icon"></i>
                 SISTEMA
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>

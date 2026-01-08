@@ -72,6 +72,7 @@
         <!-- Sección: Explorar (USER) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-compass section-title-icon"></i>
                 EXPLORAR
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -123,6 +124,7 @@
         <!-- Sección: Comunidad (USER) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-users section-title-icon"></i>
                 COMUNIDAD
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -154,6 +156,7 @@
         <!-- Sección: Historial (USER) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-clock section-title-icon"></i>
                 HISTORIAL
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>

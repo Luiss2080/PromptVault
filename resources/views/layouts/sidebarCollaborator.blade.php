@@ -21,6 +21,7 @@
         <!-- Sección: Colaboración (COLLABORATOR) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-handshake section-title-icon"></i>
                 COLABORACIÓN
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -63,6 +64,7 @@
         <!-- Sección: Edición (COLLABORATOR) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-edit section-title-icon"></i>
                 EDICIÓN
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -95,6 +97,7 @@
         <!-- Sección: Recursos (COLLABORATOR) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-folder-open section-title-icon"></i>
                 RECURSOS
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -145,6 +148,7 @@
         <!-- Sección: Comunidad (COLLABORATOR) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-users section-title-icon"></i>
                 COMUNIDAD
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>

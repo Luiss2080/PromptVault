@@ -21,6 +21,7 @@
         <!-- Sección: Explorar (GUEST) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-search section-title-icon"></i>
                 EXPLORAR
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
@@ -82,6 +83,7 @@
         <!-- Sección: Comunidad (GUEST) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
+                <i class="fas fa-globe section-title-icon"></i>
                 COMUNIDAD
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>

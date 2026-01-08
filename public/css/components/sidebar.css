@@ -115,29 +115,38 @@ body.dark-mode .brand-subtitle {
     font-family: var(--font-family);
     font-size: 0.65rem; /* Smaller section title */
     font-weight: 800;
-    color: var(--text-muted);
+    color: var(--primary-red);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 0.8rem;
     padding-left: 0.5rem;
-    opacity: 0.7;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: space-between;
     user-select: none;
     transition: all 0.3s ease;
+    gap: 0.5rem;
 }
 
 .section-title:hover {
-    opacity: 1;
-    color: var(--primary-red);
+    color: #ffffff;
+}
+
+.section-title-icon {
+    font-size: 0.75rem;
+    margin-right: 0.3rem;
+    transition: all 0.3s ease;
+}
+
+.section-title:hover .section-title-icon {
+    transform: scale(1.1);
 }
 
 .section-toggle-icon {
     font-size: 0.7rem;
     transition: transform 0.3s ease;
-    margin-right: 0.5rem;
+    margin-left: auto;
 }
 
 .nav-section.collapsed .section-toggle-icon {
@@ -160,12 +169,11 @@ body.dark-mode .brand-subtitle {
 }
 
 body.dark-mode .section-title {
-    opacity: 0.8;
+    color: var(--primary-red);
 }
 
 body.dark-mode .section-title:hover {
-    opacity: 1;
-    color: var(--primary-red);
+    color: #ffffff;
 }
 
 .nav-list {
