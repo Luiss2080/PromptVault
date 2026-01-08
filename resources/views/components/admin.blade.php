@@ -361,31 +361,178 @@
             csrfToken: '{{ csrf_token() }}',
             baseUrl: '{{ url("/") }}',
             user: {
-                id: '{{ session("user_id") }}',
-                name: '{{ session("user_name") }}',
-                role: '{{ session("user_role") }}'
+                id: '{{ Auth::id() }}',
+                name: '{{ Auth::user()->name ?? "" }}',
+                role: '{{ Auth::user()->role->nombre ?? "guest" }}'
             }
         };
-        window.appConfig.chartData = @json($chartData ?? []);
         /* eslint-enable */
     </script>
     
     <!-- JavaScript del Dashboard -->
     <script src="{{ asset('js/components/loading.js') }}"></script>
-
     <script src="{{ asset('JavaScript/components/sidebar.js') }}"></script>
     <script src="{{ asset('js/components/footer.js') }}"></script>
     
-    <!-- JavaScript del Header -->
-    {{-- Script moved to header.blade.php --}}
-    
-    @stack('scripts')
-    <script src="{{ asset('js/dashboard/admin.js') }}"></script>
-    
+    <!-- Gráficas Chart.js -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Additional initializations if needed
+            // Gráfico: Prompts Creados por Día
+            const ctxAttendance = document.getElementById('attendanceChart');
+            if (ctxAttendance) {
+                new Chart(ctxAttendance, {
+                    type: 'line',
+                    data: {
+                        labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                        datasets: [{
+                            label: 'Prompts Creados',
+                            data: [{{ \App\Models\Prompt::whereDate('created_at', now()->subDays(6))->count() }}, 
+                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(5))->count() }}, 
+                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(4))->count() }}, 
+                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(3))->count() }}, 
+                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(2))->count() }}, 
+                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(1))->count() }}, 
+                                   {{ \App\Models\Prompt::whereDate('created_at', now())->count() }}],
+                            borderColor: '#e11d48',
+                            backgroundColor: 'rgba(225, 29, 72, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico: Actividad Global (Actividades por Tipo)
+            const ctxActivity = document.getElementById('activityGlobalChart');
+            if (ctxActivity) {
+                new Chart(ctxActivity, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Creación', 'Edición', 'Compartir', 'Versión', 'Eliminación'],
+                        datasets: [{
+                            label: 'Actividades',
+                            data: [
+                                {{ \App\Models\Actividad::where('tipo_actividad', 'creacion')->count() }},
+                                {{ \App\Models\Actividad::where('tipo_actividad', 'edicion')->count() }},
+                                {{ \App\Models\Actividad::where('tipo_actividad', 'compartir')->count() }},
+                                {{ \App\Models\Actividad::where('tipo_actividad', 'version')->count() }},
+                                {{ \App\Models\Actividad::where('tipo_actividad', 'eliminacion')->count() }}
+                            ],
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico: Versiones por Prompt (Top 5 Prompts con más versiones)
+            const ctxGrades = document.getElementById('gradesBarChart');
+            if (ctxGrades) {
+                @php
+                    $topPrompts = \App\Models\Prompt::withCount('versiones')
+                        ->orderBy('versiones_count', 'desc')
+                        ->take(5)
+                        ->get();
+                @endphp
+                new Chart(ctxGrades, {
+                    type: 'bar',
+                    data: {
+                        labels: [@foreach($topPrompts as $p)'{{ Str::limit($p->titulo, 20) }}',@endforeach],
+                        datasets: [{
+                            label: 'Versiones',
+                            data: [@foreach($topPrompts as $p){{ $p->versiones_count }},@endforeach],
+                            backgroundColor: '#e11d48'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico: Prompts Compartidos por Usuario
+            const ctxResources = document.getElementById('resourcesBarChart');
+            if (ctxResources) {
+                @php
+                    $topShared = \App\Models\User::withCount('compartidos')
+                        ->orderBy('compartidos_count', 'desc')
+                        ->take(5)
+                        ->get();
+                @endphp
+                new Chart(ctxResources, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [@foreach($topShared as $u)'{{ $u->name }}',@endforeach],
+                        datasets: [{
+                            data: [@foreach($topShared as $u){{ $u->compartidos_count }},@endforeach],
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { color: '#fff', padding: 10, font: { size: 11 } } }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico: Distribución de Roles
+            const ctxRoles = document.getElementById('userRolesChart');
+            if (ctxRoles) {
+                @php
+                    $roleDistribution = [
+                        'admin' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'admin'))->count(),
+                        'user' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'user'))->count(),
+                        'collaborator' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'collaborator'))->count(),
+                    ];
+                @endphp
+                new Chart(ctxRoles, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Admin', 'User', 'Collaborator'],
+                        datasets: [{
+                            data: [{{ $roleDistribution['admin'] }}, {{ $roleDistribution['user'] }}, {{ $roleDistribution['collaborator'] }}],
+                            backgroundColor: ['#3b82f6', '#10b981', '#a855f7'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
         });
     </script>
+    
+    @stack('scripts')
+
 </body>
 </html>
