@@ -50,18 +50,36 @@ Permisos: Acceso limitado - Solo lectura de prompts públicos
 
 ### Usuarios Adicionales de Prueba
 
-| Email | Contraseña | Rol | Área |
-|-------|------------|-----|------|
-| carlos@dev.com | password | User | Programación |
-| ana@escritora.com | password | User | Redacción |
-| pedro@ingeniero.com | password | User | Ingeniería |
-| maria@marketing.com | password | User | Marketing |
-| luis@arquitecto.com | password | User | Arquitectura |
-| carmen@educadora.com | password | Collaborator | Educación |
-| jorge@analista.com | password | User | Análisis |
-| laura@disenadora.com | password | Collaborator | Diseño |
-| roberto@consultor.com | password | User | Consultoría |
-| isabel@investigadora.com | password | User | Investigación |
+#### Usuarios Estándar (User - Nivel 10)
+
+| Nombre | Email | Contraseña | Área |
+|--------|-------|------------|------|
+| Carlos Martínez | carlos@dev.com | password | Programación |
+| Ana López | ana@escritora.com | password | Redacción |
+| Pedro Sánchez | pedro@ingeniero.com | password | Ingeniería |
+| María García | maria@marketing.com | password | Marketing |
+| Luis Rodríguez | luis@arquitecto.com | password | Arquitectura |
+| Jorge Ramírez | jorge@analista.com | password | Análisis |
+| Roberto Díaz | roberto@consultor.com | password | Consultoría |
+| Isabel Moreno | isabel@investigadora.com | password | Investigación |
+
+#### Colaboradores (Collaborator - Nivel 15)
+
+| Nombre | Email | Contraseña | Área |
+|--------|-------|------------|------|
+| Colaborador Demo | colaborador@promptvault.com | password | General |
+| Carmen Torres | carmen@educadora.com | password | Educación |
+| Laura Fernández | laura@disenadora.com | password | Diseño |
+
+## Resumen de Usuarios por Rol
+
+| Rol | Nivel | Cantidad | Permisos |
+|-----|-------|----------|----------|
+| Admin | 100 | 1 | Acceso total al sistema |
+| Collaborator | 15 | 3 | Gestión de prompts propios + Edición de compartidos |
+| User | 10 | 9 | Gestión de prompts propios |
+| Guest | 1 | 1 | Solo lectura de prompts públicos |
+| **Total** | - | **14** | - |
 
 ## Configuración Laravel
 
