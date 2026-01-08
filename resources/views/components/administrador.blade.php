@@ -419,21 +419,23 @@
     <script src="{{ asset('JavaScript/components/sidebar.js') }}"></script>
     <script src="{{ asset('js/components/footer.js') }}"></script>
     
+    @php
+        // Preparar datos para JavaScript
+        $adminCount = \App\Models\User::where('role_id', 1)->count();
+        $userCount = \App\Models\User::where('role_id', 2)->count();
+        $collabCount = \App\Models\User::where('role_id', 3)->count();
+        
+        if (($adminCount + $userCount + $collabCount) == 0) {
+            $adminCount = 3;
+            $userCount = 12;
+            $collabCount = 5;
+        }
+        
+        $rolesDataJson = json_encode([$adminCount, $userCount, $collabCount]);
+    @endphp
+    
     <!-- Gráficas Chart.js -->
     <script>
-        @php
-            // Preparar datos para JavaScript
-            $adminCount = \App\Models\User::where('role_id', 1)->count();
-            $userCount = \App\Models\User::where('role_id', 2)->count();
-            $collabCount = \App\Models\User::where('role_id', 3)->count();
-            
-            if (($adminCount + $userCount + $collabCount) == 0) {
-                $adminCount = 3;
-                $userCount = 12;
-                $collabCount = 5;
-            }
-        @endphp
-        
         // Datos estáticos de ejemplo para las gráficas
         window.dashboardData = {
             promptsPerDay: [3, 7, 5, 12, 8, 15, 10],
@@ -446,7 +448,7 @@
             topCategoriesData: [20, 15, 12, 10, 8],
             activeUsersLabels: ['Juan Pérez', 'María García', 'Carlos López', 'Ana Martínez', 'Luis Rodríguez'],
             activeUsersData: [45, 32, 28, 19, 12],
-            rolesData: [{{ $adminCount }}, {{ $userCount }}, {{ $collabCount }}]
+            rolesData: {!! $rolesDataJson !!}
         };
         
         console.log('Dashboard Data:', window.dashboardData);
