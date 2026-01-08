@@ -33,7 +33,7 @@
                                 <polyline points="14 2 14 8 20 8"></polyline>
                             </svg>
                         </span>
-                        <span class="nav-text">Todos los Prompts</span>
+                        <span class="nav-text">Prompts</span>
                         <span class="nav-badge">{{ \App\Models\Prompt::count() }}</span>
                     </a>
                 </li>
