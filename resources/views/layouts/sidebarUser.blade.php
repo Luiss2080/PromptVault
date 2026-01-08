@@ -71,7 +71,10 @@
 
         <!-- Sección: Explorar (USER) -->
         <div class="nav-section">
-            <h3 class="section-title">EXPLORAR</h3>
+            <h3 class="section-title" data-toggle="collapse">
+                EXPLORAR
+                <i class="fas fa-chevron-down section-toggle-icon"></i>
+            </h3>
             <ul class="nav-list">
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -119,7 +122,10 @@
 
         <!-- Sección: Comunidad (USER) -->
         <div class="nav-section">
-            <h3 class="section-title">COMUNIDAD</h3>
+            <h3 class="section-title" data-toggle="collapse">
+                COMUNIDAD
+                <i class="fas fa-chevron-down section-toggle-icon"></i>
+            </h3>
             <ul class="nav-list">
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -147,7 +153,10 @@
 
         <!-- Sección: Historial (USER) -->
         <div class="nav-section">
-            <h3 class="section-title">HISTORIAL</h3>
+            <h3 class="section-title" data-toggle="collapse">
+                HISTORIAL
+                <i class="fas fa-chevron-down section-toggle-icon"></i>
+            </h3>
             <ul class="nav-list">
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -175,13 +184,6 @@
 
     <!-- Footer del Sidebar -->
     <div class="sidebar-footer">
-        <a href="/" target="_blank" class="visit-site-btn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-            <span>Visitar Sitio Web</span>
-        </a>
-
         <div class="theme-toggle-card">
             <div class="theme-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

@@ -20,8 +20,40 @@ class SidebarManager {
         this.setupThemeToggle();
         this.setupMobileToggle();
         this.setupSubmenus();
+        this.setupSectionCollapse();
         this.highlightActiveItem();
         this.restoreState();
+    }
+
+    setupSectionCollapse() {
+        // Get all section titles with collapse functionality
+        const sectionTitles = document.querySelectorAll('.section-title[data-toggle="collapse"]');
+        
+        sectionTitles.forEach(title => {
+            title.addEventListener('click', (e) => {
+                e.preventDefault();
+                const section = title.closest('.nav-section');
+                
+                // Toggle collapsed state
+                section.classList.toggle('collapsed');
+                
+                // Save state to localStorage
+                const sectionName = title.textContent.trim().replace(/\s+/g, '-');
+                const isCollapsed = section.classList.contains('collapsed');
+                localStorage.setItem(`sidebar-section-${sectionName}`, isCollapsed ? 'collapsed' : 'expanded');
+            });
+        });
+
+        // Restore saved states
+        sectionTitles.forEach(title => {
+            const sectionName = title.textContent.trim().replace(/\s+/g, '-');
+            const savedState = localStorage.getItem(`sidebar-section-${sectionName}`);
+            
+            if (savedState === 'collapsed') {
+                const section = title.closest('.nav-section');
+                section.classList.add('collapsed');
+            }
+        });
     }
 
     setupThemeToggle() {
