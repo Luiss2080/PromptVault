@@ -171,6 +171,16 @@ body.dark-mode .brand-subtitle {
     transition: all 0.3s ease;
 }
 
+/* Sección siempre abierta */
+.nav-section.always-open .section-title {
+    cursor: default;
+}
+
+.nav-section.always-open .section-title:hover {
+    background: transparent;
+    transform: none;
+}
+
 body.dark-mode .section-title {
     color: #ffffff;
 }
