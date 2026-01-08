@@ -404,126 +404,22 @@
     <script src="{{ asset('JavaScript/components/sidebar.js') }}"></script>
     <script src="{{ asset('js/components/footer.js') }}"></script>
     
-    @php
-        // Contar totales básicos
-        $totalPrompts = \App\Models\Prompt::count();
-        $totalUsers = \App\Models\User::count();
-        $totalCategorias = \App\Models\Categoria::count();
-        $totalActividades = \App\Models\Actividad::count();
-        
-        // Datos para gráfica de prompts por día (últimos 7 días)
-        $promptsPerDay = [];
-        if ($totalPrompts > 0) {
-            for ($i = 6; $i >= 0; $i--) {
-                $date = now()->subDays($i)->toDateString();
-                $count = \App\Models\Prompt::whereDate('created_at', $date)->count();
-                $promptsPerDay[] = $count > 0 ? $count : 0;
-            }
-        } else {
-            // Datos de ejemplo si no hay prompts
-            $promptsPerDay = [3, 7, 5, 12, 8, 15, 10];
-        }
-        
-        // Actividades por tipo - usando conteos totales
-        if ($totalActividades > 0) {
-            $allActividades = \App\Models\Actividad::select('accion')->get();
-            $creacion = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'crear') || str_contains(strtolower($a->accion), 'creó'))->count();
-            $edicion = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'edit') || str_contains(strtolower($a->accion), 'actualiz'))->count();
-            $compartir = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'compart'))->count();
-            $version = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'versión') || str_contains(strtolower($a->accion), 'version'))->count();
-            $eliminacion = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'elimin') || str_contains(strtolower($a->accion), 'borr'))->count();
-            
-            $actividadesPorTipo = [$creacion, $edicion, $compartir, $version, $eliminacion];
-        } else {
-            $actividadesPorTipo = [25, 18, 12, 8, 5];
-        }
-        
-        // Top prompts - usar prompts reales o datos de ejemplo
-        if ($totalPrompts >= 5) {
-            $topPrompts = \App\Models\Prompt::orderBy('created_at', 'desc')->take(5)->get();
-            $topPromptsLabels = $topPrompts->pluck('titulo')->map(fn($t) => \Illuminate\Support\Str::limit($t, 20))->toArray();
-            $topPromptsData = [rand(8, 15), rand(5, 12), rand(3, 10), rand(2, 8), rand(1, 6)];
-        } else {
-            $topPromptsLabels = ['Prompt de Ejemplo 1', 'Prompt de Ejemplo 2', 'Prompt de Ejemplo 3', 'Prompt de Ejemplo 4', 'Prompt de Ejemplo 5'];
-            $topPromptsData = [12, 9, 7, 5, 3];
-        }
-        
-        // Prompts compartidos - usar datos reales o ejemplo
-        if ($totalPrompts >= 5) {
-            $topShared = \App\Models\Prompt::orderBy('created_at', 'desc')->take(5)->get();
-            $topSharedLabels = $topShared->pluck('titulo')->map(fn($t) => \Illuminate\Support\Str::limit($t, 20))->toArray();
-            $topSharedData = [rand(5, 12), rand(3, 10), rand(2, 8), rand(1, 6), rand(1, 4)];
-        } else {
-            $topSharedLabels = ['Prompt Compartido 1', 'Prompt Compartido 2', 'Prompt Compartido 3', 'Prompt Compartido 4', 'Prompt Compartido 5'];
-            $topSharedData = [10, 8, 6, 4, 2];
-        }
-        
-        // Categorías - usar datos reales o ejemplo
-        if ($totalCategorias >= 3) {
-            $categorias = \App\Models\Categoria::take(5)->get();
-            $topCategoriesLabels = $categorias->pluck('nombre')->toArray();
-            // Contar prompts por categoría
-            $topCategoriesData = [];
-            foreach ($categorias as $cat) {
-                $count = \App\Models\Prompt::where('categoria_id', $cat->id)->count();
-                $topCategoriesData[] = $count > 0 ? $count : rand(3, 15);
-            }
-        } else {
-            $topCategoriesLabels = ['Desarrollo', 'Marketing', 'Diseño', 'Educación', 'Negocios'];
-            $topCategoriesData = [20, 15, 12, 10, 8];
-        }
-        
-        // Usuarios activos - usar datos reales o ejemplo
-        if ($totalUsers >= 3) {
-            $users = \App\Models\User::orderBy('created_at', 'desc')->take(5)->get();
-            $activeUsersLabels = $users->pluck('name')->toArray();
-            $activeUsersData = [rand(20, 50), rand(15, 40), rand(10, 30), rand(5, 25), rand(3, 20)];
-        } else {
-            $activeUsersLabels = ['Usuario 1', 'Usuario 2', 'Usuario 3', 'Usuario 4', 'Usuario 5'];
-            $activeUsersData = [45, 32, 28, 19, 12];
-        }
-        
-        // Distribución de roles - usar conteo real o ejemplo
-        if ($totalUsers > 0) {
-            $adminCount = \App\Models\User::where('role_id', 1)->count();
-            $userCount = \App\Models\User::where('role_id', 2)->count();
-            $collabCount = \App\Models\User::where('role_id', 3)->count();
-            
-            // Si no hay roles asignados, distribuir proporcionalmente
-            if ($adminCount == 0 && $userCount == 0 && $collabCount == 0) {
-                $adminCount = max(1, (int)($totalUsers * 0.15));
-                $userCount = max(1, (int)($totalUsers * 0.65));
-                $collabCount = max(1, (int)($totalUsers * 0.20));
-            }
-            
-            $rolesData = [$adminCount, $userCount, $collabCount];
-        } else {
-            $rolesData = [3, 12, 5];
-        }
-        
-        // Preparar el objeto completo de datos para JavaScript
-        $dashboardData = [
-            'promptsPerDay' => $promptsPerDay,
-            'actividadesPorTipo' => $actividadesPorTipo,
-            'topPromptsLabels' => $topPromptsLabels,
-            'topPromptsData' => $topPromptsData,
-            'topSharedLabels' => $topSharedLabels,
-            'topSharedData' => $topSharedData,
-            'topCategoriesLabels' => $topCategoriesLabels,
-            'topCategoriesData' => $topCategoriesData,
-            'activeUsersLabels' => $activeUsersLabels,
-            'activeUsersData' => $activeUsersData,
-            'rolesData' => $rolesData
-        ];
-    @endphp
-    
-    <!-- Datos para JavaScript -->
-    <div id="dashboard-data" data-config="{{ json_encode($dashboardData) }}" style="display:none;"></div>
-    
     <!-- Gráficas Chart.js -->
     <script>
-        // Cargar datos desde el elemento HTML
-        window.dashboardData = JSON.parse(document.getElementById('dashboard-data').getAttribute('data-config'));
+        // Datos estáticos de ejemplo para las gráficas
+        window.dashboardData = {
+            promptsPerDay: [3, 7, 5, 12, 8, 15, 10],
+            actividadesPorTipo: [25, 18, 12, 8, 5],
+            topPromptsLabels: ['Prompt Marketing', 'Prompt SEO', 'Prompt Diseño', 'Prompt Ventas', 'Prompt Código'],
+            topPromptsData: [12, 9, 7, 5, 3],
+            topSharedLabels: ['Prompt Social', 'Prompt Email', 'Prompt Blog', 'Prompt Ads', 'Prompt Copy'],
+            topSharedData: [10, 8, 6, 4, 2],
+            topCategoriesLabels: ['Desarrollo', 'Marketing', 'Diseño', 'Educación', 'Negocios'],
+            topCategoriesData: [20, 15, 12, 10, 8],
+            activeUsersLabels: ['Juan Pérez', 'María García', 'Carlos López', 'Ana Martínez', 'Luis Rodríguez'],
+            activeUsersData: [45, 32, 28, 19, 12],
+            rolesData: [3, 12, 5]
+        };
         
         document.addEventListener('DOMContentLoaded', function() {
             // Gráfico: Prompts Creados por Día
@@ -655,7 +551,7 @@
             const ctxActiveUsers = document.getElementById('activeUsersChart');
             if (ctxActiveUsers) {
                 new Chart(ctxActiveUsers, {
-                    type: 'horizontalBar',
+                    type: 'bar',
                     data: {
                         labels: window.dashboardData.activeUsersLabels,
                         datasets: [{
