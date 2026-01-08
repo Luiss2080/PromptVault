@@ -10,10 +10,10 @@
     }
     
     $dashboardComponent = match($userRole) {
-        'admin' => 'components.admin',
-        'user' => 'components.user',
-        'collaborator' => 'components.collaborator',
-        default => 'components.guest',
+        'admin' => 'components.administrador',
+        'user' => 'components.usuario',
+        'collaborator' => 'components.colaborador',
+        default => 'components.invitado',
     };
 @endphp
 
