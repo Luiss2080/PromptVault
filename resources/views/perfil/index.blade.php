@@ -56,7 +56,7 @@
                     <i class="fas fa-toggle-on"></i>
                     <div class="info">
                         <span class="label">Estado</span>
-                        <span class="value" style="color: {{ $user->cuenta_activa ? '#10b981' : '#ef4444' }}">{{ $user->cuenta_activa ? 'Activo' : 'Inactivo' }}</span>
+                        <span class="value {{ $user->cuenta_activa ? 'text-success' : 'text-danger' }}">{{ $user->cuenta_activa ? 'Activo' : 'Inactivo' }}</span>
                     </div>
                 </div>
 
@@ -142,7 +142,7 @@
                     </div>
                     <div class="info-item">
                         <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Estado de Cuenta</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:{{ $user->cuenta_activa ? '#10b981' : '#ef4444' }}">{{ $user->cuenta_activa ? 'Activa' : 'Inactiva' }}</span>
+                        <span class="{{ $user->cuenta_activa ? 'text-success' : 'text-danger' }}" style="font-weight:600; font-size:1.1rem;">{{ $user->cuenta_activa ? 'Activa' : 'Inactiva' }}</span>
                     </div>
                     <div class="info-item">
                         <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Registro en el Sistema</label>
