@@ -25,7 +25,7 @@ class PerfilController extends Controller
                                        ->take(5)
                                        ->get();
 
-        // Variables necesarias para el componente administrador
+        // Variables necesarias para los componentes (administrador e invitado requieren recentUsers)
         $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
 
         return view('perfil.index', compact('user', 'logs', 'recentUsers'));
