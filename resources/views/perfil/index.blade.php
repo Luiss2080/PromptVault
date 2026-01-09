@@ -205,7 +205,7 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('js/perfil/index.js') }}"></script>
+    <script src="{{ asset('JavaScript/perfil/index.js') }}"></script>
 @endsection
 
 @endcomponent
