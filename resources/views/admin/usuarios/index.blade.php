@@ -72,8 +72,8 @@
                 <button class="btn-secondary-action" id="openFiltersModal">
                     <i class="fas fa-filter"></i>
                     <span>Filtros Avanzados</span>
-                    @if(request()->hasAny(['cuenta_activa', 'fecha_desde', 'fecha_hasta', 'prompts_min', 'tiene_acceso']))
-                        <span class="filter-badge">{{ collect(['cuenta_activa', 'fecha_desde', 'fecha_hasta', 'prompts_min', 'tiene_acceso'])->filter(fn($f) => request()->filled($f))->count() }}</span>
+                    @if(request()->hasAny(['cuenta_activa', 'rol', 'fecha_desde', 'fecha_hasta', 'prompts_min', 'tiene_acceso']))
+                        <span class="filter-badge">{{ collect(['cuenta_activa', 'rol', 'fecha_desde', 'fecha_hasta', 'prompts_min', 'tiene_acceso'])->filter(fn($f) => request()->filled($f))->count() }}</span>
                     @endif
                 </button>
                 
