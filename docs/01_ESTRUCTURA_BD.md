@@ -27,6 +27,7 @@ Usuarios del sistema con autenticación Laravel Breeze.
 | password | varchar(255) | Contraseña hasheada |
 | cuenta_activa | boolean | Estado de la cuenta |
 | ultimo_acceso | timestamp | Último login |
+| foto_perfil | varchar(255) | Ruta de la foto de perfil |
 | email_verified_at | timestamp | Verificación email |
 | remember_token | varchar(100) | Token sesión persistente |
 

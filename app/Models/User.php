@@ -27,6 +27,7 @@ class User extends Authenticatable
         'role_id',
         'cuenta_activa',
         'ultimo_acceso',
+        'foto_perfil',
     ];
 
     /**

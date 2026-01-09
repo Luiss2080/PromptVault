@@ -14,10 +14,16 @@ return new class extends Migration
         Schema::create('compartidos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
-            $table->string('nombre_destinatario', 100);
-            $table->string('email_destinatario', 100);
-            $table->timestamp('fecha_compartido')->useCurrent();
+            $table->uuid('token')->unique()->nullable();
+            $table->enum('tipo_acceso', ['solo_lectura', 'puede_copiar', 'puede_editar'])->default('solo_lectura');
+            $table->timestamp('fecha_expiracion')->nullable();
+            $table->boolean('requiere_autenticacion')->default(false);
+            $table->string('nombre_destinatario', 100)->nullable();
+            $table->string('email_destinatario', 100)->nullable();
             $table->text('notas')->nullable();
+            $table->integer('veces_accedido')->default(0);
+            $table->timestamp('ultimo_acceso')->nullable();
+            $table->timestamp('fecha_compartido')->useCurrent();
             $table->timestamps();
         });
     }
