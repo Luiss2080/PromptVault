@@ -1,6 +1,11 @@
-@extends('layouts.admin')
+@php
+    use Illuminate\Support\Facades\Auth;
+    $user = Auth::user();
+    $userRole = $user && $user->role ? $user->role->nombre : 'guest';
+    $componentName = 'components.' . $userRole;
+@endphp
 
-@section('title', 'Seguridad de Cuenta')
+@component($componentName, ['title' => 'Seguridad - Cambiar Contraseña'])
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/perfil/edit.css') }}">
@@ -318,4 +323,6 @@
             });
         });
     </script>
+@endsection
+
 @endcomponent

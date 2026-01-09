@@ -5,11 +5,9 @@
     $componentName = 'components.' . $userRole;
 @endphp
 
-@component($componentName)
+@component($componentName, ['title' => 'Mi Perfil'])
 
-@slot('title', 'Mi Perfil')
-
-@slot('css')
+@section('css')
     <link rel="stylesheet" href="{{ asset('css/perfil/index.css') }}">
 @endsection
 
@@ -218,9 +216,10 @@
         </ul>
     </div>
 </div>
-@endcomponent
+@endsection
 
-@slot('js')
+@section('js')
     <script src="{{ asset('js/perfil/index.js') }}"></script>
-@endslot
+@endsection
+
 @endcomponent

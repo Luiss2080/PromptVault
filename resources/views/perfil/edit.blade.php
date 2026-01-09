@@ -5,11 +5,9 @@
     $componentName = 'components.' . $userRole;
 @endphp
 
-@component($componentName)
+@component($componentName, ['title' => 'Editar Perfil'])
 
-@slot('title', 'Editar Perfil')
-
-@slot('css')
+@section('css')
     <link rel="stylesheet" href="{{ asset('css/perfil/edit.css') }}">
 @endsection
 
@@ -305,9 +303,9 @@
             </div>
         </div>
     </div>
-@endcomponent
+@endsection
 
-@slot('js')
+@section('js')
 <script>
 function previewAndUpload(input) {
     const file = input.files[0];
@@ -369,5 +367,6 @@ function previewAndUpload(input) {
     });
 }
 </script>
-@endslot
+@endsection
+
 @endcomponent
