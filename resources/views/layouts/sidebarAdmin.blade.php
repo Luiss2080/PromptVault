@@ -22,7 +22,7 @@
         <div class="nav-section always-open">
             <h3 class="section-title">
                 <i class="fas fa-book section-title-icon"></i>
-                BIBLIOTECA
+                Biblioteca
             </h3>
             <ul class="nav-list">
                 <li class="nav-item">
@@ -116,7 +116,7 @@
         <div class="nav-section always-open">
             <h3 class="section-title">
                 <i class="fas fa-user section-title-icon"></i>
-                MI CUENTA
+                Mi Cuenta
             </h3>
             <ul class="nav-list">
                 <li class="nav-item">
@@ -159,7 +159,7 @@
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
                 <i class="fas fa-file-alt section-title-icon"></i>
-                CONTENIDO
+                Contenido
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
             <ul class="nav-list">
@@ -200,7 +200,7 @@
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
                 <i class="fas fa-sitemap section-title-icon"></i>
-                ORGANIZACIÓN
+                Organización
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
             <ul class="nav-list">
@@ -253,7 +253,7 @@
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
                 <i class="fas fa-users section-title-icon"></i>
-                COLABORACIÓN
+                Colaboración
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
             <ul class="nav-list">
@@ -285,7 +285,7 @@
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
                 <i class="fas fa-history section-title-icon"></i>
-                HISTORIAL
+                Historial
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
             <ul class="nav-list">
@@ -329,7 +329,7 @@
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
                 <i class="fas fa-chart-line section-title-icon"></i>
-                ANÁLISIS
+                Análisis
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
             <ul class="nav-list">
@@ -371,7 +371,7 @@
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">
                 <i class="fas fa-cog section-title-icon"></i>
-                SISTEMA
+                Sistema
                 <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
             <ul class="nav-list">
@@ -385,19 +385,7 @@
                         <span class="nav-text">Usuarios</span>
                         <span class="nav-badge">{{ \App\Models\User::count() }}</span>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Usuarios</span>
-                        <span class="nav-badge">{{ \App\Models\User::count() }}</span>
-                    </a>
+
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
