@@ -37,7 +37,7 @@
                         <label><input type="checkbox" name="tipos[]" value="prompts" checked> Prompts</label>
                         <label><input type="checkbox" name="tipos[]" value="categorias" checked> Categorías</label>
                         <label><input type="checkbox" name="tipos[]" value="etiquetas" checked> Etiquetas</label>
-                        @if(auth()->user()->hasRole('administrador'))
+                        @if(auth()->user()->esAdmin())
                         <label><input type="checkbox" name="tipos[]" value="usuarios" checked> Usuarios</label>
                         @endif
                     </div>

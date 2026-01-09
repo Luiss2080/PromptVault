@@ -69,6 +69,9 @@ class HeaderManager {
   setupSearch() {
     if (!this.searchInput) return;
 
+    // Crear dropdown para autocompletado
+    this.createAutocompleteDropdown();
+
     this.searchInput.addEventListener('input', this.handleSearchInput.bind(this));
     this.searchInput.addEventListener('keydown', this.handleSearchKeydown.bind(this));
     this.searchInput.addEventListener('focus', this.handleSearchFocus.bind(this));
@@ -79,6 +82,243 @@ class HeaderManager {
     if (searchBtn) {
       searchBtn.addEventListener('click', this.performSearch.bind(this));
     }
+  }
+
+  createAutocompleteDropdown() {
+    // Crear el dropdown si no existe
+    if (document.getElementById('searchAutocomplete')) return;
+    
+    const dropdown = document.createElement('div');
+    dropdown.id = 'searchAutocomplete';
+    dropdown.className = 'search-autocomplete-dropdown';
+    dropdown.style.cssText = `
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--card-background);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      max-height: 400px;
+      overflow-y: auto;
+      z-index: 10000;
+      display: none;
+      margin-top: 8px;
+    `;
+    
+    const searchContainer = this.searchInput.closest('.header-search');
+    if (searchContainer) {
+      searchContainer.style.position = 'relative';
+      searchContainer.appendChild(dropdown);
+    }
+    
+    this.autocompleteDropdown = dropdown;
+  }
+
+  handleSearchInput(e) {
+    const query = e.target.value.trim();
+    
+    // Limpiar timeout anterior
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+    
+    // Si hay menos de 2 caracteres, ocultar dropdown
+    if (query.length < 2) {
+      this.hideAutocomplete();
+      return;
+    }
+    
+    // Debounce: esperar 300ms antes de buscar
+    this.searchTimeout = setTimeout(() => {
+      this.performAutocompleteSearch(query);
+    }, 300);
+  }
+
+  async performAutocompleteSearch(query) {
+    try {
+      const response = await fetch(`/buscador/search?q=${encodeURIComponent(query)}`);
+      const data = await response.json();
+      
+      if (data.resultados && data.resultados.length > 0) {
+        this.showAutocompleteResults(data.resultados);
+      } else {
+        this.showNoResults();
+      }
+    } catch (error) {
+      console.error('Error en búsqueda:', error);
+      this.hideAutocomplete();
+    }
+  }
+
+  showAutocompleteResults(resultados) {
+    if (!this.autocompleteDropdown) return;
+    
+    let html = '<div class="autocomplete-results">';
+    
+    resultados.forEach((item, index) => {
+      const iconClass = this.getIconClass(item.icono);
+      html += `
+        <a href="${item.url}" class="autocomplete-item" data-index="${index}">
+          <div class="autocomplete-icon">
+            <i class="fas ${iconClass}"></i>
+          </div>
+          <div class="autocomplete-content">
+            <div class="autocomplete-title">${this.escapeHtml(item.titulo)}</div>
+            <div class="autocomplete-description">${this.escapeHtml(item.descripcion)}</div>
+          </div>
+          <div class="autocomplete-type">${item.tipo}</div>
+        </a>
+      `;
+    });
+    
+    html += '</div>';
+    
+    this.autocompleteDropdown.innerHTML = html;
+    this.autocompleteDropdown.style.display = 'block';
+    
+    // Agregar estilos CSS dinámicamente
+    this.addAutocompleteStyles();
+  }
+
+  showNoResults() {
+    if (!this.autocompleteDropdown) return;
+    
+    this.autocompleteDropdown.innerHTML = `
+      <div class="autocomplete-no-results">
+        <i class="fas fa-search"></i>
+        <p>No se encontraron resultados</p>
+      </div>
+    `;
+    this.autocompleteDropdown.style.display = 'block';
+  }
+
+  hideAutocomplete() {
+    if (this.autocompleteDropdown) {
+      setTimeout(() => {
+        this.autocompleteDropdown.style.display = 'none';
+      }, 200);
+    }
+  }
+
+  getIconClass(icon) {
+    const iconMap = {
+      'file-alt': 'fa-file-alt',
+      'folder': 'fa-folder',
+      'tag': 'fa-tag',
+      'user': 'fa-user',
+      'desktop': 'fa-desktop'
+    };
+    return iconMap[icon] || 'fa-circle';
+  }
+
+  escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  addAutocompleteStyles() {
+    if (document.getElementById('autocompleteStyles')) return;
+    
+    const style = document.createElement('style');
+    style.id = 'autocompleteStyles';
+    style.textContent = `
+      .autocomplete-results {
+        padding: 8px;
+      }
+      
+      .autocomplete-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        color: var(--text-color);
+        cursor: pointer;
+      }
+      
+      .autocomplete-item:hover {
+        background: var(--primary-accent);
+        transform: translateX(4px);
+      }
+      
+      .autocomplete-icon {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--primary-color);
+        color: white;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      
+      .autocomplete-content {
+        flex: 1;
+        min-width: 0;
+      }
+      
+      .autocomplete-title {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--text-color);
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .autocomplete-description {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .autocomplete-type {
+        font-size: 0.8rem;
+        color: var(--primary-color);
+        font-weight: 500;
+        text-transform: uppercase;
+        flex-shrink: 0;
+      }
+      
+      .autocomplete-no-results {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-secondary);
+      }
+      
+      .autocomplete-no-results i {
+        font-size: 3rem;
+        opacity: 0.3;
+        margin-bottom: 12px;
+      }
+      
+      .autocomplete-no-results p {
+        margin: 0;
+        font-size: 0.95rem;
+      }
+      
+      body.dark-mode .search-autocomplete-dropdown {
+        background: var(--card-background);
+        border-color: var(--border-color);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      }
+      
+      body.dark-mode .autocomplete-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+    `;
+    
+    document.head.appendChild(style);
   }
 
   setupNotifications() {

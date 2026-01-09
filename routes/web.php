@@ -80,6 +80,7 @@ Route::middleware('auth')->group(function () {
     
     // Rutas de Buscador
     Route::get('buscador', [BuscadorController::class, 'index'])->name('buscador.index');
+    Route::get('buscador/search', [BuscadorController::class, 'search'])->name('buscador.search');
     
     // Rutas de Configuraciones
     Route::get('configuraciones', [ConfiguracionesController::class, 'index'])->name('configuraciones.index');

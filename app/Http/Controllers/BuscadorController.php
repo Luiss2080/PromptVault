@@ -11,6 +11,94 @@ use Illuminate\Support\Facades\DB;
 
 class BuscadorController extends Controller
 {
+    /**
+     * Búsqueda en tiempo real (AJAX)
+     */
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+        $resultados = [];
+        
+        if (strlen($query) < 2) {
+            return response()->json(['resultados' => []]);
+        }
+        
+        // Buscar en Prompts
+        $prompts = Prompt::where('titulo', 'like', "%{$query}%")
+            ->orWhere('contenido', 'like', "%{$query}%")
+            ->limit(5)
+            ->get()
+            ->map(function ($prompt) {
+                return [
+                    'titulo' => $prompt->titulo,
+                    'descripcion' => substr($prompt->descripcion ?? $prompt->contenido, 0, 80),
+                    'tipo' => 'Prompt',
+                    'icono' => 'file-alt',
+                    'url' => route('prompts.show', $prompt->id)
+                ];
+            });
+        
+        // Buscar en Categorías
+        $categorias = Categoria::where('nombre', 'like', "%{$query}%")
+            ->limit(5)
+            ->get()
+            ->map(function ($categoria) {
+                return [
+                    'titulo' => $categoria->nombre,
+                    'descripcion' => $categoria->descripcion ?? 'Categoría',
+                    'tipo' => 'Categoría',
+                    'icono' => 'folder',
+                    'url' => route('prompts.index', ['categoria' => $categoria->id])
+                ];
+            });
+        
+        // Buscar en Etiquetas
+        $etiquetas = Etiqueta::where('nombre', 'like', "%{$query}%")
+            ->limit(5)
+            ->get()
+            ->map(function ($etiqueta) {
+                return [
+                    'titulo' => $etiqueta->nombre,
+                    'descripcion' => 'Etiqueta',
+                    'tipo' => 'Etiqueta',
+                    'icono' => 'tag',
+                    'url' => route('prompts.index', ['etiqueta' => $etiqueta->id])
+                ];
+            });
+        
+        // Vistas y opciones del sistema (solo admin)
+        $vistas = [];
+        if (auth()->user()->esAdmin()) {
+            $rutasSistema = [
+                ['titulo' => 'Dashboard', 'url' => route('dashboard'), 'tipo' => 'Vista'],
+                ['titulo' => 'Prompts', 'url' => route('prompts.index'), 'tipo' => 'Vista'],
+                ['titulo' => 'Crear Prompt', 'url' => route('prompts.create'), 'tipo' => 'Vista'],
+                ['titulo' => 'Calendario', 'url' => route('calendario.index'), 'tipo' => 'Vista'],
+                ['titulo' => 'Configuraciones', 'url' => route('configuraciones.index'), 'tipo' => 'Vista'],
+                ['titulo' => 'Usuarios', 'url' => '#', 'tipo' => 'Vista'],
+                ['titulo' => 'Categorías', 'url' => '#', 'tipo' => 'Vista'],
+                ['titulo' => 'Etiquetas', 'url' => '#', 'tipo' => 'Vista'],
+            ];
+            
+            $vistas = collect($rutasSistema)->filter(function ($item) use ($query) {
+                return stripos($item['titulo'], $query) !== false;
+            })->map(function ($item) {
+                return [
+                    'titulo' => $item['titulo'],
+                    'descripcion' => 'Ir a ' . $item['titulo'],
+                    'tipo' => $item['tipo'],
+                    'icono' => 'desktop',
+                    'url' => $item['url']
+                ];
+            })->take(5)->values();
+        }
+        
+        // Combinar resultados
+        $resultados = $vistas->concat($prompts)->concat($categorias)->concat($etiquetas)->take(10);
+        
+        return response()->json(['resultados' => $resultados]);
+    }
+    
     public function index(Request $request)
     {
         $query = $request->input('query');
@@ -86,8 +174,8 @@ class BuscadorController extends Controller
                 }
             }
             
-            // Buscar en Usuarios
-            if (in_array('usuarios', $tipos) && auth()->user()->hasRole('administrador')) {
+            // Buscar en Usuarios (solo admin)
+            if (in_array('usuarios', $tipos) && auth()->user()->esAdmin()) {
                 $usuarios = User::where('name', 'like', "%{$query}%")
                     ->orWhere('email', 'like', "%{$query}%")
                     ->limit(10)
