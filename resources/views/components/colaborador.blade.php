@@ -337,6 +337,7 @@
     @php
         // ===== DATOS REALES PARA COLABORADOR =====
         $userId = auth()->id();
+        $userEmail = auth()->user()->email;
         
         // 1. Ediciones por día (últimos 7 días)
         $edicionesPorDia = [];
@@ -367,17 +368,17 @@
             $actividadSemanal[] = $count;
         }
         
-        // 4. Estado de revisiones (simulado con compartidos)
-        $compartidosTotal = \App\Models\Compartido::where('user_destino_id', $userId)->count();
-        $compartidosEditable = \App\Models\Compartido::where('user_destino_id', $userId)->where('permiso_edicion', true)->count();
-        $compartidosSoloLectura = $compartidosTotal - $compartidosEditable;
+        // 4. Estado de revisiones (basado en prompts compartidos al usuario)
+        $compartidosTotal = \App\Models\Compartido::where('email_destinatario', $userEmail)->count();
+        $compartidosConNotas = \App\Models\Compartido::where('email_destinatario', $userEmail)->whereNotNull('notas')->count();
+        $compartidosSinNotas = $compartidosTotal - $compartidosConNotas;
         
         // Preparar datos para JavaScript
         $colabChartData = [
             'edicionesPorDia' => $edicionesPorDia,
             'contribucionesPorTipo' => [$nuevos, $ediciones, $revisiones, $comentarios, $versiones],
             'actividadSemanal' => $actividadSemanal,
-            'revisionesEstado' => [$compartidosEditable, $compartidosSoloLectura, 0] // [Editable, Solo Lectura, Sin Acceso]
+            'revisionesEstado' => [$compartidosConNotas, $compartidosSinNotas, 0] // [Con Notas, Sin Notas, Otros]
         ];
     @endphp
     
@@ -511,7 +512,7 @@
                 new Chart(ctxRevisiones, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Editables', 'Solo Lectura', 'Sin Acceso'],
+                        labels: ['Con Notas', 'Sin Notas', 'Otros'],
                         datasets: [{
                             data: window.colabChartData.revisionesEstado,
                             backgroundColor: ['#10b981', '#f59e0b', '#e11d48']
