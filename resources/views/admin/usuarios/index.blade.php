@@ -9,6 +9,18 @@
 
 @section('content')
 <div class="usuarios-container">
+    <!-- Mensajes Flash -->
+    @if(session('success'))
+        <div class="alert alert-success" style="background: #10b981; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger" style="background: #ef4444; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <!-- Control Panel Section -->
     <div class="control-panel">
         <div class="panel-header">
