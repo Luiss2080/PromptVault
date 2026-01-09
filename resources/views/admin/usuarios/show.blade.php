@@ -143,5 +143,5 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('js/admin/usuarios/show.js') }}"></script>
+    <script src="{{ asset('JavaScript/usuarios/show.js') }}"></script>
 @endsection

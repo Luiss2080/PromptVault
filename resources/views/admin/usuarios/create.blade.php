@@ -49,7 +49,7 @@
                             <i class="fas fa-camera"></i>
                             Subir Foto
                         </button>
-                        <input type="file" name="foto_perfil" id="foto_perfil" class="file-input" accept="image/*">
+                        <input type="file" name="foto_perfil" id="avatar" class="file-input" accept="image/*">
                     </div>
                     <p class="photo-help-text">JPG, PNG o GIF. Máx 2MB</p>
                 </div>
@@ -178,5 +178,5 @@
 </div>
 @endsection
 @section('js')
-<script src="{{ asset('js/admin/usuarios/create.js') }}"></script>
+<script src="{{ asset('JavaScript/usuarios/create.js') }}"></script>
 @endsection

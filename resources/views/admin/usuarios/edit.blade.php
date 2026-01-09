@@ -53,7 +53,7 @@
                             <i class="fas fa-camera"></i>
                             Cambiar Foto
                         </button>
-                        <input type="file" name="foto_perfil" id="foto_perfil" class="file-input" accept="image/*">
+                        <input type="file" name="foto_perfil" id="avatar" class="file-input" accept="image/*">
                     </div>
                     <p class="photo-help-text">Deje vacío para mantener la actual.</p>
                 </div>
@@ -185,5 +185,5 @@
 </div>
 @endsection
 @section('js')
-<script src="{{ asset('js/admin/usuarios/edit.js') }}"></script>
+<script src="{{ asset('JavaScript/usuarios/edit.js') }}"></script>
 @endsection

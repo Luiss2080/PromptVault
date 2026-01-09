@@ -170,13 +170,13 @@
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('js/admin/usuarios/index.js') }}"></script>
     <script>
         const swalTheme = {
             confirmButtonColor: '#e11d48',
             cancelButtonColor: '#64748b',
-            background: '#ffffff',
-            color: '#1e293b'
+            background: '#1e293b',
+            color: '#f1f5f9'
         };
     </script>
+    <script src="{{ asset('JavaScript/usuarios/index.js') }}"></script>
 @endsection
