@@ -3,7 +3,7 @@
 @section('title', 'Gestión de Usuarios')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/admin/usuarios/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/perfil/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/pages/paginacion.css') }}">
 @endsection
 

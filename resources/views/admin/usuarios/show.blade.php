@@ -3,7 +3,22 @@
 @section('title', 'Detalle de Usuario')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/admin/usuarios/show.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/perfil/index.css') }}">
+    <style>
+        .user-role-title {
+            color: white;
+            margin-top: 1rem;
+        }
+        .user-email-text {
+            color: var(--text-muted, #94a3b8);
+        }
+        .estado-activo {
+            color: #4ade80 !important;
+        }
+        .estado-inactivo {
+            color: #f87171 !important;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -16,7 +31,7 @@
             </div>
             <div class="title-content">
                 <h2>Detalles del Usuario</h2>
-                <p class="subtitle">{{ $usuario->nombre_completo }}</p>
+                <p class="subtitle">{{ $usuario->name }}</p>
             </div>
         </div>
         <div class="header-actions">
@@ -42,14 +57,14 @@
                     @endif
                 </div>
                 
-                <h3 style="color: white; margin-top: 1rem;">{{ ucfirst($usuario->role?->nombre ?? 'Sin rol') }}</h3>
-                <span style="color: var(--text-muted);">{{ $usuario->email }}</span>
+                <h3 class="user-role-title">{{ ucfirst($usuario->role?->nombre ?? 'Sin rol') }}</h3>
+                <span class="user-email-text">{{ $usuario->email }}</span>
 
                 <!-- Quick Stats -->
                 <div class="info-list">
                     <div class="info-item">
                         <span class="info-label">Estado</span>
-                        <span class="info-value" style="color: {{ $usuario->cuenta_activa ? '#4ade80' : '#f87171' }};">
+                        <span class="info-value estado-{{ $usuario->cuenta_activa ? 'activo' : 'inactivo' }}">
                             {{ $usuario->cuenta_activa ? 'Activa' : 'Inactiva' }}
                         </span>
                     </div>

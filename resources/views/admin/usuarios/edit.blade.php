@@ -3,7 +3,7 @@
 @section('title', 'Editar Usuario')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/admin/usuarios/edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/perfil/edit.css') }}">
 @endsection
 
 @section('content')
@@ -41,7 +41,7 @@
                         @if($usuario->foto_perfil)
                             <img src="{{ asset('storage/' . $usuario->foto_perfil) }}" alt="Foto de perfil" class="photo-preview">
                         @else
-                            <div class="photo-placeholder" style="{{ $usuario->foto_perfil ? 'display: none;' : '' }}">
+                            <div class="photo-placeholder">
                                 <i class="fas fa-user"></i>
                             </div>
                             <img src="" alt="Vista previa" class="photo-preview" style="display: none;">
