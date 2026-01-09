@@ -1,14 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // --- SEARCH FUNCTIONALITY (REAL TIME FILTER) ---
+    // --- SEARCH FUNCTIONALITY (AJAX WITHOUT PAGE RELOAD) ---
     const searchInput = document.getElementById("searchInput");
     let timeout = null;
+    let currentRequest = null;
 
     if (searchInput) {
         searchInput.addEventListener("input", function () {
             clearTimeout(timeout);
             timeout = setTimeout(function () {
-                filterTableRows();
-            }, 300); // Reduced debounce for real-time feel
+                performSearch();
+            }, 400); // Debounce for server request
         });
 
         // Focus effect for parent wrapper
@@ -23,58 +24,81 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Function to filter table rows in real-time
-    function filterTableRows() {
-        const query = searchInput.value.toLowerCase().trim();
-        const tableRows = document.querySelectorAll('.dashboard-table tbody tr');
-        let visibleCount = 0;
+    // Function to perform AJAX search
+    function performSearch() {
+        const query = searchInput.value.trim();
+        const role = document.getElementById("roleSelect")?.value || "";
+        const perPage = document.getElementById("entriesSelect")?.value || 10;
 
-        tableRows.forEach(row => {
-            // Skip the "no results" row if it exists
-            if (row.querySelector('td[colspan]')) {
-                row.style.display = 'none';
-                return;
-            }
+        // Cancel previous request if exists
+        if (currentRequest) {
+            currentRequest.abort();
+        }
 
-            const userName = row.querySelector('.user-info h4')?.textContent.toLowerCase() || '';
-            const userEmail = row.querySelector('.user-info p')?.textContent.toLowerCase() || '';
+        // Build URL with parameters
+        const url = new URL(window.location.href);
+        url.searchParams.set("search", query);
+        url.searchParams.set("page", 1);
+        url.searchParams.set("per_page", perPage);
+        if (role) url.searchParams.set("rol", role);
+        else url.searchParams.delete("rol");
+
+        // Create abort controller for cancellation
+        const controller = new AbortController();
+        currentRequest = controller;
+
+        // Fetch results from server
+        fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            signal: controller.signal
+        })
+        .then(response => response.text())
+        .then(html => {
+            // Parse the response and extract table body
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newTbody = doc.querySelector('.dashboard-table tbody');
+            const newPagination = doc.querySelector('.pagination-wrapper');
             
-            // Check if query matches name or email
-            if (userName.includes(query) || userEmail.includes(query)) {
-                row.style.display = '';
-                visibleCount++;
-            } else {
-                row.style.display = 'none';
+            if (newTbody) {
+                const currentTbody = document.querySelector('.dashboard-table tbody');
+                if (currentTbody) {
+                    currentTbody.innerHTML = newTbody.innerHTML;
+                }
             }
-        });
 
-        // Show/hide no results message
-        updateNoResultsMessage(visibleCount);
+            if (newPagination) {
+                const currentPagination = document.querySelector('.pagination-wrapper');
+                if (currentPagination) {
+                    currentPagination.innerHTML = newPagination.innerHTML;
+                }
+            }
+
+            // Re-attach delete button listeners
+            attachDeleteListeners();
+        })
+        .catch(error => {
+            if (error.name !== 'AbortError') {
+                console.error('Search error:', error);
+            }
+        })
+        .finally(() => {
+            currentRequest = null;
+        });
     }
 
-    // Function to show/hide no results message
-    function updateNoResultsMessage(visibleCount) {
-        const tbody = document.querySelector('.dashboard-table tbody');
-        let noResultsRow = tbody.querySelector('.no-results-row');
-
-        if (visibleCount === 0) {
-            if (!noResultsRow) {
-                noResultsRow = document.createElement('tr');
-                noResultsRow.className = 'no-results-row';
-                noResultsRow.innerHTML = `
-                    <td colspan="6" class="text-center" style="padding: 3rem; color: var(--text-muted);">
-                        <i class="fas fa-search" style="font-size: 3rem; opacity: 0.3; display: block; margin-bottom: 1rem;"></i>
-                        No se encontraron resultados para tu búsqueda
-                    </td>
-                `;
-                tbody.appendChild(noResultsRow);
-            }
-            noResultsRow.style.display = '';
-        } else {
-            if (noResultsRow) {
-                noResultsRow.style.display = 'none';
-            }
-        }
+    // Function to attach delete button listeners
+    function attachDeleteListeners() {
+        const deleteButtons = document.querySelectorAll('.btn-delete-user');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                confirmDelete(id);
+            });
+        });
     }
 
     // --- ENTRIES PER PAGE ---
