@@ -74,10 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- Loader Functions ---
 
     function showLoader() {
-        if (overlay.classList.contains("hidden")) {
-            overlay.style.display = "flex";
-            void overlay.offsetWidth;
-            overlay.classList.remove("hidden");
+        if (!overlay.classList.contains("active")) {
+            overlay.classList.add("active");
             resetLoader();
             startSimulation();
         }
@@ -175,17 +173,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         setTimeout(() => {
-            overlay.classList.add("hidden");
+            overlay.classList.remove("active");
             setTimeout(() => {
-                overlay.style.display = "none";
                 resetLoader();
             }, 500);
         }, 1000);
     }
 
     function hideLoaderInstant() {
-        overlay.classList.add("hidden");
-        overlay.style.display = "none";
+        overlay.classList.remove("active");
         resetLoader();
     }
 });
