@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Simulation Config
     const duration = 5000;
     const minDuration = 2000; // Mínimo 2 segundos
-    const interval = 30;
+    const interval = 50; // Actualización más suave
     const steps = duration / interval;
     const increment = 100 / steps;
 

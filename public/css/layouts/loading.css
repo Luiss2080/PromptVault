@@ -219,7 +219,7 @@
     background: var(--loader-primary);
     border-radius: 4px;
     box-shadow: 0 0 15px var(--loader-primary);
-    transition: width 0.1s linear; /* Smooth linear for smoother simulation */
+    transition: width 0.3s ease-out;
 }
 
 .progress-info {
@@ -233,6 +233,7 @@
     font-weight: 700;
     font-size: 1rem;
     text-shadow: 0 0 10px var(--loader-glow);
+    transition: all 0.3s ease-out;
 }
 
 /* Status Text */
