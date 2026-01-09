@@ -144,6 +144,49 @@
             </ul>
         </div>
 
+        <!-- Sección: Perfil (COLLABORATOR) -->
+        <div class="nav-section always-open">
+            <h3 class="section-title">
+                <i class="fas fa-user section-title-icon"></i>
+                MI CUENTA
+            </h3>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="{{ route('perfil.index') }}" class="nav-link {{ request()->routeIs('perfil.index') ? 'active' : '' }}">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Ver Perfil</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('perfil.edit') }}" class="nav-link {{ request()->routeIs('perfil.edit') ? 'active' : '' }}">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Editar Perfil</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('perfil.security') }}" class="nav-link {{ request()->routeIs('perfil.security') ? 'active' : '' }}">
+                        <span class="nav-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                        <span class="nav-text">Seguridad</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
         <!-- Sección: Comunidad (COLLABORATOR) -->
         <div class="nav-section">
             <h3 class="section-title" data-toggle="collapse">

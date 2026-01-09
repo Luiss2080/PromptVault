@@ -205,8 +205,8 @@
 
             <button class="profile-trigger" id="profileDropdownToggle" aria-expanded="false">
                 <div class="user-avatar-small">
-                    @if($loggedInUser && $loggedInUser->avatar && file_exists(public_path('images/avatars/'.$loggedInUser->avatar)))
-                        <img src="{{ asset('images/avatars/'.$loggedInUser->avatar) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                    @if($loggedInUser && $loggedInUser->foto_perfil && file_exists(public_path($loggedInUser->foto_perfil)))
+                        <img src="{{ asset($loggedInUser->foto_perfil) }}" alt="Foto de Perfil" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                     @else
                         <span>{{ $initial }}</span>
                     @endif
@@ -224,8 +224,8 @@
             <div class="profile-dropdown compact" id="profileDropdown">
                 <div class="pd-header-compact">
                     <div class="user-avatar-med">
-                        @if($loggedInUser && $loggedInUser->avatar && file_exists(public_path('images/avatars/'.$loggedInUser->avatar)))
-                            <img src="{{ asset('images/avatars/'.$loggedInUser->avatar) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        @if($loggedInUser && $loggedInUser->foto_perfil && file_exists(public_path($loggedInUser->foto_perfil)))
+                            <img src="{{ asset($loggedInUser->foto_perfil) }}" alt="Foto de Perfil" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                         @else
                             <span>{{ $initial }}</span>
                         @endif
@@ -238,7 +238,7 @@
                 
                 <div class="pd-grid-menu">
                     <!-- 1. Perfil -->
-                    <a href="#" class="pd-grid-item" title="Ver Perfil">
+                    <a href="{{ route('perfil.index') }}" class="pd-grid-item" title="Ver Perfil">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
