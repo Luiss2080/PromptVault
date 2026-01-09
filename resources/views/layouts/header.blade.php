@@ -20,12 +20,12 @@
             </h1>
         </div>
         <div class="header-search">
-            <form action="{{ route('prompts.index') }}" method="GET" class="search-form">
+            <form action="{{ route('buscador.index') }}" method="GET" class="search-form">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
-                <input type="text" name="q" id="globalSearch" placeholder="Buscar prompts..." class="search-input" autocomplete="off">
+                <input type="text" name="query" id="globalSearch" placeholder="Buscar prompts, categorías, etiquetas..." class="search-input" autocomplete="off">
             </form>
         </div>
     </div>
@@ -110,18 +110,6 @@
                 <line x1="3" y1="10" x2="21" y2="10"></line>
             </svg>
         </a>
-
-        <!-- Buscador Button -->
-        <a href="{{ route('buscador.index') }}" class="action-btn" title="Buscador Global">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <path d="m21 21-4.35-4.35"></path>
-            </svg>
-        </a>
-
-
-
-
 
         <!-- Notificaciones -->
         <div class="notification-wrapper">
