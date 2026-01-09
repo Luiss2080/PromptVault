@@ -1,13 +1,36 @@
-@extends('layouts.admin')
-
-@section('title', 'Configuración del Sistema')
-
-@section('css')
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración del Sistema - PromptVault</title>
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/LogoPestañaPrompt.jpg') }}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{{ asset('css/dashboard/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/components/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/components/header.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/components/footer.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layouts/loading.css') }}">
     <link rel="stylesheet" href="{{ asset('css/perfil/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/configuraciones/configuraciones.css') }}">
-@endsection
+</head>
 
-@section('content')
+<body>
+    @include('layouts.loading')
+    
+    <div class="dashboard-layout">
+        @include('layouts.sidebar')
+        
+        <div class="main-content">
+            @include('layouts.header', ['header_title' => 'Configuración'])
+            
+            <div class="dashboard-content">
+
     <!-- Control Panel Header -->
     <div class="control-panel">
         <div class="panel-header">
@@ -224,14 +247,18 @@
             </div>
         </div>
     </div>
-@endsection
 
-@section('js')
-    <script src="{{ asset('js/configuraciones/configuraciones.js') }}"></script>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('JavaScript/layouts/loading.js') }}"></script>
+    <script src="{{ asset('JavaScript/components/sidebar.js') }}"></script>
+    <script src="{{ asset('JavaScript/configuraciones/configuraciones.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Animation for cards
-            const cards = document.querySelectorAll('.settings-card, .profile-card'); // Animate sidebars too
+            const cards = document.querySelectorAll('.settings-card, .profile-card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(20px)';
@@ -243,4 +270,6 @@
             });
         });
     </script>
-@endsection
+
+</body>
+</html>

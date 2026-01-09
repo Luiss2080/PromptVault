@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromptController;
 use App\Http\Controllers\CalendarioController;
+use App\Http\Controllers\ConfiguracionesController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -75,6 +76,16 @@ Route::middleware('auth')->group(function () {
     
     // Rutas de Calendario
     Route::resource('calendario', CalendarioController::class);
+    
+    // Rutas de Configuraciones
+    Route::get('configuraciones', [ConfiguracionesController::class, 'index'])->name('configuraciones.index');
+    Route::get('configuraciones/general', [ConfiguracionesController::class, 'general'])->name('configuraciones.general');
+    Route::get('configuraciones/seguridad', [ConfiguracionesController::class, 'seguridad'])->name('configuraciones.seguridad');
+    Route::get('configuraciones/notificaciones', [ConfiguracionesController::class, 'notificaciones'])->name('configuraciones.notificaciones');
+    Route::get('configuraciones/apariencia', [ConfiguracionesController::class, 'apariencia'])->name('configuraciones.apariencia');
+    Route::get('configuraciones/sistema', [ConfiguracionesController::class, 'sistema'])->name('configuraciones.sistema');
+    Route::get('configuraciones/respaldos', [ConfiguracionesController::class, 'respaldos'])->name('configuraciones.respaldos');
+    Route::post('configuraciones/update', [ConfiguracionesController::class, 'update'])->name('configuraciones.update');
 });
 
 require __DIR__.'/auth.php';
