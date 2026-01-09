@@ -520,3 +520,40 @@
     animation-delay: 0.1s;
 }
 /* ... simpler to just let them fade in or use JS to stagger. For CSS only, subtle fade is safer. */
+
+/* ============================================
+   DARK MODE OVERRIDES
+   ============================================ */
+body.dark-mode .event-badge.academic {
+    background: rgba(14, 165, 233, 0.2);
+    color: #38bdf8;
+}
+
+body.dark-mode .event-badge.holiday {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+body.dark-mode .event-badge.meeting {
+    background: rgba(168, 85, 247, 0.2);
+    color: #c084fc;
+}
+
+body.dark-mode .event-badge.exam {
+    background: rgba(234, 179, 8, 0.2);
+    color: #fbbf24;
+}
+
+body.dark-mode .day-cell.today {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: var(--primary-accent);
+    color: #818cf8;
+}
+
+body.dark-mode .cal-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d1d5db' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+body.dark-mode .weekdays {
+    color: #9ca3af;
+}

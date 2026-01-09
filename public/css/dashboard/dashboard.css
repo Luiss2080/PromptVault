@@ -51,6 +51,7 @@
     --bg-surface-secondary: #f8fafc;
     --input-bg: #f8fafc;
     --dropdown-bg: #ffffff;
+    --primary-accent: #6366f1; /* Indigo para elementos de acento */
 }
 
 body.dark-mode {
