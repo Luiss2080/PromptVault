@@ -32,7 +32,7 @@
         <div class="panel-content">
             <div class="search-bar">
                 <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="Buscar por nombre, correo o documento..." value="{{ request('search') }}">
+                <input type="text" id="searchInput" placeholder="Buscar por nombre o correo..." value="{{ request('search') }}">
             </div>
             
             <div class="filter-group">
@@ -41,9 +41,9 @@
                     <select id="roleSelect">
                         <option value="">Todos los Roles</option>
                         <option value="admin" {{ request('rol') == 'admin' ? 'selected' : '' }}>Administrador</option>
-                        <option value="docente" {{ request('rol') == 'docente' ? 'selected' : '' }}>Docente</option>
-                        <option value="estudiante" {{ request('rol') == 'estudiante' ? 'selected' : '' }}>Estudiante</option>
-                        <option value="padre" {{ request('rol') == 'padre' ? 'selected' : '' }}>Padre</option>
+                        <option value="user" {{ request('rol') == 'user' ? 'selected' : '' }}>Usuario</option>
+                        <option value="collaborator" {{ request('rol') == 'collaborator' ? 'selected' : '' }}>Colaborador</option>
+                        <option value="guest" {{ request('rol') == 'guest' ? 'selected' : '' }}>Invitado</option>
                     </select>
                 </div>
 
@@ -71,9 +71,9 @@
                 <thead>
                     <tr>
                         <th>Usuario</th>
-                        <th>Documento</th>
                         <th>Rol</th>
                         <th>Estado</th>
+                        <th>Prompts</th>
                         <th>Último Acceso</th>
                         <th>Acciones</th>
                     </tr>
@@ -84,32 +84,46 @@
                             <td>
                                 <div class="user-info">
                                     <div class="avatar-circle">
-                                        @if($usuario->avatar)
-                                            <img src="{{ asset('storage/' . $usuario->avatar) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                                        @if($usuario->foto_perfil)
+                                            <img src="{{ asset('storage/' . $usuario->foto_perfil) }}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
                                         @else
-                                            {{ strtoupper(substr($usuario->name ?? '?', 0, 1) . substr($usuario->apellido ?? '?', 0, 1)) }}
+                                            {{ strtoupper(substr($usuario->name ?? '?', 0, 1)) }}
                                         @endif
                                     </div>
                                     <div class="details">
-                                        <span class="name">{{ $usuario->nombre_completo ?? 'N/A' }}</span>
+                                        <span class="name">{{ $usuario->name ?? 'N/A' }}</span>
                                         <span class="role">{{ $usuario->email ?? 'Sin email' }}</span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <div class="id-info">
-                                    <span class="primary-text">{{ $usuario->ci ?? '-' }}</span>
-                                    
-                                </div>
-                            </td>
-                            <td>
-                                 <span class="badge role {{ $usuario->rol }}">
-                                    {{ ucfirst($usuario->rol) }}
+                                 <span class="badge role {{ $usuario->role?->nombre }}">
+                                    @switch($usuario->role?->nombre)
+                                        @case('admin')
+                                            Administrador
+                                            @break
+                                        @case('user')
+                                            Usuario
+                                            @break
+                                        @case('collaborator')
+                                            Colaborador
+                                            @break
+                                        @case('guest')
+                                            Invitado
+                                            @break
+                                        @default
+                                            Sin rol
+                                    @endswitch
                                  </span>
                             </td>
                             <td>
-                                <span class="badge {{ $usuario->estado == 'activo' ? 'active' : 'inactive' }}">
-                                    {{ ucfirst($usuario->estado) }}
+                                <span class="badge {{ $usuario->cuenta_activa ? 'active' : 'inactive' }}">
+                                    {{ $usuario->cuenta_activa ? 'Activo' : 'Inactivo' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="sub-text" style="font-weight: 500;">
+                                    {{ $usuario->prompts_count ?? 0 }}
                                 </span>
                             </td>
                             <td>
@@ -138,6 +152,7 @@
                     @empty
                         <tr>
                             <td colspan="6" class="text-center" style="padding: 3rem; color: var(--text-muted);">
+                                <i class="fas fa-users" style="font-size: 3rem; opacity: 0.3; display: block; margin-bottom: 1rem;"></i>
                                 No se encontraron usuarios registrados
                             </td>
                         </tr>

@@ -33,8 +33,8 @@
         <div class="left-column">
             <div class="form-card profile-card">
                  <div class="photo-preview-container">
-                    @if($usuario->avatar)
-                        <img src="{{ asset('storage/' . $usuario->avatar) }}" alt="Foto de perfil" class="photo-preview">
+                    @if($usuario->foto_perfil)
+                        <img src="{{ asset('storage/' . $usuario->foto_perfil) }}" alt="Foto de perfil" class="photo-preview">
                     @else
                         <div class="photo-placeholder">
                             <i class="fas fa-user"></i>
@@ -42,15 +42,21 @@
                     @endif
                 </div>
                 
-                <h3 style="color: white; margin-top: 1rem;">{{ ucfirst($usuario->rol) }}</h3>
+                <h3 style="color: white; margin-top: 1rem;">{{ ucfirst($usuario->role?->nombre ?? 'Sin rol') }}</h3>
                 <span style="color: var(--text-muted);">{{ $usuario->email }}</span>
 
                 <!-- Quick Stats -->
                 <div class="info-list">
                     <div class="info-item">
                         <span class="info-label">Estado</span>
-                        <span class="info-value" style="color: {{ $usuario->estado == 'activo' ? '#4ade80' : '#f87171' }};">
-                            {{ ucfirst($usuario->estado) }}
+                        <span class="info-value" style="color: {{ $usuario->cuenta_activa ? '#4ade80' : '#f87171' }};">
+                            {{ $usuario->cuenta_activa ? 'Activa' : 'Inactiva' }}
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Prompts Creados</span>
+                        <span class="info-value">
+                            {{ $usuario->prompts_count ?? 0 }}
                         </span>
                     </div>
                 </div>
@@ -64,65 +70,17 @@
             <div class="form-card">
                 <div class="card-header">
                     <h3>
-                        <i class="fas fa-address-card"></i>
+                        <i class="fas fa-user"></i>
                         Información Personal
                     </h3>
                 </div>
 
                 <div class="form-grid">
-                    <div class="form-group span-2">
-                        <label>Nombre(s)</label>
+                    <div class="form-group span-4">
+                        <label>Nombre Completo</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user"></i>
                             <input type="text" class="form-input" value="{{ $usuario->name }}" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-group span-2">
-                        <label>Apellido(s)</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-user"></i>
-                            <input type="text" class="form-input" value="{{ $usuario->apellido }}" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-group span-2">
-                        <label>Cédula de Identidad</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-id-card"></i>
-                            <input type="text" class="form-input" value="{{ $usuario->ci }}" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-group span-2">
-                        <label>Fecha de Nacimiento</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-calendar"></i>
-                            <input type="text" class="form-input" value="{{ $usuario->fecha_nacimiento ? $usuario->fecha_nacimiento->format('d/m/Y') : '-' }}" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-group span-2">
-                        <label>Género</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-venus-mars"></i>
-                            <input type="text" class="form-input" value="{{ $usuario->genero == 'M' ? 'Masculino' : ($usuario->genero == 'F' ? 'Femenino' : '') }}" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-group span-2">
-                        <label>Teléfono</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-phone"></i>
-                            <input type="text" class="form-input" value="{{ $usuario->telefono }}" readonly>
-                        </div>
-                    </div>
-
-                     <div class="form-group span-4">
-                        <label>Dirección</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <input type="text" class="form-input" value="{{ $usuario->direccion }}" readonly>
                         </div>
                     </div>
                 </div>
@@ -150,7 +108,23 @@
                         <label>Rol</label>
                         <div class="input-wrapper">
                             <i class="fas fa-user-tag"></i>
-                            <input type="text" class="form-input" value="{{ ucfirst($usuario->rol) }}" readonly>
+                            <input type="text" class="form-input" value="{{ ucfirst($usuario->role?->nombre ?? 'Sin rol') }}" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group span-2">
+                        <label>Último Acceso</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-clock"></i>
+                            <input type="text" class="form-input" value="{{ $usuario->ultimo_acceso ? $usuario->ultimo_acceso->format('d/m/Y H:i') : 'Nunca' }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group span-2">
+                        <label>Fecha de Registro</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-calendar-plus"></i>
+                            <input type="text" class="form-input" value="{{ $usuario->created_at->format('d/m/Y H:i') }}" readonly>
                         </div>
                     </div>
                 </div>
