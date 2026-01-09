@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let messageInterval = null;
     let logInterval = null;
     let loadingStartTime = null;
+    let pageLoaded = false;
 
     // Simulation Config
     const duration = 2000; // Llega al 100% en 2 segundos
@@ -140,18 +141,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (progress >= 100) {
                 progress = 100;
+                updateUI(100);
                 clearInterval(loadingInterval);
                 clearInterval(messageInterval);
                 clearInterval(logInterval);
+                
+                // Solo terminar si la página ya está cargada
+                if (pageLoaded) {
+                    finishLoading();
+                }
+            } else {
+                updateUI(progress);
             }
-            updateUI(progress);
         }, interval);
     }
 
     window.addEventListener("load", function () {
-        progress = 100;
-        updateUI(100);
-        finishLoading();
+        pageLoaded = true;
+        
+        // Si ya llegamos al 100%, terminar la carga
+        if (progress >= 100) {
+            finishLoading();
+        }
     });
 
     function updateUI(value) {
