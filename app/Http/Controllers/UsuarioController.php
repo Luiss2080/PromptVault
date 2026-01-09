@@ -125,7 +125,8 @@ class UsuarioController extends Controller
         $usuario = User::findOrFail($id);
 
         // No permitir eliminar al usuario autenticado
-        if (auth()->id() === $usuario->id) {
+        $userId = auth()->id();
+        if ($userId && $userId === $usuario->id) {
             return back()->with('error', 'No puedes eliminar tu propio usuario.');
         }
 

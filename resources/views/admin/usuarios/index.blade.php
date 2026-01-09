@@ -151,7 +151,7 @@
                                     <a href="{{ route('admin.usuarios.edit', $usuario->id) }}" class="btn-icon edit" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button type="button" class="btn-icon delete" onclick="confirmDelete({{ $usuario->id }})" title="Eliminar">
+                                    <button type="button" class="btn-icon delete btn-delete-user" data-id="{{ $usuario->id }}" title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                     <form id="delete-form-{{ $usuario->id }}" action="{{ route('admin.usuarios.destroy', $usuario->id) }}" method="POST" style="display: none;">

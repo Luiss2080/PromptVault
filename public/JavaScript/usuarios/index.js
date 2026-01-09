@@ -60,6 +60,15 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = url.toString();
         });
     }
+
+    // --- DELETE BUTTONS WITH DATA-ID ---
+    const deleteButtons = document.querySelectorAll('.btn-delete-user');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            confirmDelete(id);
+        });
+    });
 });
 
 // --- SWEETALERT DELETE CONFIRMATION ---
@@ -74,8 +83,8 @@ function confirmDelete(id) {
             ? swalTheme.cancelButtonColor
             : "#64748b";
     const bg =
-        typeof swalTheme !== "undefined" ? swalTheme.background : "#ffffff";
-    const text = typeof swalTheme !== "undefined" ? swalTheme.color : "#1e293b";
+        typeof swalTheme !== "undefined" ? swalTheme.background : "#1e293b";
+    const text = typeof swalTheme !== "undefined" ? swalTheme.color : "#f1f5f9";
 
     Swal.fire({
         title: "¿Estás seguro?",
