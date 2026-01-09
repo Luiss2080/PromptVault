@@ -101,6 +101,11 @@ Route::middleware('auth')->group(function () {
     Route::get('configuraciones/sistema', [ConfiguracionesController::class, 'sistema'])->name('configuraciones.sistema');
     Route::get('configuraciones/respaldos', [ConfiguracionesController::class, 'respaldos'])->name('configuraciones.respaldos');
     Route::post('configuraciones/update', [ConfiguracionesController::class, 'update'])->name('configuraciones.update');
+    
+    // Rutas de Administración de Usuarios (solo admin)
+    Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::resource('usuarios', \App\Http\Controllers\Admin\UsuarioController::class);
+    });
 });
 
 require __DIR__.'/auth.php';
