@@ -255,10 +255,10 @@
                     <!-- Row 1: Large Charts (Asistencia & Rendimiento) -->
                     <div class="analytics-row-1" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem;">
                         
-                        <!-- Chart: Asistencia de Estudiantes -->
+                        <!-- Chart: Prompts Creados por Día -->
                         <div class="dashboard-card glow-effect h-100" style="overflow: hidden;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Asistencia de Estudiantes</h3>
+                                <h3 class="card-title">Prompts Creados</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
@@ -270,10 +270,10 @@
                             </div>
                         </div>
 
-                        <!-- Chart: Rendimiento Académico -->
+                        <!-- Chart: Prompts por Categoría -->
                         <div class="dashboard-card glow-effect h-100" style="overflow: hidden;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Rendimiento Académico</h3>
+                                <h3 class="card-title">Prompts por Categoría</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
@@ -289,14 +289,12 @@
                     <!-- Row 2: Small Charts (Tareas & Exámenes) -->
                     <div class="analytics-row-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
                         
-                        <!-- Chart: Tareas Entregadas -->
+                        <!-- Chart: Estado de Prompts -->
                         <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Tareas Entregadas</h3>
+                                <h3 class="card-title">Estado de Prompts</h3>
                                 <div class="d-flex gap-2">
-                                    <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
-                                    <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
-                                    <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Año</button>
+                                    <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Total</button>
                                 </div>
                             </div>
                             <div class="card-body" style="position: relative;">
@@ -304,10 +302,10 @@
                             </div>
                         </div>
 
-                        <!-- Chart: Resultados de Exámenes -->
+                        <!-- Chart: Prompts Más Usados -->
                         <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Resultados de Exámenes</h3>
+                                <h3 class="card-title">Prompts Más Usados</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
@@ -412,16 +410,16 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Gráfica de Asistencia
+            // Gráfica de Prompts Creados por Día
             const ctxAttendance = document.getElementById('attendanceChart');
             if (ctxAttendance) {
                 new Chart(ctxAttendance, {
                     type: 'line',
                     data: {
-                        labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie'],
+                        labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
                         datasets: [{
-                            label: 'Asistencia',
-                            data: [85, 90, 78, 92, 88],
+                            label: 'Prompts Creados',
+                            data: window.userChartData.promptsPorDia,
                             borderColor: '#e11d48',
                             backgroundColor: 'rgba(225, 29, 72, 0.1)',
                             tension: 0.4,
@@ -435,22 +433,26 @@
                             legend: {
                                 display: false
                             }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { grid: { display: false } }
                         }
                     }
                 });
             }
 
-            // Gráfica de Rendimiento
+            // Gráfica de Prompts por Categoría
             const ctxRendimiento = document.getElementById('rendimientoChart');
             if (ctxRendimiento) {
                 new Chart(ctxRendimiento, {
                     type: 'bar',
                     data: {
-                        labels: ['Matemáticas', 'Física', 'Química', 'Programación', 'Base de Datos'],
+                        labels: window.userChartData.categoriasLabels,
                         datasets: [{
-                            label: 'Promedio',
-                            data: [85, 78, 92, 88, 90],
-                            backgroundColor: '#e11d48'
+                            label: 'Prompts',
+                            data: window.userChartData.categoriasData,
+                            backgroundColor: ['#e11d48', '#f59e0b', '#10b981', '#3b82f6', '#a855f7']
                         }]
                     },
                     options: {
@@ -460,20 +462,24 @@
                             legend: {
                                 display: false
                             }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { grid: { display: false } }
                         }
                     }
                 });
             }
 
-            // Gráfica de Tareas
+            // Gráfica de Estado de Prompts
             const ctxTareas = document.getElementById('tareasChart');
             if (ctxTareas) {
                 new Chart(ctxTareas, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Entregadas', 'Pendientes', 'Retrasadas'],
+                        labels: ['Públicos', 'Privados', 'Favoritos'],
                         datasets: [{
-                            data: [75, 15, 10],
+                            data: window.userChartData.estadoPrompts,
                             backgroundColor: ['#10b981', '#f59e0b', '#e11d48']
                         }]
                     },
@@ -482,33 +488,39 @@
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                position: 'bottom'
+                                position: 'bottom',
+                                labels: { color: '#fff', padding: 10, font: { size: 11 } }
                             }
                         }
                     }
                 });
             }
 
-            // Gráfica de Exámenes
+            // Gráfica de Prompts Más Usados
             const ctxExamenes = document.getElementById('examenesChart');
             if (ctxExamenes) {
                 new Chart(ctxExamenes, {
                     type: 'bar',
                     data: {
-                        labels: ['0-50', '51-60', '61-70', '71-80', '81-90', '91-100'],
+                        labels: window.userChartData.usadosLabels,
                         datasets: [{
-                            label: 'Estudiantes',
-                            data: [2, 5, 12, 18, 15, 8],
-                            backgroundColor: '#667eea'
+                            label: 'Veces Usado',
+                            data: window.userChartData.usadosData,
+                            backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#fa709a']
                         }]
                     },
                     options: {
+                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
                                 display: false
                             }
+                        },
+                        scales: {
+                            x: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            y: { grid: { display: false } }
                         }
                     }
                 });
