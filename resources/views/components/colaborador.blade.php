@@ -334,9 +334,57 @@
     </div>
     
     <!-- Configuración global -->
+    @php
+        // ===== DATOS REALES PARA COLABORADOR =====
+        $userId = auth()->id();
+        
+        // 1. Ediciones por día (últimos 7 días)
+        $edicionesPorDia = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $count = \App\Models\Actividad::where('user_id', $userId)
+                ->where('accion', 'LIKE', '%editó%')
+                ->whereDate('created_at', $date)
+                ->count();
+            $edicionesPorDia[] = $count;
+        }
+        
+        // 2. Contribuciones por tipo
+        $actividadesUser = \App\Models\Actividad::where('user_id', $userId)->get();
+        $nuevos = $actividadesUser->filter(fn($a) => str_contains(strtolower($a->accion), 'creó'))->count();
+        $ediciones = $actividadesUser->filter(fn($a) => str_contains(strtolower($a->accion), 'editó'))->count();
+        $revisiones = $actividadesUser->filter(fn($a) => str_contains(strtolower($a->accion), 'revisó'))->count();
+        $comentarios = $actividadesUser->filter(fn($a) => str_contains(strtolower($a->accion), 'comentó'))->count();
+        $versiones = $actividadesUser->filter(fn($a) => str_contains(strtolower($a->accion), 'versión'))->count();
+        
+        // 3. Actividad semanal (total de actividades por día)
+        $actividadSemanal = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $count = \App\Models\Actividad::where('user_id', $userId)
+                ->whereDate('created_at', $date)
+                ->count();
+            $actividadSemanal[] = $count;
+        }
+        
+        // 4. Estado de revisiones (simulado con compartidos)
+        $compartidosTotal = \App\Models\Compartido::where('user_destino_id', $userId)->count();
+        $compartidosEditable = \App\Models\Compartido::where('user_destino_id', $userId)->where('permiso_edicion', true)->count();
+        $compartidosSoloLectura = $compartidosTotal - $compartidosEditable;
+        
+        // Preparar datos para JavaScript
+        $colabChartData = [
+            'edicionesPorDia' => $edicionesPorDia,
+            'contribucionesPorTipo' => [$nuevos, $ediciones, $revisiones, $comentarios, $versiones],
+            'actividadSemanal' => $actividadSemanal,
+            'revisionesEstado' => [$compartidosEditable, $compartidosSoloLectura, 0] // [Editable, Solo Lectura, Sin Acceso]
+        ];
+    @endphp
+    
+    <!-- Datos para JavaScript -->
+    <div id="colab-chart-data" data-config="{{ json_encode($colabChartData) }}" style="display:none;"></div>
+    
     <script>
-        // @ts-nocheck
-        /* eslint-disable */
         window.appConfig = {
             csrfToken: '{{ csrf_token() }}',
             baseUrl: '{{ url("/") }}',
@@ -346,8 +394,12 @@
                 role: '{{ session("user_role") }}'
             }
         };
-        window.appConfig.chartData = @json($chartData ?? []);
-        /* eslint-enable */
+        
+        // Cargar datos reales desde elemento HTML
+        const colabDataElement = document.getElementById('colab-chart-data');
+        window.colabChartData = JSON.parse(colabDataElement.getAttribute('data-config'));
+        
+        console.log('Colaborador Chart Data:', window.colabChartData);
     </script>
     
     <!-- JavaScript del Dashboard -->
@@ -369,7 +421,7 @@
                         labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
                         datasets: [{
                             label: 'Ediciones',
-                            data: [5, 8, 6, 10, 7, 3, 2],
+                            data: window.colabChartData.edicionesPorDia,
                             borderColor: '#a855f7',
                             backgroundColor: 'rgba(168, 85, 247, 0.1)',
                             tension: 0.4,
@@ -383,6 +435,10 @@
                             legend: {
                                 display: false
                             }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { grid: { display: false } }
                         }
                     }
                 });
@@ -397,8 +453,8 @@
                         labels: ['Nuevos', 'Ediciones', 'Revisiones', 'Comentarios', 'Versiones'],
                         datasets: [{
                             label: 'Contribuciones',
-                            data: [12, 25, 18, 32, 15],
-                            backgroundColor: '#00b4db'
+                            data: window.colabChartData.contribucionesPorTipo,
+                            backgroundColor: ['#3b82f6', '#a855f7', '#f59e0b', '#10b981', '#e11d48']
                         }]
                     },
                     options: {
@@ -408,6 +464,10 @@
                             legend: {
                                 display: false
                             }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { grid: { display: false } }
                         }
                     }
                 });
@@ -422,7 +482,7 @@
                         labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
                         datasets: [{
                             label: 'Actividades',
-                            data: [15, 22, 18, 25, 20, 12, 8],
+                            data: window.colabChartData.actividadSemanal,
                             borderColor: '#10b981',
                             backgroundColor: 'rgba(16, 185, 129, 0.1)',
                             tension: 0.4,
@@ -436,6 +496,10 @@
                             legend: {
                                 display: false
                             }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                            x: { grid: { display: false } }
                         }
                     }
                 });
@@ -447,9 +511,9 @@
                 new Chart(ctxRevisiones, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Aprobadas', 'Pendientes', 'Rechazadas'],
+                        labels: ['Editables', 'Solo Lectura', 'Sin Acceso'],
                         datasets: [{
-                            data: [75, 20, 5],
+                            data: window.colabChartData.revisionesEstado,
                             backgroundColor: ['#10b981', '#f59e0b', '#e11d48']
                         }]
                     },
@@ -458,7 +522,8 @@
                         maintainAspectRatio: false,
                         plugins: {
                             legend: {
-                                position: 'bottom'
+                                position: 'bottom',
+                                labels: { color: '#fff', padding: 10, font: { size: 11 } }
                             }
                         }
                     }
