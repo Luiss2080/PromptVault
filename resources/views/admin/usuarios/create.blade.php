@@ -3,7 +3,7 @@
 @section('title', 'Nuevo Usuario')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/perfil/edit.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/usuarios/create.css') }}">
 @endsection
 
 @section('content')

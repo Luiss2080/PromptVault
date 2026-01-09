@@ -3,7 +3,7 @@
 @section('title', 'Detalle de Usuario')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/perfil/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/usuarios/show.css') }}">
     <style>
         .user-role-title {
             color: white;
