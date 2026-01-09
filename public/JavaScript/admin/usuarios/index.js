@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // --- SEARCH FUNCTIONALITY ---
+    // --- SEARCH FUNCTIONALITY (REAL TIME FILTER) ---
     const searchInput = document.getElementById("searchInput");
     let timeout = null;
 
@@ -7,21 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
         searchInput.addEventListener("input", function () {
             clearTimeout(timeout);
             timeout = setTimeout(function () {
-                const query = searchInput.value;
-                const entries =
-                    document.getElementById("entriesSelect")?.value || 10;
-                const role = document.getElementById("roleSelect")?.value || "";
-
-                // Redirect to search
-                const url = new URL(window.location.href);
-                url.searchParams.set("search", query);
-                url.searchParams.set("page", 1); // Reset to page 1
-                url.searchParams.set("per_page", entries);
-                if (role) url.searchParams.set("rol", role);
-                else url.searchParams.delete("rol");
-
-                window.location.href = url.toString();
-            }, 600); // 600ms debounce
+                filterTableRows();
+            }, 300); // Reduced debounce for real-time feel
         });
 
         // Focus effect for parent wrapper
@@ -34,6 +21,60 @@ document.addEventListener("DOMContentLoaded", function () {
             const wrapper = this.closest(".search-wrapper");
             if (wrapper) wrapper.classList.remove("focused");
         });
+    }
+
+    // Function to filter table rows in real-time
+    function filterTableRows() {
+        const query = searchInput.value.toLowerCase().trim();
+        const tableRows = document.querySelectorAll('.dashboard-table tbody tr');
+        let visibleCount = 0;
+
+        tableRows.forEach(row => {
+            // Skip the "no results" row if it exists
+            if (row.querySelector('td[colspan]')) {
+                row.style.display = 'none';
+                return;
+            }
+
+            const userName = row.querySelector('.user-info h4')?.textContent.toLowerCase() || '';
+            const userEmail = row.querySelector('.user-info p')?.textContent.toLowerCase() || '';
+            
+            // Check if query matches name or email
+            if (userName.includes(query) || userEmail.includes(query)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // Show/hide no results message
+        updateNoResultsMessage(visibleCount);
+    }
+
+    // Function to show/hide no results message
+    function updateNoResultsMessage(visibleCount) {
+        const tbody = document.querySelector('.dashboard-table tbody');
+        let noResultsRow = tbody.querySelector('.no-results-row');
+
+        if (visibleCount === 0) {
+            if (!noResultsRow) {
+                noResultsRow = document.createElement('tr');
+                noResultsRow.className = 'no-results-row';
+                noResultsRow.innerHTML = `
+                    <td colspan="6" class="text-center" style="padding: 3rem; color: var(--text-muted);">
+                        <i class="fas fa-search" style="font-size: 3rem; opacity: 0.3; display: block; margin-bottom: 1rem;"></i>
+                        No se encontraron resultados para tu búsqueda
+                    </td>
+                `;
+                tbody.appendChild(noResultsRow);
+            }
+            noResultsRow.style.display = '';
+        } else {
+            if (noResultsRow) {
+                noResultsRow.style.display = 'none';
+            }
+        }
     }
 
     // --- ENTRIES PER PAGE ---
