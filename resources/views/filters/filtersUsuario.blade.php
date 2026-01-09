@@ -22,12 +22,11 @@
                 <h4 class="section-title">Estado y Rol</h4>
                 <div class="filters-grid">
                     <div class="filter-group">
-                        <label class="filter-label">Estado del Usuario</label>
-                        <select name="estado" class="filter-select">
+                        <label class="filter-label">Estado de Cuenta</label>
+                        <select name="cuenta_activa" class="filter-select">
                             <option value="">Todos los estados</option>
-                            <option value="activo">Activo</option>
-                            <option value="inactivo">Inactivo</option>
-                            <option value="suspendido">Suspendido</option>
+                            <option value="1">Activa</option>
+                            <option value="0">Inactiva</option>
                         </select>
                     </div>
 
@@ -35,9 +34,10 @@
                         <label class="filter-label">Rol</label>
                         <select name="rol" class="filter-select">
                             <option value="">Todos los roles</option>
-                            <option value="administrador">Administrador</option>
-                            <option value="operador">Operador</option>
-                            <option value="usuario">Usuario</option>
+                            <option value="admin">Administrador</option>
+                            <option value="user">Usuario</option>
+                            <option value="collaborator">Colaborador</option>
+                            <option value="guest">Invitado</option>
                         </select>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
 
             <!-- Filtros de fecha -->
             <div class="filters-section">
-                <h4 class="section-title">Fechas</h4>
+                <h4 class="section-title">Fechas y Actividad</h4>
                 <div class="filters-grid">
                     <div class="filter-group">
                         <label class="filter-label">Registrado desde</label>
@@ -55,6 +55,20 @@
                     <div class="filter-group">
                         <label class="filter-label">Registrado hasta</label>
                         <input type="date" name="fecha_hasta" class="filter-input">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Prompts creados (mínimo)</label>
+                        <input type="number" name="prompts_min" class="filter-input" min="0" placeholder="0">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Con último acceso</label>
+                        <select name="tiene_acceso" class="filter-select">
+                            <option value="">Todos</option>
+                            <option value="1">Con acceso registrado</option>
+                            <option value="0">Sin acceso registrado</option>
+                        </select>
                     </div>
                 </div>
             </div>
