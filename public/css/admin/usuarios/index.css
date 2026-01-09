@@ -144,6 +144,8 @@
     display: flex;
     gap: 1rem;
     align-items: center;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
 }
 
 .select-wrapper {
