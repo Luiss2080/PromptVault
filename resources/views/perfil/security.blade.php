@@ -296,7 +296,7 @@
             </div>
         </div>
     </div>
-@endsection
+@endcomponent
 
 @section('js')
     <script src="{{ asset('js/perfil/index.js') }}"></script>

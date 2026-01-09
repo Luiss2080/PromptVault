@@ -1,8 +1,15 @@
-@extends('layouts.admin')
+@php
+    use Illuminate\Support\Facades\Auth;
+    $user = Auth::user();
+    $userRole = $user && $user->role ? $user->role->nombre : 'guest';
+    $componentName = 'components.' . $userRole;
+@endphp
 
-@section('title', 'Mi Perfil')
+@component($componentName)
 
-@section('css')
+@slot('title', 'Mi Perfil')
+
+@slot('css')
     <link rel="stylesheet" href="{{ asset('css/perfil/index.css') }}">
 @endsection
 
@@ -211,8 +218,9 @@
         </ul>
     </div>
 </div>
-@endsection
+@endcomponent
 
-@section('js')
+@slot('js')
     <script src="{{ asset('js/perfil/index.js') }}"></script>
-@endsection
+@endslot
+@endcomponent

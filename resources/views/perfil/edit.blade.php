@@ -1,8 +1,15 @@
-@extends('layouts.admin')
+@php
+    use Illuminate\Support\Facades\Auth;
+    $user = Auth::user();
+    $userRole = $user && $user->role ? $user->role->nombre : 'guest';
+    $componentName = 'components.' . $userRole;
+@endphp
 
-@section('title', 'Editar Perfil')
+@component($componentName)
 
-@section('css')
+@slot('title', 'Editar Perfil')
+
+@slot('css')
     <link rel="stylesheet" href="{{ asset('css/perfil/edit.css') }}">
 @endsection
 
@@ -298,9 +305,9 @@
             </div>
         </div>
     </div>
-@endsection
+@endcomponent
 
-@section('js')
+@slot('js')
 <script>
 function previewAndUpload(input) {
     const file = input.files[0];
@@ -362,4 +369,5 @@ function previewAndUpload(input) {
     });
 }
 </script>
-@endsection
+@endslot
+@endcomponent
