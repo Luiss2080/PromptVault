@@ -234,6 +234,8 @@ body.dark-mode .footer-bottom {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
     padding: 5px;
+    position: relative;
+    top: -8px;
 }
 
 .logo-icon-red svg {
@@ -257,6 +259,8 @@ body.dark-mode .footer-bottom {
     height: 50px;
     margin: 0;
     padding: 0;
+    pointer-events: none;
+    user-select: none;
 }
 
 .brand-title {
@@ -266,6 +270,7 @@ body.dark-mode .footer-bottom {
     line-height: 1;
     margin: 0;
     padding: 0;
+    pointer-events: none;
 }
 
 .brand-subtitle {
@@ -275,6 +280,7 @@ body.dark-mode .footer-bottom {
     line-height: 1;
     margin: 0;
     padding: 0;
+    pointer-events: none;
 }
 
 /* Social Icons */
