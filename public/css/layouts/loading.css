@@ -164,7 +164,7 @@
 /* System Log */
 .system-log-container {
     width: 100%;
-    height: 50px; /* Compact height */
+    height: 70px; /* Aumentado para 3 líneas */
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(220, 38, 38, 0.2);
     border-radius: 6px;
