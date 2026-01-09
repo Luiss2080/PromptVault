@@ -76,7 +76,7 @@
                 <!-- Card 1: Avatar -->
                 <div class="profile-card" style="width: 100%; position: relative; top: 0;">
                     <div class="profile-avatar-wrapper">
-                        <img src="{{ $user->foto_perfil && file_exists(public_path($user->foto_perfil)) ? asset($user->foto_perfil) : asset('images/default-avatar.png') }}" alt="Foto de Perfil" class="profile-avatar" id="avatarPreview">
+                        <img src="{{ $user->foto_perfil && file_exists(public_path($user->foto_perfil)) ? asset($user->foto_perfil) : asset('images/default-avatar.svg') }}" alt="Foto de Perfil" class="profile-avatar" id="avatarPreview">
                         
                         <button type="button" class="avatar-edit-btn" onclick="document.getElementById('avatarInput').click()" title="Cambiar Foto">
                             <i class="fas fa-camera"></i>

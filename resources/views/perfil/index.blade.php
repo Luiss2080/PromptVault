@@ -72,7 +72,7 @@
         <!-- Izquierda: Tarjeta de Perfil -->
         <div class="profile-card">
             <div class="profile-avatar-wrapper">
-                <img src="{{ $user->foto_perfil && file_exists(public_path($user->foto_perfil)) ? asset($user->foto_perfil) : asset('images/default-avatar.png') }}" alt="Foto de Perfil" class="profile-avatar">
+                <img src="{{ $user->foto_perfil && file_exists(public_path($user->foto_perfil)) ? asset($user->foto_perfil) : asset('images/default-avatar.svg') }}" alt="Foto de Perfil" class="profile-avatar">
                 <label for="avatarInput" class="avatar-edit-btn" title="Cambiar foto">
                     <i class="fas fa-camera"></i>
                 </label>

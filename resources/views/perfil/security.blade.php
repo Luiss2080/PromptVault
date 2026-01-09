@@ -76,7 +76,7 @@
                 <!-- Card 1: Avatar -->
                 <div class="profile-card" style="width: 100%; position: relative; top: 0; padding: 1rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none;">
                     <div class="profile-avatar-wrapper">
-                        <img src="{{ $user->foto_perfil && file_exists(public_path($user->foto_perfil)) ? asset($user->foto_perfil) : asset('images/default-avatar.png') }}" alt="Foto de Perfil" class="profile-avatar" id="avatarPreview">
+                        <img src="{{ $user->foto_perfil && file_exists(public_path($user->foto_perfil)) ? asset($user->foto_perfil) : asset('images/default-avatar.svg') }}" alt="Foto de Perfil" class="profile-avatar" id="avatarPreview">
                         
                         <!-- Removed edit button for security view context or keep it if desired, but user asked for "IGUAL". 
                              If "IGUAL", I should probably keep it even if it doesn't work or hide it? 
