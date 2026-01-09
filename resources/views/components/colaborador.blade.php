@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="{{ asset('css/components/footer.css') }}">
     <link rel="stylesheet" href="{{ asset('css/layouts/loading.css') }}">
     
+    @yield('css')
     @stack('styles')
 </head>
 
@@ -48,6 +49,9 @@
             <!-- Contenido principal -->
             <div class="dashboard-content">
                 
+                @hasSection('content')
+                    @yield('content')
+                @else
                 <!-- Stats Section -->
                 <div class="stats-grid">
                     <!-- Prompts Compartidos Card -->
@@ -325,6 +329,8 @@
                     </div>
                 </div>
                 
+                @endif
+                
             </div>
             
             <!-- Footer Component -->
@@ -532,5 +538,8 @@
             }
         });
     </script>
+    
+    @yield('js')
+    @stack('scripts')
 </body>
 </html>

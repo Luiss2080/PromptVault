@@ -6,8 +6,8 @@
     // Mapear roles a nombres de componentes
     $roleComponentMap = [
         'admin' => 'administrador',
-        'user' => 'user',
-        'collaborator' => 'collaborator',
+        'user' => 'usuario',
+        'collaborator' => 'colaborador',
         'guest' => 'invitado'
     ];
     
