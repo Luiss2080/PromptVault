@@ -412,7 +412,7 @@
     </script>
     
     <!-- JavaScript del Dashboard -->
-    <script src="{{ asset('js/components/loading.js') }}"></script>
+    <script src="{{ asset('JavaScript/layouts/loading.js') }}"></script>
     <script src="{{ asset('JavaScript/components/sidebar.js') }}"></script>
     <script src="{{ asset('js/components/footer.js') }}"></script>
     
