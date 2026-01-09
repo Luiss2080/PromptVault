@@ -382,10 +382,87 @@
         </div>
     </div>
     
+    @php
+        // Datos para gráficas del dashboard de invitado
+        
+        // 1. Prompts creados por día (últimos 7 días)
+        $promptsPorDia = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $promptsPorDia[] = \App\Models\Prompt::whereDate('created_at', now()->subDays($i))->count();
+        }
+        
+        // 2. Actividad global por tipo
+        $actividadPorTipo = [
+            \App\Models\Actividad::where('accion', 'LIKE', '%Creó%')->count(),
+            \App\Models\Actividad::where('accion', 'LIKE', '%Editó%')->count(),
+            \App\Models\Actividad::where('accion', 'LIKE', '%Compartió%')->count(),
+            \App\Models\Actividad::where('accion', 'LIKE', '%versión%')->count(),
+            \App\Models\Actividad::where('accion', 'LIKE', '%Eliminó%')->count()
+        ];
+        
+        // 3. Top 5 prompts con más versiones
+        $topPromptsVersiones = \App\Models\Prompt::withCount('versiones')
+            ->orderByDesc('versiones_count')
+            ->take(5)
+            ->get()
+            ->map(fn($p) => [
+                'titulo' => \Str::limit($p->titulo, 20),
+                'count' => $p->versiones_count
+            ]);
+        
+        // 4. Top 5 prompts más compartidos
+        $topPromptsCompartidos = \App\Models\Prompt::withCount('compartidos')
+            ->orderByDesc('compartidos_count')
+            ->take(5)
+            ->get()
+            ->map(fn($p) => [
+                'titulo' => \Str::limit($p->titulo, 20),
+                'count' => $p->compartidos_count
+            ]);
+        
+        // 5. Distribución de usuarios por rol
+        $roleDistribution = [
+            'admin' => \App\Models\User::where('role_id', 1)->count(),
+            'docente' => \App\Models\User::where('role_id', 2)->count(),
+            'estudiante' => \App\Models\User::where('role_id', 3)->count(),
+        ];
+        
+        // 6. Top 5 categorías con más prompts
+        $topCategorias = \App\Models\Categoria::withCount('prompts')
+            ->orderByDesc('prompts_count')
+            ->take(5)
+            ->get()
+            ->map(fn($c) => [
+                'nombre' => \Str::limit($c->nombre, 20),
+                'count' => $c->prompts_count
+            ]);
+        
+        // 7. Top 5 usuarios más activos
+        $usuariosActivos = \App\Models\User::withCount('actividades')
+            ->orderByDesc('actividades_count')
+            ->take(5)
+            ->get()
+            ->map(fn($u) => [
+                'nombre' => \Str::limit($u->name, 20),
+                'count' => $u->actividades_count
+            ]);
+        
+        // Consolidar todos los datos en un array
+        $guestChartData = [
+            'promptsPorDia' => $promptsPorDia,
+            'actividadPorTipo' => $actividadPorTipo,
+            'topPromptsVersiones' => $topPromptsVersiones,
+            'topPromptsCompartidos' => $topPromptsCompartidos,
+            'roleDistribution' => $roleDistribution,
+            'topCategorias' => $topCategorias,
+            'usuariosActivos' => $usuariosActivos
+        ];
+    @endphp
+    
+    <div id="guest-chart-data" data-config="{{ json_encode($guestChartData) }}" style="display:none;"></div>
+
     <!-- Configuración global -->
     <script>
-        // @ts-nocheck
-        /* eslint-disable */
         window.appConfig = {
             csrfToken: '{{ csrf_token() }}',
             baseUrl: '{{ url("/") }}',
@@ -395,7 +472,6 @@
                 role: '{{ Auth::user()->role->nombre ?? "guest" }}'
             }
         };
-        /* eslint-enable */
     </script>
     
     <!-- JavaScript del Dashboard -->
@@ -406,7 +482,11 @@
     <!-- Gráficas Chart.js -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Gráfico: Prompts Creados por Día
+            
+            // Obtener datos desde el data-attribute
+            window.guestChartData = JSON.parse(document.getElementById('guest-chart-data').getAttribute('data-config'));
+            
+            // Gráfico 1: Prompts Creados por Día
             const ctxAttendance = document.getElementById('attendanceChart');
             if (ctxAttendance) {
                 new Chart(ctxAttendance, {
@@ -415,17 +495,13 @@
                         labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
                         datasets: [{
                             label: 'Prompts Creados',
-                            data: [{{ \App\Models\Prompt::whereDate('created_at', now()->subDays(6))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(5))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(4))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(3))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(2))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(1))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now())->count() }}],
+                            data: window.guestChartData.promptsPorDia,
                             borderColor: '#e11d48',
                             backgroundColor: 'rgba(225, 29, 72, 0.1)',
                             tension: 0.4,
-                            fill: true
+                            fill: true,
+                            borderWidth: 3,
+                            pointRadius: 5
                         }]
                     },
                     options: {
@@ -433,14 +509,14 @@
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false } },
                         scales: {
-                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#fff' } },
-                            x: { grid: { display: false }, ticks: { color: '#fff' } }
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
+                            x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
                         }
                     }
                 });
             }
 
-            // Gráfico: Actividad Global
+            // Gráfico 2: Actividad Global por Tipo
             const ctxActivity = document.getElementById('activityGlobalChart');
             if (ctxActivity) {
                 new Chart(ctxActivity, {
@@ -449,14 +525,9 @@
                         labels: ['Creación', 'Edición', 'Compartir', 'Versión', 'Eliminación'],
                         datasets: [{
                             label: 'Actividades',
-                            data: [
-                                {{ \App\Models\Actividad::where('accion', 'creacion')->count() }},
-                                {{ \App\Models\Actividad::where('accion', 'edicion')->count() }},
-                                {{ \App\Models\Actividad::where('accion', 'compartir')->count() }},
-                                {{ \App\Models\Actividad::where('accion', 'version')->count() }},
-                                {{ \App\Models\Actividad::where('accion', 'eliminacion')->count() }}
-                            ],
-                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
+                            data: window.guestChartData.actividadPorTipo,
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'],
+                            borderRadius: 8
                         }]
                     },
                     options: {
@@ -464,89 +535,90 @@
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false } },
                         scales: {
-                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#fff' } },
-                            x: { grid: { display: false }, ticks: { color: '#fff' } }
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
+                            x: { grid: { display: false }, ticks: { color: '#9ca3af' } }
                         }
                     }
                 });
             }
 
-            // Gráfico: Versiones por Prompt
+            // Gráfico 3: Versiones por Prompt (Top 5)
             const ctxGrades = document.getElementById('gradesBarChart');
             if (ctxGrades) {
-                @php
-                    $topPrompts = \App\Models\Prompt::withCount('versiones')
-                        ->orderBy('versiones_count', 'desc')
-                        ->take(5)
-                        ->get();
-                @endphp
                 new Chart(ctxGrades, {
                     type: 'bar',
                     data: {
-                        labels: [@foreach($topPrompts as $p)'{{ Str::limit($p->titulo, 20) }}',@endforeach],
+                        labels: window.guestChartData.topPromptsVersiones.map(p => p.titulo),
                         datasets: [{
                             label: 'Versiones',
-                            data: [@foreach($topPrompts as $p){{ $p->versiones_count }},@endforeach],
-                            backgroundColor: '#e11d48'
+                            data: window.guestChartData.topPromptsVersiones.map(p => p.count),
+                            backgroundColor: '#e11d48',
+                            borderRadius: 8,
+                            barThickness: 40
                         }]
                     },
                     options: {
+                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false } },
                         scales: {
-                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#fff' } },
-                            x: { grid: { display: false }, ticks: { color: '#fff' } }
+                            x: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
+                            y: { grid: { display: false }, ticks: { color: '#9ca3af' } }
                         }
                     }
                 });
             }
 
-            // Gráfico: Prompts Compartidos
+            // Gráfico 4: Prompts Compartidos (Top 5)
             const ctxResources = document.getElementById('resourcesBarChart');
             if (ctxResources) {
-                @php
-                    $topShared = \App\Models\Prompt::withCount('compartidos')
-                        ->orderBy('compartidos_count', 'desc')
-                        ->take(5)
-                        ->get();
-                @endphp
                 new Chart(ctxResources, {
-                    type: 'doughnut',
+                    type: 'bar',
                     data: {
-                        labels: [@foreach($topShared as $p)'{{ Str::limit($p->titulo, 20) }}',@endforeach],
+                        labels: window.guestChartData.topPromptsCompartidos.map(p => p.titulo),
                         datasets: [{
-                            data: [@foreach($topShared as $p){{ $p->compartidos_count }},@endforeach],
-                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
+                            label: 'Compartidos',
+                            data: window.guestChartData.topPromptsCompartidos.map(p => p.count),
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'],
+                            borderRadius: 8,
+                            barThickness: 40
                         }]
                     },
                     options: {
+                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: { position: 'bottom', labels: { color: '#fff', padding: 10, font: { size: 11 } } }
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                padding: 12,
+                                cornerRadius: 8
+                            }
+                        },
+                        scales: {
+                            x: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
+                            y: { grid: { display: false }, ticks: { color: '#9ca3af' } }
                         }
                     }
                 });
             }
 
-            // Gráfico: Distribución de Roles
+            // Gráfico 5: Distribución de Roles
             const ctxRoles = document.getElementById('userRolesChart');
             if (ctxRoles) {
-                @php
-                    $roleDistribution = [
-                        'admin' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'admin'))->count(),
-                        'user' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'user'))->count(),
-                        'collaborator' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'collaborator'))->count(),
-                    ];
-                @endphp
                 new Chart(ctxRoles, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Admin', 'User', 'Collaborator'],
+                        labels: ['Admin', 'Docente', 'Estudiante'],
                         datasets: [{
-                            data: [{{ $roleDistribution['admin'] }}, {{ $roleDistribution['user'] }}, {{ $roleDistribution['collaborator'] }}],
-                            backgroundColor: ['#3b82f6', '#10b981', '#a855f7'],
+                            data: [
+                                window.guestChartData.roleDistribution.admin,
+                                window.guestChartData.roleDistribution.docente,
+                                window.guestChartData.roleDistribution.estudiante
+                            ],
+                            backgroundColor: ['#3b82f6', '#a855f7', '#10b981'],
                             borderWidth: 0
                         }]
                     },
@@ -554,7 +626,70 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         cutout: '70%',
-                        plugins: { legend: { display: false } }
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                padding: 12,
+                                cornerRadius: 8
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico 6: Prompts por Categoría (Top 5)
+            const ctxCategories = document.getElementById('categoriesChart');
+            if (ctxCategories) {
+                new Chart(ctxCategories, {
+                    type: 'bar',
+                    data: {
+                        labels: window.guestChartData.topCategorias.map(c => c.nombre),
+                        datasets: [{
+                            label: 'Prompts',
+                            data: window.guestChartData.topCategorias.map(c => c.count),
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444'],
+                            borderRadius: 8,
+                            barThickness: 40
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
+                            y: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico 7: Usuarios Más Activos (Top 5)
+            const ctxActiveUsers = document.getElementById('activeUsersChart');
+            if (ctxActiveUsers) {
+                new Chart(ctxActiveUsers, {
+                    type: 'bar',
+                    data: {
+                        labels: window.guestChartData.usuariosActivos.map(u => u.nombre),
+                        datasets: [{
+                            label: 'Actividades',
+                            data: window.guestChartData.usuariosActivos.map(u => u.count),
+                            backgroundColor: ['#e11d48', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'],
+                            borderRadius: 8,
+                            barThickness: 40
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
+                            y: { grid: { display: false }, ticks: { color: '#9ca3af' } }
+                        }
                     }
                 });
             }
