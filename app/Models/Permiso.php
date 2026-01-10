@@ -10,7 +10,7 @@ class Permiso extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
-        'modulo'
+        'modulo',
     ];
 
     public function roles(): BelongsToMany

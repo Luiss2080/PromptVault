@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class PerfilController extends Controller
 {
@@ -13,17 +13,17 @@ class PerfilController extends Controller
         // Recuperar usuario autenticado
         /** @var User $user */
         $user = Auth::user();
-        
-        if (!$user) {
+
+        if (! $user) {
             return redirect()->route('login')->with('error', 'Sesión no válida.');
         }
 
         // Obtener actividad reciente del usuario
         $logs = \App\Models\Actividad::where('user_id', $user->id)
-                                       ->with(['prompt'])
-                                       ->orderBy('fecha', 'desc')
-                                       ->take(5)
-                                       ->get();
+            ->with(['prompt'])
+            ->orderBy('fecha', 'desc')
+            ->take(5)
+            ->get();
 
         // Variables necesarias para los componentes (administrador e invitado requieren recentUsers)
         $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
@@ -40,10 +40,12 @@ class PerfilController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$user) return redirect()->route('login');
-        
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
         $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
-        
+
         return view('perfil.edit', compact('user', 'recentUsers'));
     }
 
@@ -51,10 +53,12 @@ class PerfilController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        if (!$user) return redirect()->route('login');
-        
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
         $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
-        
+
         return view('perfil.security', compact('user', 'recentUsers'));
     }
 
@@ -68,12 +72,12 @@ class PerfilController extends Controller
             'new_password' => 'required|min:6|confirmed',
         ]);
 
-        if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
+        if (! \Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
             return back()->with('error', 'La contraseña actual no es correcta.');
         }
 
         $user->update([
-            'password' => \Illuminate\Support\Facades\Hash::make($request->new_password)
+            'password' => \Illuminate\Support\Facades\Hash::make($request->new_password),
         ]);
 
         return redirect()->route('perfil.index')->with('success', 'Contraseña actualizada correctamente.');
@@ -83,7 +87,7 @@ class PerfilController extends Controller
     {
         /** @var User $user */
         $user = Auth::user();
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,'.$user->id,
@@ -107,7 +111,7 @@ class PerfilController extends Controller
         $user = Auth::user();
 
         if ($request->hasFile('avatar')) {
-            $imageName = 'profile_' . $user->id . '_' . time() . '.' . $request->avatar->extension();
+            $imageName = 'profile_'.$user->id.'_'.time().'.'.$request->avatar->extension();
             $request->avatar->move(public_path('uploads/profile'), $imageName);
 
             // Eliminar foto anterior si existe
@@ -115,13 +119,13 @@ class PerfilController extends Controller
                 unlink(public_path($user->foto_perfil));
             }
 
-            $rutaFoto = 'uploads/profile/' . $imageName;
+            $rutaFoto = 'uploads/profile/'.$imageName;
             $user->update(['foto_perfil' => $rutaFoto]);
-            
+
             return response()->json([
-                'success' => true, 
+                'success' => true,
                 'foto_url' => asset($rutaFoto),
-                'message' => 'Foto de perfil actualizada correctamente'
+                'message' => 'Foto de perfil actualizada correctamente',
             ]);
         }
 

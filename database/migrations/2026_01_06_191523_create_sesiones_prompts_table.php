@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('orden_preferido', 50)->default('reciente');
             $table->timestamp('fecha_expiracion')->nullable();
             $table->timestamps();
-            
+
             $table->unique('user_id');
         });
     }

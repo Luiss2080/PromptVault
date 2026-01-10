@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
@@ -19,14 +18,14 @@ class UserSeeder extends Seeder
             ['name' => 'Admin Principal', 'email' => 'admin@promptvault.com', 'role_id' => 1],
             ['name' => 'Admin Secundario', 'email' => 'admin2@promptvault.com', 'role_id' => 1],
             ['name' => 'Super Admin', 'email' => 'superadmin@promptvault.com', 'role_id' => 1],
-            
+
             // Colaboradores
             ['name' => 'Colaborador Demo', 'email' => 'colaborador@promptvault.com', 'role_id' => 3],
             ['name' => 'Carmen Torres', 'email' => 'carmen@educadora.com', 'role_id' => 3],
             ['name' => 'Laura Fernández', 'email' => 'laura@disenadora.com', 'role_id' => 3],
             ['name' => 'Diego Morales', 'email' => 'diego@content.com', 'role_id' => 3],
             ['name' => 'Patricia Ruiz', 'email' => 'patricia@writer.com', 'role_id' => 3],
-            
+
             // Usuarios normales
             ['name' => 'Carlos Martínez', 'email' => 'carlos@dev.com', 'role_id' => 2],
             ['name' => 'Ana López', 'email' => 'ana@escritora.com', 'role_id' => 2],

@@ -114,16 +114,18 @@ class User extends Authenticatable
                 return true;
             }
         }
+
         return false;
     }
 
     public function tieneTodosEstosPermisos(array $permisos): bool
     {
         foreach ($permisos as $permiso) {
-            if (!$this->tienePermiso($permiso)) {
+            if (! $this->tienePermiso($permiso)) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -146,7 +148,7 @@ class User extends Authenticatable
                 ->where('email_destinatario', $this->email)
                 ->where('tipo_acceso', 'puede_editar')
                 ->first();
-            
+
             return $compartido !== null;
         }
 

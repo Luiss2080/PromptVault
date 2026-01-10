@@ -16,14 +16,14 @@ class SesionPrompt extends Model
         'vista_preferida',
         'columnas_visibles',
         'orden_preferido',
-        'fecha_expiracion'
+        'fecha_expiracion',
     ];
 
     protected $casts = [
         'filtros_activos' => 'array',
         'busquedas_recientes' => 'array',
         'columnas_visibles' => 'array',
-        'fecha_expiracion' => 'datetime'
+        'fecha_expiracion' => 'datetime',
     ];
 
     public function user(): BelongsTo

@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Version;
+use Illuminate\Database\Seeder;
 
 class VersionSeeder extends Seeder
 {

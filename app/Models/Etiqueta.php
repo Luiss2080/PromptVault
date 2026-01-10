@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Etiqueta extends Model
 {
     protected $fillable = [
-        'nombre'
+        'nombre',
     ];
 
     public function prompts(): BelongsToMany

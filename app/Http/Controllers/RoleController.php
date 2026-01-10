@@ -18,7 +18,7 @@ class RoleController extends Controller
         if ($request->has('search')) {
             $search = $request->search;
             $query->where('nombre', 'like', "%{$search}%")
-                  ->orWhere('descripcion', 'like', "%{$search}%");
+                ->orWhere('descripcion', 'like', "%{$search}%");
         }
 
         if ($request->has('tipo') && $request->tipo != '') {
@@ -38,6 +38,7 @@ class RoleController extends Controller
     public function create()
     {
         $permisosGrouped = \App\Models\Permiso::agrupadosPorModulo();
+
         return view('admin.roles.create', compact('permisosGrouped'));
     }
 
@@ -55,6 +56,7 @@ class RoleController extends Controller
     public function show(Role $role)
     {
         $role->load(['permisos', 'usuarios']);
+
         return view('admin.roles.show', compact('role'));
     }
 
@@ -65,6 +67,7 @@ class RoleController extends Controller
     {
         $permisosGrouped = \App\Models\Permiso::agrupadosPorModulo();
         $role->load('permisos');
+
         return view('admin.roles.edit', compact('role', 'permisosGrouped'));
     }
 

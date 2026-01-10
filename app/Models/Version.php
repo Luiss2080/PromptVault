@@ -15,11 +15,11 @@ class Version extends Model
         'contenido',
         'contenido_anterior',
         'motivo_cambio',
-        'fecha_version'
+        'fecha_version',
     ];
 
     protected $casts = [
-        'fecha_version' => 'datetime'
+        'fecha_version' => 'datetime',
     ];
 
     public function prompt(): BelongsTo

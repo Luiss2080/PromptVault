@@ -3,15 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Role extends Model
 {
     protected $fillable = [
         'nombre',
         'descripcion',
-        'nivel_acceso'
+        'nivel_acceso',
     ];
 
     public function users(): HasMany

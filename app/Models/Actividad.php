@@ -14,11 +14,11 @@ class Actividad extends Model
         'user_id',
         'accion',
         'descripcion',
-        'fecha'
+        'fecha',
     ];
 
     protected $casts = [
-        'fecha' => 'datetime'
+        'fecha' => 'datetime',
     ];
 
     public function prompt(): BelongsTo

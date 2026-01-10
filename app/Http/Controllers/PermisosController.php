@@ -13,9 +13,9 @@ class PermisosController extends Controller
 
         if ($request->has('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nombre', 'like', "%{$search}%")
-                  ->orWhere('descripcion', 'like', "%{$search}%");
+                    ->orWhere('descripcion', 'like', "%{$search}%");
             });
         }
 
@@ -37,7 +37,7 @@ class PermisosController extends Controller
         // Get unique modules and actions for suggestions
         $modulos = \App\Models\Permiso::select('modulo')->distinct()->pluck('modulo');
         $acciones = \App\Models\Permiso::select('accion')->distinct()->pluck('accion');
-        
+
         return view('admin.permisos.create', compact('modulos', 'acciones'));
     }
 
@@ -49,6 +49,7 @@ class PermisosController extends Controller
     public function show($id)
     {
         $permiso = \App\Models\Permiso::withCount('roles')->findOrFail($id);
+
         return view('admin.permisos.show', compact('permiso'));
     }
 

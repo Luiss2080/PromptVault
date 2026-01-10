@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Role;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -21,7 +21,7 @@ class UsuarioController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
@@ -70,6 +70,7 @@ class UsuarioController extends Controller
     public function create()
     {
         $roles = Role::all();
+
         return view('admin.usuarios.create', compact('roles'));
     }
 
@@ -103,6 +104,7 @@ class UsuarioController extends Controller
         $usuario = User::with(['role', 'prompts'])
             ->withCount('prompts')
             ->findOrFail($id);
+
         return view('admin.usuarios.show', compact('usuario'));
     }
 
@@ -110,6 +112,7 @@ class UsuarioController extends Controller
     {
         $usuario = User::findOrFail($id);
         $roles = Role::all();
+
         return view('admin.usuarios.edit', compact('usuario', 'roles'));
     }
 
@@ -136,7 +139,7 @@ class UsuarioController extends Controller
         }
 
         // Solo actualizar contraseña si se proporcionó una nueva
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {
             unset($validated['password']);
@@ -155,7 +158,7 @@ class UsuarioController extends Controller
         // No permitir eliminar al usuario autenticado
         /** @var \Illuminate\Contracts\Auth\Guard $auth */
         $auth = auth();
-        if ($auth->check() && $auth->user()->id === (int)$id) {
+        if ($auth->check() && $auth->user()->id === (int) $id) {
             return back()->with('error', 'No puedes eliminar tu propio usuario.');
         }
 

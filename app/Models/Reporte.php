@@ -20,14 +20,14 @@ class Reporte extends Model
         'programado',
         'frecuencia',
         'usuario_id',
-        'estado'
+        'estado',
     ];
 
     protected $casts = [
         'parametros' => 'array',
         'filtros' => 'array',
         'columnas' => 'array',
-        'programado' => 'boolean'
+        'programado' => 'boolean',
     ];
 
     public function usuario()

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,7 +42,7 @@ class RegisterController extends Controller
         // Concatenar nombre y apellido si existe apellido
         $nombreCompleto = $request->name;
         if ($request->apellido) {
-            $nombreCompleto .= ' ' . $request->apellido;
+            $nombreCompleto .= ' '.$request->apellido;
         }
 
         $user = User::create([

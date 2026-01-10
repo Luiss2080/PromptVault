@@ -10,7 +10,7 @@ class Categoria extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
-        'color'
+        'color',
     ];
 
     public function prompts(): HasMany

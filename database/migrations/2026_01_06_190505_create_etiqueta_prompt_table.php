@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('etiqueta_id')->constrained()->onDelete('cascade');
             $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-            
+
             $table->unique(['etiqueta_id', 'prompt_id']);
         });
     }

@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PromptController;
+use App\Http\Controllers\BuscadorController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ConfiguracionesController;
-use App\Http\Controllers\BuscadorController;
 use App\Http\Controllers\PerfilController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PromptController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -16,10 +16,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     /** @var \App\Models\User $user */
     $user = Auth::user();
-    
+
     // Preparar estadísticas según el rol
     $stats = [];
-    
+
     if ($user->esAdmin()) {
         $stats = [
             'users' => \App\Models\User::count(),
@@ -34,6 +34,7 @@ Route::get('/dashboard', function () {
             'active_prompts' => \App\Models\Prompt::where('es_publico', true)->count(),
         ];
         $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
+
         return view('dashboard', compact('stats', 'recentUsers'));
     } elseif ($user->role && in_array($user->role->nombre, ['user', 'collaborator'])) {
         $stats = [
@@ -41,12 +42,13 @@ Route::get('/dashboard', function () {
             'categories' => \App\Models\Categoria::count(),
             'tags' => \App\Models\Etiqueta::count(),
             'shared' => \App\Models\Compartido::where('email_destinatario', $user->email)->count(),
-            'versions' => \App\Models\Version::whereHas('prompt', function($q) use ($user) {
+            'versions' => \App\Models\Version::whereHas('prompt', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             })->count(),
         ];
         $misMaterias = [];
         $horarioHoy = [];
+
         return view('dashboard', compact('stats', 'misMaterias', 'horarioHoy'));
     } else {
         // Guest
@@ -58,6 +60,7 @@ Route::get('/dashboard', function () {
             'versions' => 0,
         ];
         $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
+
         return view('dashboard', compact('stats', 'recentUsers'));
     }
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -77,21 +80,21 @@ Route::middleware('auth')->group(function () {
 
     // Rutas de Prompts
     Route::resource('prompts', PromptController::class);
-    
+
     // Rutas adicionales de Prompts
     Route::post('/prompts/{prompt}/favorito', [PromptController::class, 'toggleFavorito'])->name('prompts.favorito');
     Route::post('/prompts/{prompt}/uso', [PromptController::class, 'incrementarUso'])->name('prompts.uso');
     Route::post('/prompts/{prompt}/compartir', [PromptController::class, 'compartir'])->name('prompts.compartir');
     Route::get('/prompts/{prompt}/historial', [PromptController::class, 'historial'])->name('prompts.historial');
     Route::post('/prompts/{prompt}/versiones/{version}/restaurar', [PromptController::class, 'restaurarVersion'])->name('prompts.restaurar');
-    
+
     // Rutas de Calendario
     Route::resource('calendario', CalendarioController::class);
-    
+
     // Rutas de Buscador
     Route::get('buscador', [BuscadorController::class, 'index'])->name('buscador.index');
     Route::get('buscador/search', [BuscadorController::class, 'search'])->name('buscador.search');
-    
+
     // Rutas de Configuraciones
     Route::get('configuraciones', [ConfiguracionesController::class, 'index'])->name('configuraciones.index');
     Route::get('configuraciones/general', [ConfiguracionesController::class, 'general'])->name('configuraciones.general');
@@ -101,7 +104,7 @@ Route::middleware('auth')->group(function () {
     Route::get('configuraciones/sistema', [ConfiguracionesController::class, 'sistema'])->name('configuraciones.sistema');
     Route::get('configuraciones/respaldos', [ConfiguracionesController::class, 'respaldos'])->name('configuraciones.respaldos');
     Route::post('configuraciones/update', [ConfiguracionesController::class, 'update'])->name('configuraciones.update');
-    
+
     // Rutas de Administración de Usuarios (solo admin)
     Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::resource('usuarios', \App\Http\Controllers\UsuarioController::class);

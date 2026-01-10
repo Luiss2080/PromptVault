@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Prompt;
-use App\Models\Categoria;
-use App\Models\Etiqueta;
-use App\Models\Version;
 use App\Models\Actividad;
+use App\Models\Categoria;
 use App\Models\Compartido;
+use App\Models\Etiqueta;
+use App\Models\Prompt;
+use App\Models\Version;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,10 +24,10 @@ class PromptController extends Controller
         // Búsqueda por palabra clave
         if ($request->filled('buscar')) {
             $buscar = $request->buscar;
-            $query->where(function($q) use ($buscar) {
+            $query->where(function ($q) use ($buscar) {
                 $q->where('titulo', 'like', "%{$buscar}%")
-                  ->orWhere('contenido', 'like', "%{$buscar}%")
-                  ->orWhere('descripcion', 'like', "%{$buscar}%");
+                    ->orWhere('contenido', 'like', "%{$buscar}%")
+                    ->orWhere('descripcion', 'like', "%{$buscar}%");
             });
         }
 
@@ -48,7 +48,7 @@ class PromptController extends Controller
 
         // Filtro por etiqueta
         if ($request->filled('etiqueta')) {
-            $query->whereHas('etiquetas', function($q) use ($request) {
+            $query->whereHas('etiquetas', function ($q) use ($request) {
                 $q->where('nombre', $request->etiqueta);
             });
         }
@@ -83,6 +83,7 @@ class PromptController extends Controller
     {
         $categorias = Categoria::all();
         $etiquetas = Etiqueta::all();
+
         return view('prompts.create', compact('categorias', 'etiquetas'));
     }
 
@@ -99,7 +100,7 @@ class PromptController extends Controller
             'ia_destino' => 'nullable|string|max:50',
             'es_publico' => 'boolean',
             'etiquetas' => 'array',
-            'etiquetas.*' => 'exists:etiquetas,id'
+            'etiquetas.*' => 'exists:etiquetas,id',
         ]);
 
         $prompt = Prompt::create([
@@ -111,7 +112,7 @@ class PromptController extends Controller
             'ia_destino' => $validated['ia_destino'] ?? null,
             'es_publico' => $request->boolean('es_publico'),
             'fecha_creacion' => now(),
-            'version_actual' => 1
+            'version_actual' => 1,
         ]);
 
         // Asignar etiquetas
@@ -124,7 +125,7 @@ class PromptController extends Controller
             'prompt_id' => $prompt->id,
             'numero_version' => 1,
             'contenido' => $prompt->contenido,
-            'fecha_version' => now()
+            'fecha_version' => now(),
         ]);
 
         // Registrar actividad
@@ -133,7 +134,7 @@ class PromptController extends Controller
             'user_id' => Auth::id(),
             'accion' => 'creado',
             'descripcion' => 'Prompt creado',
-            'fecha' => now()
+            'fecha' => now(),
         ]);
 
         return redirect()->route('prompts.show', $prompt)
@@ -146,9 +147,9 @@ class PromptController extends Controller
     public function show(Prompt $prompt)
     {
         $this->authorize('view', $prompt);
-        
+
         $prompt->load(['categoria', 'etiquetas', 'versiones', 'actividades.user', 'compartidos']);
-        
+
         return view('prompts.show', compact('prompt'));
     }
 
@@ -158,10 +159,10 @@ class PromptController extends Controller
     public function edit(Prompt $prompt)
     {
         $this->authorize('update', $prompt);
-        
+
         $categorias = Categoria::all();
         $etiquetas = Etiqueta::all();
-        
+
         return view('prompts.edit', compact('prompt', 'categorias', 'etiquetas'));
     }
 
@@ -181,12 +182,12 @@ class PromptController extends Controller
             'es_publico' => 'boolean',
             'etiquetas' => 'array',
             'etiquetas.*' => 'exists:etiquetas,id',
-            'motivo_cambio' => 'nullable|string'
+            'motivo_cambio' => 'nullable|string',
         ]);
 
         // Verificar si el contenido cambió para crear nueva versión
         $contenidoCambio = $prompt->contenido !== $validated['contenido'];
-        
+
         if ($contenidoCambio) {
             // Crear nueva versión
             $prompt->version_actual++;
@@ -196,7 +197,7 @@ class PromptController extends Controller
                 'contenido' => $validated['contenido'],
                 'contenido_anterior' => $prompt->contenido,
                 'motivo_cambio' => $validated['motivo_cambio'] ?? null,
-                'fecha_version' => now()
+                'fecha_version' => now(),
             ]);
         }
 
@@ -207,7 +208,7 @@ class PromptController extends Controller
             'categoria_id' => $validated['categoria_id'] ?? null,
             'ia_destino' => $validated['ia_destino'] ?? null,
             'es_publico' => $request->boolean('es_publico'),
-            'fecha_modificacion' => now()
+            'fecha_modificacion' => now(),
         ]);
 
         // Actualizar etiquetas
@@ -220,8 +221,8 @@ class PromptController extends Controller
             'prompt_id' => $prompt->id,
             'user_id' => Auth::id(),
             'accion' => 'editado',
-            'descripcion' => $contenidoCambio ? 'Contenido modificado - versión ' . $prompt->version_actual : 'Metadatos actualizados',
-            'fecha' => now()
+            'descripcion' => $contenidoCambio ? 'Contenido modificado - versión '.$prompt->version_actual : 'Metadatos actualizados',
+            'fecha' => now(),
         ]);
 
         return redirect()->route('prompts.show', $prompt)
@@ -234,9 +235,9 @@ class PromptController extends Controller
     public function destroy(Prompt $prompt)
     {
         $this->authorize('delete', $prompt);
-        
+
         $prompt->delete();
-        
+
         return redirect()->route('prompts.index')
             ->with('success', 'Prompt eliminado exitosamente');
     }
@@ -247,8 +248,8 @@ class PromptController extends Controller
     public function toggleFavorito(Prompt $prompt)
     {
         $this->authorize('update', $prompt);
-        
-        $prompt->es_favorito = !$prompt->es_favorito;
+
+        $prompt->es_favorito = ! $prompt->es_favorito;
         $prompt->save();
 
         Actividad::create([
@@ -256,7 +257,7 @@ class PromptController extends Controller
             'user_id' => Auth::id(),
             'accion' => $prompt->es_favorito ? 'marcado_favorito' : 'desmarcado_favorito',
             'descripcion' => $prompt->es_favorito ? 'Marcado como favorito' : 'Desmarcado como favorito',
-            'fecha' => now()
+            'fecha' => now(),
         ]);
 
         return back()->with('success', $prompt->es_favorito ? 'Agregado a favoritos' : 'Removido de favoritos');
@@ -268,7 +269,7 @@ class PromptController extends Controller
     public function incrementarUso(Prompt $prompt)
     {
         $this->authorize('view', $prompt);
-        
+
         $prompt->increment('veces_usado');
 
         Actividad::create([
@@ -276,7 +277,7 @@ class PromptController extends Controller
             'user_id' => Auth::id(),
             'accion' => 'usado',
             'descripcion' => 'Prompt copiado/usado',
-            'fecha' => now()
+            'fecha' => now(),
         ]);
 
         return response()->json(['success' => true, 'veces_usado' => $prompt->veces_usado]);
@@ -292,7 +293,7 @@ class PromptController extends Controller
         $validated = $request->validate([
             'nombre_destinatario' => 'required|string|max:100',
             'email_destinatario' => 'required|email|max:100',
-            'notas' => 'nullable|string'
+            'notas' => 'nullable|string',
         ]);
 
         Compartido::create([
@@ -300,7 +301,7 @@ class PromptController extends Controller
             'nombre_destinatario' => $validated['nombre_destinatario'],
             'email_destinatario' => $validated['email_destinatario'],
             'notas' => $validated['notas'] ?? null,
-            'fecha_compartido' => now()
+            'fecha_compartido' => now(),
         ]);
 
         Actividad::create([
@@ -308,7 +309,7 @@ class PromptController extends Controller
             'user_id' => Auth::id(),
             'accion' => 'compartido',
             'descripcion' => "Compartido con {$validated['email_destinatario']}",
-            'fecha' => now()
+            'fecha' => now(),
         ]);
 
         return back()->with('success', 'Prompt compartido exitosamente');
@@ -320,7 +321,7 @@ class PromptController extends Controller
     public function historial(Prompt $prompt)
     {
         $this->authorize('view', $prompt);
-        
+
         $actividades = $prompt->actividades()
             ->with('user')
             ->latest('fecha')
@@ -348,12 +349,12 @@ class PromptController extends Controller
             'contenido' => $version->contenido,
             'contenido_anterior' => $prompt->contenido,
             'motivo_cambio' => "Restaurado desde versión {$version->numero_version}",
-            'fecha_version' => now()
+            'fecha_version' => now(),
         ]);
 
         $prompt->update([
             'contenido' => $version->contenido,
-            'fecha_modificacion' => now()
+            'fecha_modificacion' => now(),
         ]);
 
         Actividad::create([
@@ -361,7 +362,7 @@ class PromptController extends Controller
             'user_id' => Auth::id(),
             'accion' => 'restaurado',
             'descripcion' => "Versión {$version->numero_version} restaurada",
-            'fecha' => now()
+            'fecha' => now(),
         ]);
 
         return redirect()->route('prompts.show', $prompt)

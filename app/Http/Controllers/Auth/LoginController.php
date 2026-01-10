@@ -33,10 +33,10 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            
+
             // Actualizar último acceso
             $user->update([
-                'ultimo_acceso' => now()
+                'ultimo_acceso' => now(),
             ]);
 
             // Guardar información del usuario en sesión
@@ -61,7 +61,7 @@ class LoginController extends Controller
     protected function redirectByRole($user)
     {
         // Mensaje de bienvenida según el rol
-        $mensaje = match($user->role?->nombre) {
+        $mensaje = match ($user->role?->nombre) {
             'admin' => '¡Bienvenido Administrador!',
             'collaborator' => '¡Bienvenido Colaborador!',
             'user' => '¡Bienvenido Usuario!',

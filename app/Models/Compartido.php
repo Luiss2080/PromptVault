@@ -18,14 +18,14 @@ class Compartido extends Model
         'fecha_expiracion',
         'requiere_autenticacion',
         'veces_accedido',
-        'ultimo_acceso'
+        'ultimo_acceso',
     ];
 
     protected $casts = [
         'fecha_compartido' => 'datetime',
         'fecha_expiracion' => 'datetime',
         'ultimo_acceso' => 'datetime',
-        'requiere_autenticacion' => 'boolean'
+        'requiere_autenticacion' => 'boolean',
     ];
 
     public function prompt(): BelongsTo

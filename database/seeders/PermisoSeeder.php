@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -79,7 +78,7 @@ class PermisoSeeder extends Seeder
                 'descripcion' => $permiso['descripcion'],
                 'modulo' => $permiso['modulo'],
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
 
@@ -96,7 +95,7 @@ class PermisoSeeder extends Seeder
                 'role_id' => 1, // admin
                 'permiso_id' => $permisoId,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
 
@@ -107,19 +106,19 @@ class PermisoSeeder extends Seeder
             'versiones.ver', 'versiones.crear', 'versiones.restaurar', 'versiones.comparar',
             'categorias.ver', 'etiquetas.ver', 'etiquetas.crear',
             'actividades.ver_propias', 'estadisticas.ver_propias',
-            'exportar.propios', 'busqueda.basica', 'busqueda.avanzada'
+            'exportar.propios', 'busqueda.basica', 'busqueda.avanzada',
         ];
         $this->asignarPermisosPorNombre(2, $permisosUser);
 
         // Colaborador: incluye todos los de user + editar compartidos
         $permisosCollaborator = array_merge($permisosUser, [
-            'prompts.editar_compartidos'
+            'prompts.editar_compartidos',
         ]);
         $this->asignarPermisosPorNombre(3, $permisosCollaborator);
 
         // Guest: solo lectura limitada
         $permisosGuest = [
-            'prompts.ver_propios' // Solo el prompt compartido
+            'prompts.ver_propios', // Solo el prompt compartido
         ];
         $this->asignarPermisosPorNombre(4, $permisosGuest);
     }
@@ -133,7 +132,7 @@ class PermisoSeeder extends Seeder
                     'role_id' => $roleId,
                     'permiso_id' => $permiso->id,
                     'created_at' => now(),
-                    'updated_at' => now()
+                    'updated_at' => now(),
                 ]);
             }
         }

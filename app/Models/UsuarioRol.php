@@ -67,7 +67,7 @@ class UsuarioRol extends Model
     {
         return $query->where(function ($q) {
             $q->whereNull('fecha_expiracion')
-              ->orWhere('fecha_expiracion', '>', now());
+                ->orWhere('fecha_expiracion', '>', now());
         });
     }
 
@@ -76,7 +76,7 @@ class UsuarioRol extends Model
      */
     public function estaVigente(): bool
     {
-        if (!$this->activo) {
+        if (! $this->activo) {
             return false;
         }
 
