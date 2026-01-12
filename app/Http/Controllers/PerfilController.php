@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class PerfilController extends Controller
 {
     public function index()
     {
-        // Recuperar usuario autenticado
         /** @var User $user */
         $user = Auth::user();
 
@@ -18,17 +18,25 @@ class PerfilController extends Controller
             return redirect()->route('login')->with('error', 'Sesión no válida.');
         }
 
-        // Obtener actividad reciente del usuario
-        $logs = \App\Models\Actividad::where('user_id', $user->id)
-            ->with(['prompt'])
-            ->orderBy('fecha', 'desc')
+        // Obtener prompts recientes del usuario
+        $promptsRecientes = $user->prompts()
+            ->with('etiquetas')
+            ->latest()
             ->take(5)
             ->get();
 
-        // Variables necesarias para los componentes (administrador e invitado requieren recentUsers)
-        $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
+        // Estadísticas del usuario
+        $estadisticas = [
+            'total_prompts' => $user->prompts()->count(),
+            'prompts_publicos' => $user->prompts()->where('visibilidad', 'publico')->count(),
+            'prompts_compartidos' => $user->accesosCompartidos()->count(),
+            'total_comentarios' => $user->comentarios()->count(),
+        ];
 
-        return view('perfil.index', compact('user', 'logs', 'recentUsers'));
+        // Variables necesarias para los componentes
+        $recentUsers = User::with('role')->latest()->take(5)->get();
+
+        return view('perfil.index', compact('user', 'promptsRecientes', 'estadisticas', 'recentUsers'));
     }
 
     public function show()
@@ -44,7 +52,7 @@ class PerfilController extends Controller
             return redirect()->route('login');
         }
 
-        $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
+        $recentUsers = User::with('role')->latest()->take(5)->get();
 
         return view('perfil.edit', compact('user', 'recentUsers'));
     }
@@ -57,7 +65,7 @@ class PerfilController extends Controller
             return redirect()->route('login');
         }
 
-        $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
+        $recentUsers = User::with('role')->latest()->take(5)->get();
 
         return view('perfil.security', compact('user', 'recentUsers'));
     }
@@ -72,12 +80,12 @@ class PerfilController extends Controller
             'new_password' => 'required|min:6|confirmed',
         ]);
 
-        if (! \Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
+        if (! Hash::check($request->current_password, $user->password)) {
             return back()->with('error', 'La contraseña actual no es correcta.');
         }
 
         $user->update([
-            'password' => \Illuminate\Support\Facades\Hash::make($request->new_password),
+            'password' => Hash::make($request->new_password),
         ]);
 
         return redirect()->route('perfil.index')->with('success', 'Contraseña actualizada correctamente.');

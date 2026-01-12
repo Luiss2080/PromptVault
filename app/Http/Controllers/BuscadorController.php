@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categoria;
 use App\Models\Etiqueta;
 use App\Models\Prompt;
 use Illuminate\Http\Request;
@@ -15,15 +14,20 @@ class BuscadorController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('q');
-        $resultados = [];
 
         if (strlen($query) < 2) {
             return response()->json(['resultados' => []]);
         }
 
-        // Buscar en Prompts
-        $prompts = Prompt::where('titulo', 'like', "%{$query}%")
-            ->orWhere('contenido', 'like', "%{$query}%")
+        // Buscar en Prompts (solo públicos o propios)
+        $prompts = Prompt::where(function ($q) use ($query) {
+            $q->where('titulo', 'like', "%{$query}%")
+                ->orWhere('contenido', 'like', "%{$query}%");
+        })
+            ->where(function ($q) {
+                $q->where('visibilidad', 'publico')
+                    ->orWhere('user_id', auth()->id());
+            })
             ->limit(5)
             ->get()
             ->map(function ($prompt) {
@@ -33,20 +37,6 @@ class BuscadorController extends Controller
                     'tipo' => 'Prompt',
                     'icono' => 'file-alt',
                     'url' => route('prompts.show', $prompt->id),
-                ];
-            });
-
-        // Buscar en Categorías
-        $categorias = Categoria::where('nombre', 'like', "%{$query}%")
-            ->limit(5)
-            ->get()
-            ->map(function ($categoria) {
-                return [
-                    'titulo' => $categoria->nombre,
-                    'descripcion' => $categoria->descripcion ?? 'Categoría',
-                    'tipo' => 'Categoría',
-                    'icono' => 'folder',
-                    'url' => route('prompts.index', ['categoria' => $categoria->id]),
                 ];
             });
 
@@ -60,8 +50,13 @@ class BuscadorController extends Controller
                     'descripcion' => 'Etiqueta',
                     'tipo' => 'Etiqueta',
                     'icono' => 'tag',
-                    'url' => route('prompts.index', ['etiqueta' => $etiqueta->id]),
+                    'color' => $etiqueta->color_hex,
+                    'url' => route('prompts.index', ['etiqueta' => $etiqueta->nombre]),
                 ];
             });
+
+        $resultados = $prompts->concat($etiquetas);
+
+        return response()->json(['resultados' => $resultados]);
     }
 }
