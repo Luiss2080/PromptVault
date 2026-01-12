@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Usuario\StoreUsuarioRequest;
+use App\Http\Requests\Usuario\UpdateUsuarioRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class UsuarioController extends Controller
 {
+    /**
+     * Listar usuarios
+     */
     public function index(Request $request)
     {
-        $query = User::with(['role', 'prompts'])
-            ->withCount('prompts');
+        // Obtener filtros
+        $query = User::with(['role', 'prompts'])->withCount('prompts');
 
-        // Búsqueda por nombre o email
-        if ($request->has('search') && $request->search != '') {
+        if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
@@ -25,150 +28,155 @@ class UsuarioController extends Controller
             });
         }
 
-        // Filtro por rol
-        if ($request->has('rol') && $request->rol != '') {
+        if ($request->filled('rol')) {
             $query->whereHas('role', function ($q) use ($request) {
                 $q->where('nombre', $request->rol);
             });
         }
 
-        // Filtro por estado de cuenta
         if ($request->has('cuenta_activa') && $request->cuenta_activa !== '') {
             $query->where('cuenta_activa', (bool) $request->cuenta_activa);
         }
 
-        // Filtro por fecha de registro (desde)
-        if ($request->has('fecha_desde') && $request->fecha_desde != '') {
+        if ($request->filled('fecha_desde')) {
             $query->whereDate('created_at', '>=', $request->fecha_desde);
         }
 
-        // Filtro por fecha de registro (hasta)
-        if ($request->has('fecha_hasta') && $request->fecha_hasta != '') {
+        if ($request->filled('fecha_hasta')) {
             $query->whereDate('created_at', '<=', $request->fecha_hasta);
         }
 
-        // Filtro por número mínimo de prompts
-        if ($request->has('prompts_min') && $request->prompts_min !== '') {
-            $query->having('prompts_count', '>=', (int) $request->prompts_min);
-        }
-
-        // Filtro por último acceso
-        if ($request->has('tiene_acceso') && $request->tiene_acceso !== '') {
-            if ($request->tiene_acceso == '1') {
-                $query->whereNotNull('ultimo_acceso');
-            } else {
-                $query->whereNull('ultimo_acceso');
-            }
-        }
-
+        // Obtener datos
         $perPage = $request->input('per_page', 10);
         $usuarios = $query->latest()->paginate($perPage);
 
+        // Retornar vista
         return view('admin.usuarios.index', compact('usuarios'));
     }
 
+    /**
+     * Formulario de creación
+     */
     public function create()
     {
+        // Obtener datos
         $roles = Role::all();
 
+        // Retornar vista
         return view('admin.usuarios.create', compact('roles'));
     }
 
-    public function store(Request $request)
+    /**
+     * Guardar usuario
+     */
+    public function store(StoreUsuarioRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-            'role_id' => 'required|exists:roles,id',
-            'cuenta_activa' => 'required|boolean',
-            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        // Autorización: manejada en StoreUsuarioRequest::authorize()
+        // Validación: manejada en StoreUsuarioRequest::rules()
 
-        // Procesar foto de perfil
+        // Obtener datos validados
+        $data = $request->validated();
+
+        // Procesar foto si existe
         if ($request->hasFile('foto_perfil')) {
-            $validated['foto_perfil'] = $request->file('foto_perfil')->store('perfiles', 'public');
+            $data['foto_perfil'] = $request->file('foto_perfil')->store('perfiles', 'public');
         }
 
-        // Hash de la contraseña
-        $validated['password'] = Hash::make($validated['password']);
+        // Hash de contraseña
+        $data['password'] = Hash::make($data['password']);
 
-        $usuario = User::create($validated);
+        // Crear usuario
+        User::create($data);
 
+        // Retornar vista
         return redirect()->route('admin.usuarios.index')
             ->with('success', 'Usuario creado exitosamente.');
     }
 
+    /**
+     * Mostrar usuario
+     */
     public function show($id)
     {
+        // Obtener datos
         $usuario = User::with(['role', 'prompts'])
             ->withCount('prompts')
             ->findOrFail($id);
 
+        // Retornar vista
         return view('admin.usuarios.show', compact('usuario'));
     }
 
+    /**
+     * Formulario de edición
+     */
     public function edit($id)
     {
+        // Obtener datos
         $usuario = User::findOrFail($id);
         $roles = Role::all();
 
+        // Retornar vista
         return view('admin.usuarios.edit', compact('usuario', 'roles'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Actualizar usuario
+     */
+    public function update(UpdateUsuarioRequest $request, $id)
     {
+        // Autorización: manejada en UpdateUsuarioRequest::authorize()
+        // Validación: manejada en UpdateUsuarioRequest::rules()
+
+        // Obtener datos validados
+        $data = $request->validated();
         $usuario = User::findOrFail($id);
 
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'email', Rule::unique('users')->ignore($usuario->id)],
-            'password' => 'nullable|string|min:8',
-            'role_id' => 'required|exists:roles,id',
-            'cuenta_activa' => 'required|boolean',
-            'foto_perfil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        // Procesar foto de perfil
+        // Procesar foto si existe
         if ($request->hasFile('foto_perfil')) {
-            // Eliminar foto anterior
             if ($usuario->foto_perfil) {
                 Storage::disk('public')->delete($usuario->foto_perfil);
             }
-            $validated['foto_perfil'] = $request->file('foto_perfil')->store('perfiles', 'public');
+            $data['foto_perfil'] = $request->file('foto_perfil')->store('perfiles', 'public');
         }
 
-        // Solo actualizar contraseña si se proporcionó una nueva
-        if (! empty($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
+        // Solo actualizar contraseña si se proporcionó
+        if (! empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
         } else {
-            unset($validated['password']);
+            unset($data['password']);
         }
 
-        $usuario->update($validated);
+        // Actualizar usuario
+        $usuario->update($data);
 
+        // Retornar vista
         return redirect()->route('admin.usuarios.index')
             ->with('success', 'Usuario actualizado exitosamente.');
     }
 
+    /**
+     * Eliminar usuario
+     */
     public function destroy($id)
     {
+        // Obtener datos
         $usuario = User::findOrFail($id);
 
         // No permitir eliminar al usuario autenticado
-        /** @var \Illuminate\Contracts\Auth\Guard $auth */
-        $auth = auth();
-        if ($auth->check() && $auth->user()->id === (int) $id) {
+        if (auth()->id() === (int) $id) {
             return back()->with('error', 'No puedes eliminar tu propio usuario.');
         }
 
-        // Eliminar foto de perfil si existe
+        // Eliminar foto si existe
         if ($usuario->foto_perfil) {
             Storage::disk('public')->delete($usuario->foto_perfil);
         }
 
+        // Eliminar usuario
         $usuario->delete();
 
+        // Retornar vista
         return redirect()->route('admin.usuarios.index')
             ->with('success', 'Usuario eliminado exitosamente.');
     }

@@ -3,16 +3,17 @@
 namespace App\Services;
 
 use App\Contracts\Repositories\PromptRepositoryInterface;
+use App\Contracts\Repositories\VersionRepositoryInterface;
 use App\Contracts\Services\PromptServiceInterface;
 use App\Models\Prompt;
 use App\Models\User;
-use App\Models\Version;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class PromptService implements PromptServiceInterface
 {
     public function __construct(
-        private PromptRepositoryInterface $promptRepository
+        private PromptRepositoryInterface $promptRepository,
+        private VersionRepositoryInterface $versionRepository
     ) {}
 
     public function listar(?User $user, int $perPage = 15, array $filters = []): LengthAwarePaginator
@@ -24,7 +25,7 @@ class PromptService implements PromptServiceInterface
 
     public function crear(User $user, array $data): Prompt
     {
-        // Crear el prompt
+        // Crear el prompt usando el repositorio
         $prompt = $this->promptRepository->create([
             'user_id' => $user->id,
             'titulo' => $data['titulo'],
@@ -34,8 +35,8 @@ class PromptService implements PromptServiceInterface
             'version_actual' => 1,
         ]);
 
-        // Crear primera versión
-        Version::create([
+        // Crear primera versión usando el repositorio
+        $this->versionRepository->create([
             'prompt_id' => $prompt->id,
             'numero_version' => 1,
             'contenido' => $prompt->contenido,
@@ -54,11 +55,11 @@ class PromptService implements PromptServiceInterface
     {
         $contenidoCambio = $prompt->contenido !== ($data['contenido'] ?? $prompt->contenido);
 
-        // Si el contenido cambió, crear nueva versión
+        // Si el contenido cambió, crear nueva versión usando el repositorio
         if ($contenidoCambio) {
             $prompt->version_actual++;
 
-            Version::create([
+            $this->versionRepository->create([
                 'prompt_id' => $prompt->id,
                 'numero_version' => $prompt->version_actual,
                 'contenido' => $data['contenido'],
@@ -66,7 +67,7 @@ class PromptService implements PromptServiceInterface
             ]);
         }
 
-        // Actualizar el prompt
+        // Actualizar el prompt usando el repositorio
         $this->promptRepository->update($prompt, [
             'titulo' => $data['titulo'] ?? $prompt->titulo,
             'contenido' => $data['contenido'] ?? $prompt->contenido,
