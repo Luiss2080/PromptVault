@@ -411,10 +411,9 @@
     <!-- JavaScript del Dashboard -->
     <script src="{{ asset('JavaScript/layouts/loading.js') }}"></script>
     <script src="{{ asset('JavaScript/components/sidebar.js') }}"></script>
-    <script src="{{ asset('js/components/footer.js') }}"></script>
+    <script src="{{ asset('JavaScript/components/footer.js') }}"></script>
     
     @stack('scripts')
-    <script src="{{ asset('js/dashboard/docente.js') }}"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {

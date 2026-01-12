@@ -34,7 +34,7 @@
                             </svg>
                         </span>
                         <span class="nav-text">Prompts</span>
-                        <span class="nav-badge">{{ \App\Models\Prompt::count() }}</span>
+                        <span class="nav-badge">{{ $sidebarStats['prompts'] ?? 0 }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -169,7 +169,7 @@
                             </svg>
                         </span>
                         <span class="nav-text">Etiquetas</span>
-                        <span class="nav-badge">{{ \App\Models\Etiqueta::count() }}</span>
+                        <span class="nav-badge">{{ $sidebarStats['etiquetas'] ?? 0 }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -180,7 +180,7 @@
                             </svg>
                         </span>
                         <span class="nav-text">Etiquetas</span>
-                        <span class="nav-badge">{{ \App\Models\Etiqueta::count() }}</span>
+                        <span class="nav-badge">{{ $sidebarStats['etiquetas'] ?? 0 }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -222,7 +222,7 @@
                             </svg>
                         </span>
                         <span class="nav-text">Compartidos</span>
-                        <span class="nav-badge">{{ \App\Models\AccesoCompartido::count() }}</span>
+                        <span class="nav-badge">{{ $sidebarStats['accesos_compartidos'] ?? 0 }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -254,7 +254,7 @@
                             </svg>
                         </span>
                         <span class="nav-text">Versiones</span>
-                        <span class="nav-badge">{{ \App\Models\Version::count() }}</span>
+                        <span class="nav-badge">{{ $sidebarStats['versiones'] ?? 0 }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -265,7 +265,7 @@
                             </svg>
                         </span>
                         <span class="nav-text">Comentarios</span>
-                        <span class="nav-badge">{{ \App\Models\Comentario::count() }}</span>
+                        <span class="nav-badge">{{ $sidebarStats['comentarios'] ?? 0 }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -276,7 +276,7 @@
                             </svg>
                         </span>
                         <span class="nav-text">Calificaciones</span>
-                        <span class="nav-badge">{{ \App\Models\Calificacion::count() }}</span>
+                        <span class="nav-badge">{{ $sidebarStats['calificaciones'] ?? 0 }}</span>
                     </a>
                 </li>
             </ul>
@@ -340,7 +340,7 @@
                             </svg>
                         </span>
                         <span class="nav-text">Usuarios</span>
-                        <span class="nav-badge">{{ \App\Models\User::count() }}</span>
+                        <span class="nav-badge">{{ $sidebarStats['users'] ?? 0 }}</span>
                     </a>
 
                 </li>
@@ -352,7 +352,7 @@
                             </svg>
                         </span>
                         <span class="nav-text">Roles</span>
-                        <span class="nav-badge">{{ \App\Models\Role::count() }}</span>
+                        <span class="nav-badge">{{ $sidebarStats['roles'] ?? 0 }}</span>
                     </a>
                 </li>
                 <li class="nav-item">

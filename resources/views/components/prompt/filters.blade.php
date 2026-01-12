@@ -1,41 +1,35 @@
 {{-- Componente: Filtros de Prompts --}}
 @props(['etiquetas', 'showVisibility' => true])
 
-<form action="{{ request()->url() }}" method="GET" class="row g-3 mb-4">
-    <div class="col-md-4">
-        <div class="input-group">
-            <span class="input-group-text">
-                <i class="fas fa-search"></i>
-            </span>
-            <input 
-                type="text" 
-                name="buscar" 
-                class="form-control" 
-                placeholder="Buscar por título o contenido..." 
-                value="{{ request('buscar') }}"
-            >
-        </div>
+<form action="{{ request()->url() }}" method="GET" style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 0.75rem; margin-bottom: 2rem;">
+    <div>
+        <input 
+            type="text" 
+            name="buscar" 
+            placeholder="Buscar por título o contenido..." 
+            value="{{ request('buscar') }}"
+            style="width: 100%; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); 
+                   background: rgba(255, 255, 255, 0.05); color: #fff; font-size: 0.95rem;"
+        >
     </div>
     
     @if($showVisibility)
-        <div class="col-md-2">
-            <select name="visibilidad" class="form-select">
+        <div>
+            <select name="visibilidad" 
+                    style="width: 100%; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); 
+                           background: rgba(255, 255, 255, 0.05); color: #fff; font-size: 0.95rem;">
                 <option value="">Todas las visibilidades</option>
-                <option value="privado" {{ request('visibilidad') == 'privado' ? 'selected' : '' }}>
-                    <i class="fas fa-lock"></i> Privado
-                </option>
-                <option value="publico" {{ request('visibilidad') == 'publico' ? 'selected' : '' }}>
-                    <i class="fas fa-globe"></i> Público
-                </option>
-                <option value="enlace" {{ request('visibilidad') == 'enlace' ? 'selected' : '' }}>
-                    <i class="fas fa-link"></i> Por enlace
-                </option>
+                <option value="privado" {{ request('visibilidad') == 'privado' ? 'selected' : '' }}>Privado</option>
+                <option value="publico" {{ request('visibilidad') == 'publico' ? 'selected' : '' }}>Público</option>
+                <option value="enlace" {{ request('visibilidad') == 'enlace' ? 'selected' : '' }}>Por enlace</option>
             </select>
         </div>
     @endif
     
-    <div class="col-md-3">
-        <select name="etiqueta" class="form-select">
+    <div>
+        <select name="etiqueta" 
+                style="width: 100%; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); 
+                       background: rgba(255, 255, 255, 0.05); color: #fff; font-size: 0.95rem;">
             <option value="">Todas las etiquetas</option>
             @foreach($etiquetas as $etiqueta)
                 <option value="{{ $etiqueta->nombre }}" {{ request('etiqueta') == $etiqueta->nombre ? 'selected' : '' }}>
@@ -45,8 +39,10 @@
         </select>
     </div>
     
-    <div class="col-md-2">
-        <select name="orden" class="form-select">
+    <div>
+        <select name="orden" 
+                style="width: 100%; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); 
+                       background: rgba(255, 255, 255, 0.05); color: #fff; font-size: 0.95rem;">
             <option value="reciente" {{ request('orden', 'reciente') == 'reciente' ? 'selected' : '' }}>Más recientes</option>
             <option value="titulo" {{ request('orden') == 'titulo' ? 'selected' : '' }}>Por título</option>
             <option value="vistas" {{ request('orden') == 'vistas' ? 'selected' : '' }}>Más vistos</option>
@@ -54,9 +50,11 @@
         </select>
     </div>
     
-    <div class="col-md-1">
-        <button type="submit" class="btn btn-primary w-100">
-            <i class="fas fa-filter"></i>
+    <div>
+        <button type="submit" 
+                style="padding: 0.75rem 1.5rem; border-radius: 8px; background: #e11d48; color: #fff; 
+                       border: none; cursor: pointer; font-weight: 600; font-size: 0.95rem; white-space: nowrap;">
+            <i class="fas fa-filter"></i> Filtrar
         </button>
     </div>
 </form>
