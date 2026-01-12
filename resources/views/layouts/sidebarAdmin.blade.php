@@ -168,8 +168,8 @@
                                 <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                             </svg>
                         </span>
-                        <span class="nav-text">Categorías</span>
-                        <span class="nav-badge">{{ \App\Models\Categoria::count() }}</span>
+                        <span class="nav-text">Etiquetas</span>
+                        <span class="nav-badge">{{ \App\Models\Etiqueta::count() }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -222,7 +222,7 @@
                             </svg>
                         </span>
                         <span class="nav-text">Compartidos</span>
-                        <span class="nav-badge">{{ \App\Models\Compartido::count() }}</span>
+                        <span class="nav-badge">{{ \App\Models\AccesoCompartido::count() }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -264,8 +264,8 @@
                                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
                             </svg>
                         </span>
-                        <span class="nav-text">Actividades</span>
-                        <span class="nav-badge">{{ \App\Models\Actividad::count() }}</span>
+                        <span class="nav-text">Comentarios</span>
+                        <span class="nav-badge">{{ \App\Models\Comentario::count() }}</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -275,8 +275,8 @@
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                             </svg>
                         </span>
-                        <span class="nav-text">Sesiones de Uso</span>
-                        <span class="nav-badge">{{ \App\Models\SesionPrompt::count() }}</span>
+                        <span class="nav-text">Calificaciones</span>
+                        <span class="nav-badge">{{ \App\Models\Calificacion::count() }}</span>
                     </a>
                 </li>
             </ul>

@@ -277,7 +277,7 @@
                         <!-- Chart: Prompts por Categoría -->
                         <div class="dashboard-card glow-effect h-100" style="overflow: hidden;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Prompts por Categoría</h3>
+                                <h3 class="card-title">Prompts por Etiqueta</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
@@ -309,7 +309,7 @@
                         <!-- Chart: Prompts Más Usados -->
                         <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Prompts Más Usados</h3>
+                                <h3 class="card-title">Prompts Más Vistos</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
@@ -348,40 +348,42 @@
             $promptsPorDia[] = $count;
         }
         
-        // 2. Prompts por categoría (top 5 categorías del usuario)
-        $promptsPorCategoria = \App\Models\Prompt::where('user_id', $userId)
-            ->join('categorias', 'prompts.categoria_id', '=', 'categorias.id')
-            ->selectRaw('categorias.nombre, COUNT(*) as total')
-            ->groupBy('categorias.nombre')
+        // 2. Prompts por etiqueta (top 5 etiquetas del usuario)
+        $promptsPorEtiqueta = \DB::table('prompt_etiquetas')
+            ->join('etiquetas', 'prompt_etiquetas.etiqueta_id', '=', 'etiquetas.id')
+            ->join('prompts', 'prompt_etiquetas.prompt_id', '=', 'prompts.id')
+            ->where('prompts.user_id', $userId)
+            ->selectRaw('etiquetas.nombre, COUNT(*) as total')
+            ->groupBy('etiquetas.id', 'etiquetas.nombre')
             ->orderByDesc('total')
             ->take(5)
             ->get();
         
-        $categoriasLabels = $promptsPorCategoria->pluck('nombre')->toArray();
-        $categoriasData = $promptsPorCategoria->pluck('total')->toArray();
+        $etiquetasLabels = $promptsPorEtiqueta->pluck('nombre')->toArray();
+        $etiquetasData = $promptsPorEtiqueta->pluck('total')->toArray();
         
-        // 3. Estado de prompts del usuario
-        $promptsPublicos = \App\Models\Prompt::where('user_id', $userId)->where('es_publico', true)->count();
-        $promptsPrivados = \App\Models\Prompt::where('user_id', $userId)->where('es_publico', false)->count();
-        $promptsFavoritos = \App\Models\Prompt::where('user_id', $userId)->where('es_favorito', true)->count();
+        // 3. Estado de prompts del usuario (por visibilidad)
+        $promptsPublicos = \App\Models\Prompt::where('user_id', $userId)->where('visibilidad', 'publico')->count();
+        $promptsPrivados = \App\Models\Prompt::where('user_id', $userId)->where('visibilidad', 'privado')->count();
+        $promptsEnlace = \App\Models\Prompt::where('user_id', $userId)->where('visibilidad', 'enlace')->count();
         
-        // 4. Actividad del usuario (prompts más usados)
-        $promptsMasUsados = \App\Models\Prompt::where('user_id', $userId)
-            ->orderBy('veces_usado', 'desc')
+        // 4. Actividad del usuario (prompts más vistos)
+        $promptsMasVistos = \App\Models\Prompt::where('user_id', $userId)
+            ->orderBy('conteo_vistas', 'desc')
             ->take(6)
-            ->get(['titulo', 'veces_usado']);
+            ->get(['titulo', 'conteo_vistas']);
         
-        $usadosLabels = $promptsMasUsados->pluck('titulo')->map(fn($t) => \Illuminate\Support\Str::limit($t, 15))->toArray();
-        $usadosData = $promptsMasUsados->pluck('veces_usado')->toArray();
+        $vistosLabels = $promptsMasVistos->pluck('titulo')->map(fn($t) => \Illuminate\Support\Str::limit($t, 15))->toArray();
+        $vistosData = $promptsMasVistos->pluck('conteo_vistas')->toArray();
         
         // Preparar datos para JavaScript
         $userChartData = [
             'promptsPorDia' => $promptsPorDia,
-            'categoriasLabels' => $categoriasLabels,
-            'categoriasData' => $categoriasData,
-            'estadoPrompts' => [$promptsPublicos, $promptsPrivados, $promptsFavoritos],
-            'usadosLabels' => $usadosLabels,
-            'usadosData' => $usadosData
+            'etiquetasLabels' => $etiquetasLabels,
+            'etiquetasData' => $etiquetasData,
+            'estadoPrompts' => [$promptsPublicos, $promptsPrivados, $promptsEnlace],
+            'vistosLabels' => $vistosLabels,
+            'vistosData' => $vistosData
         ];
     @endphp
     
@@ -448,16 +450,16 @@
                 });
             }
 
-            // Gráfica de Prompts por Categoría
+            // Gráfica de Prompts por Etiqueta
             const ctxRendimiento = document.getElementById('rendimientoChart');
             if (ctxRendimiento) {
                 new Chart(ctxRendimiento, {
                     type: 'bar',
                     data: {
-                        labels: window.userChartData.categoriasLabels,
+                        labels: window.userChartData.etiquetasLabels,
                         datasets: [{
                             label: 'Prompts',
-                            data: window.userChartData.categoriasData,
+                            data: window.userChartData.etiquetasData,
                             backgroundColor: ['#e11d48', '#f59e0b', '#10b981', '#3b82f6', '#a855f7']
                         }]
                     },
@@ -483,7 +485,7 @@
                 new Chart(ctxTareas, {
                     type: 'doughnut',
                     data: {
-                        labels: ['Públicos', 'Privados', 'Favoritos'],
+                        labels: ['Públicos', 'Privados', 'Por Enlace'],
                         datasets: [{
                             data: window.userChartData.estadoPrompts,
                             backgroundColor: ['#10b981', '#f59e0b', '#e11d48']
@@ -502,16 +504,16 @@
                 });
             }
 
-            // Gráfica de Prompts Más Usados
+            // Gráfica de Prompts Más Vistos
             const ctxExamenes = document.getElementById('examenesChart');
             if (ctxExamenes) {
                 new Chart(ctxExamenes, {
                     type: 'bar',
                     data: {
-                        labels: window.userChartData.usadosLabels,
+                        labels: window.userChartData.vistosLabels,
                         datasets: [{
-                            label: 'Veces Usado',
-                            data: window.userChartData.usadosData,
+                            label: 'Vistas',
+                            data: window.userChartData.vistosData,
                             backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#fa709a']
                         }]
                     },
