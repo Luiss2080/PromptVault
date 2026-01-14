@@ -1,0 +1,152 @@
+Entidades y Atributos (PK + Atributos)
+
+1) users
+- PK: id
+- Atributos: name, email (unique), email_verified_at (nullable), password, cuenta_activa (boolean, default true), ultimo_acceso (nullable), foto_perfil (nullable), remember_token, created_at, updated_at
+
+2) password_reset_tokens
+- PK: email
+- Atributos: token, created_at (nullable)
+
+3) sessions
+- PK: id (string)
+- Atributos: user_id (FK, nullable, index) [FK listada en sección de relaciones], ip_address (nullable), user_agent (nullable), payload (longText), last_activity (integer, index)
+
+4) cache
+- PK: key
+- Atributos: value (mediumText), expiration (integer)
+
+5) cache_locks
+- PK: key
+- Atributos: owner, expiration (integer)
+
+6) roles
+- PK: id
+- Atributos: nombre (unique), descripcion, nivel_acceso (integer, default 1), created_at, updated_at
+
+7) jobs
+- PK: id
+- Atributos: queue (index), payload (longText), attempts (unsignedTinyInteger), reserved_at (nullable), available_at (unsignedInteger), created_at (integer)
+
+8) job_batches
+- PK: id (string)
+- Atributos: name, total_jobs (integer), pending_jobs (integer), failed_jobs (integer), failed_job_ids (longText), options (mediumText, nullable), cancelled_at (nullable), created_at (integer), finished_at (nullable)
+
+9) failed_jobs
+- PK: id
+- Atributos: uuid (unique), connection (text), queue (text), payload (longText), exception (longText), failed_at (timestamp)
+
+10) prompts
+- PK: id
+- Atributos: titulo, contenido, descripcion (nullable), visibilidad (enum: privado/publico/enlace, default privado), version_actual (integer, default 1), promedio_calificacion (decimal(3,2), default 0), conteo_vistas (integer, default 0), created_at, updated_at
+
+11) versiones
+- PK: id
+- Atributos: numero_version (integer), contenido, mensaje_cambio (nullable), created_at, updated_at
+
+12) etiquetas
+- PK: id
+- Atributos: nombre (unique), color_hex (default '#E5E7EB'), created_at, updated_at
+
+13) prompt_etiquetas (tabla de relación)
+- PK compuesta: prompt_id, etiqueta_id
+- Atributos: (ninguno adicional)
+
+14) permisos
+- PK: id
+- Atributos: nombre (unique), descripcion, modulo, created_at, updated_at
+
+15) role_permiso
+- PK: id
+- Atributos: role_id (FK), permiso_id (FK), created_at, updated_at -- unique(role_id, permiso_id)
+
+16) calificaciones
+- PK: id
+- Atributos: estrellas (unsignedTinyInteger), resena (nullable), created_at, updated_at -- unique(prompt_id, user_id) (FKs listadas en relaciones)
+
+17) comentarios
+- PK: id
+- Atributos: contenido, created_at, updated_at -- (FKs listadas en relaciones; parent_id para jerarquía)
+
+18) accesos_compartidos
+- PK: id
+- Atributos: nivel_acceso (enum: lector/comentador/editor, default lector), created_at, updated_at -- unique(prompt_id, user_id) (FKs listadas en relaciones)
+
+
+Relaciones (atributos que representan relaciones: columna, conexión (palabra), cardinalidad conceptual y tipo de atributo)
+
+- users.role_id
+  - Conexión: "pertenece a" / "tiene rol"
+  - Cardinalidad: usuarios N : 1 roles (1 role puede tener N usuarios)
+  - Tipo de atributo: FK (single-valued)
+
+- sessions.user_id
+  - Conexión: "pertenece a" / "sesión de"
+  - Cardinalidad: users 1 : N sessions
+  - Tipo de atributo: FK (nullable)
+
+- prompts.user_id
+  - Conexión: "creado por" / "crea"
+  - Cardinalidad: users 1 : N prompts
+  - Tipo de atributo: FK (single-valued)
+
+- versiones.prompt_id
+  - Conexión: "versión de" / "tiene versión"
+  - Cardinalidad: prompts 1 : N versiones
+  - Tipo de atributo: FK (single-valued); `version_actual` en `prompts` es derivable/calculable (máx de `versiones.numero_version`)
+
+- prompt_etiquetas.prompt_id, prompt_etiquetas.etiqueta_id
+  - Conexión: "etiqueta de" / "tiene etiqueta"
+  - Cardinalidad: PROMPTS N : M ETIQUETAS (conceptual N:M); implementado como tabla intermedia con PK compuesta
+  - Tipo de atributo: FKs en tabla intermedia (cada campo single-valued en la fila); la relación es conceptualmente multivaluada para la entidad `prompts` (una prompt puede tener muchas etiquetas)
+
+- role_permiso.role_id, role_permiso.permiso_id
+  - Conexión: "tiene permiso" / "es permiso de"
+  - Cardinalidad: ROLES N : M PERMISOS (conceptual N:M); implementado con tabla `role_permiso`
+  - Tipo de atributo: FKs en tabla intermedia
+
+- calificaciones.prompt_id, calificaciones.user_id
+  - Conexión: "califica" / "es calificación de"
+  - Cardinalidad: PROMPTS 1 : N calificaciones; USERS 1 : N calificaciones (pero unique(prompt_id,user_id) → un usuario solo puede calificar una vez cada prompt)
+  - Tipo de atributo: FKs; `promedio_calificacion` en `prompts` es calculable (agregado sobre `calificaciones.estrellas`)
+
+- comentarios.prompt_id
+  - Conexión: "es comentario de" / "tiene comentario"
+  - Cardinalidad: PROMPTS 1 : N comentarios
+  - Tipo de atributo: FK
+
+- comentarios.user_id
+  - Conexión: "escrito por" / "escribe"
+  - Cardinalidad: USERS 1 : N comentarios
+  - Tipo de atributo: FK
+
+- comentarios.parent_id
+  - Conexión: "respuesta a" / "tiene respuesta"
+  - Cardinalidad: comentario 1 : N (jerarquía de comentarios)
+  - Tipo de atributo: FK (nullable) — representa relación recursiva; las instancias de una entidad pueden estar relacionadas entre sí
+
+- accesos_compartidos.prompt_id, accesos_compartidos.user_id
+  - Conexión: "compartido con" / "tiene acceso"
+  - Cardinalidad: conceptual PROMPTS N : M USERS (implementado vía `accesos_compartidos` con unique por par)
+  - Tipo de atributo: FKs en tabla intermedia; `nivel_acceso` es un atributo de la relación (propiedad asociativa)
+
+Notas sobre tipos especiales de atributos
+- Multivaluados:
+  - Conceptualmente: etiquetas (una `prompt` puede tener múltiples `etiquetas`) → multivaluado desde la vista de `prompts` (implementado vía tabla intermedia `prompt_etiquetas`).
+  - `failed_job_ids` en `job_batches` almacena múltiples ids en un campo de texto (denormalizado) → comportamiento similar a multivaluado pero guardado como texto.
+
+- Atributos calculables/derivados:
+  - `promedio_calificacion` (en `prompts`): calculable como promedio de `calificaciones.estrellas`.
+  - `conteo_vistas` (en `prompts`): típicamente calculable/actualizable por eventos (puede ser derivado).
+  - `version_actual` (en `prompts`): derivable como máximo de `versiones.numero_version` (aunque se almacena para rapidez).
+
+- Atributos multivaluado/colección guardados como texto:
+  - `failed_job_ids` (longText) en `job_batches` puede contener una lista serializada.
+
+- Atributos especiales:
+  - Timestamps (`created_at`, `updated_at`, `failed_at`): sistema-gestionados (automáticos) — no multivaluados.
+  - Campos `enum` (`visibilidad`, `nivel_acceso`): valores restringidos (no multivaluados).
+  - Campos `unique` (ej. `email`, `roles.nombre`, `etiquetas.nombre`, `permisos.nombre`, `failed_jobs.uuid`): valor único por fila.
+
+---
+Archivo creado: DiagramasHTML/ER_atributos_separados.txt

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Diagrama E/R - Conceptual</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:20px;background:#f7f7f7}
+    .note{margin-bottom:12px;color:#333}
+    svg{background:#fff;border:1px solid #ddd;box-shadow:0 4px 10px rgba(0,0,0,0.04)}
+    .entity rect{fill:#fff;stroke:#2b6cb0;stroke-width:2}
+    .entity .title{font-weight:700;fill:#0b3b6f}
+    .attr{font-size:12px;fill:#111}
+    .rel{stroke:#333;stroke-width:2;fill:none}
+    .mult{font-size:12px;fill:#111}
+    .legend{font-size:13px}
+  </style>
+</head>
+<body>
+  <h2>Modelo E/R conceptual (basado en migraciones)</h2>
+  <p class="note">Este diagrama muestra las entidades principales y relaciones extraídas de las migraciones. Incluye claves primarias (PK), claves foráneas (FK) y multiplicidades.</p>
+
+  <svg width="1100" height="720" xmlns="http://www.w3.org/2000/svg">
+    <!-- Entities -->
+    <!-- Users -->
+    <g class="entity" transform="translate(40,40)">
+      <rect width="260" height="120" rx="6"/>
+      <text x="12" y="24" class="title">USERS</text>
+      <text x="12" y="48" class="attr">PK id</text>
+      <text x="12" y="66" class="attr">FK role_id -> ROLES.id (1:N)</text>
+      <text x="12" y="84" class="attr">name, email, password, cuenta_activa</text>
+      <text x="12" y="102" class="attr">foto_perfil, ultimo_acceso</text>
+    </g>
+
+    <!-- Roles -->
+    <g class="entity" transform="translate(360,40)">
+      <rect width="220" height="80" rx="6"/>
+      <text x="12" y="24" class="title">ROLES</text>
+      <text x="12" y="48" class="attr">PK id</text>
+      <text x="12" y="66" class="attr">nombre, descripcion, nivel_acceso</text>
+    </g>
+
+    <!-- Permisos -->
+    <g class="entity" transform="translate(640,40)">
+      <rect width="260" height="100" rx="6"/>
+      <text x="12" y="24" class="title">PERMISOS</text>
+      <text x="12" y="48" class="attr">PK id</text>
+      <text x="12" y="66" class="attr">nombre, descripcion, modulo</text>
+    </g>
+
+    <!-- Role_Permiso (N:M) -->
+    <g class="entity" transform="translate(360,140)">
+      <rect width="220" height="80" rx="6"/>
+      <text x="12" y="24" class="title">ROLE_PERMISO</text>
+      <text x="12" y="48" class="attr">PK id</text>
+      <text x="12" y="66" class="attr">FK role_id -> ROLES (N:M)</text>
+    </g>
+
+    <!-- Prompts -->
+    <g class="entity" transform="translate(40,200)">
+      <rect width="320" height="120" rx="6"/>
+      <text x="12" y="24" class="title">PROMPTS</text>
+      <text x="12" y="48" class="attr">PK id</text>
+      <text x="12" y="66" class="attr">FK user_id -> USERS.id (1:N)</text>
+      <text x="12" y="84" class="attr">titulo, contenido, descripcion, visibilidad</text>
+      <text x="12" y="102" class="attr">version_actual, promedio_calificacion, conteo_vistas</text>
+    </g>
+
+    <!-- Versiones -->
+    <g class="entity" transform="translate(420,220)">
+      <rect width="260" height="90" rx="6"/>
+      <text x="12" y="24" class="title">VERSIONES</text>
+      <text x="12" y="48" class="attr">PK id</text>
+      <text x="12" y="66" class="attr">FK prompt_id -> PROMPTS.id (1:N)</text>
+      <text x="12" y="84" class="attr">numero_version, mensaje_cambio, timestamps</text>
+    </g>
+
+    <!-- Etiquetas -->
+    <g class="entity" transform="translate(40,360)">
+      <rect width="220" height="70" rx="6"/>
+      <text x="12" y="24" class="title">ETIQUETAS</text>
+      <text x="12" y="48" class="attr">PK id</text>
+      <text x="12" y="66" class="attr">nombre, color_hex</text>
+    </g>
+
+    <!-- Prompt_Etiquetas (N:M) -->
+    <g class="entity" transform="translate(300,360)">
+      <rect width="230" height="70" rx="6"/>
+      <text x="12" y="24" class="title">PROMPT_ETIQUETAS</text>
+      <text x="12" y="48" class="attr">FK prompt_id, FK etiqueta_id (PK compuesta)</text>
+    </g>
+
+    <!-- Comentarios -->
+    <g class="entity" transform="translate(40,470)">
+      <rect width="320" height="90" rx="6"/>
+      <text x="12" y="24" class="title">COMENTARIOS</text>
+      <text x="12" y="48" class="attr">PK id</text>
+      <text x="12" y="66" class="attr">FK prompt_id -> PROMPTS.id</text>
+      <text x="12" y="84" class="attr">FK user_id -> USERS.id, FK parent_id -> COMENTARIOS.id (jerárquico)</text>
+    </g>
+
+    <!-- Calificaciones -->
+    <g class="entity" transform="translate(420,360)">
+      <rect width="260" height="90" rx="6"/>
+      <text x="12" y="24" class="title">CALIFICACIONES</text>
+      <text x="12" y="48" class="attr">PK id</text>
+      <text x="12" y="66" class="attr">FK prompt_id, FK user_id (único por pareja)</text>
+      <text x="12" y="84" class="attr">estrellas, resena, timestamps</text>
+    </g>
+
+    <!-- Accesos Compartidos -->
+    <g class="entity" transform="translate(720,220)">
+      <rect width="300" height="90" rx="6"/>
+      <text x="12" y="24" class="title">ACCESOS_COMPARTIDOS</text>
+      <text x="12" y="48" class="attr">PK id</text>
+      <text x="12" y="66" class="attr">FK prompt_id, FK user_id (único por pareja)</text>
+      <text x="12" y="84" class="attr">nivel_acceso (lector/comentador/editor)</text>
+    </g>
+
+    <!-- Connections (simplified, multiplicities indicated) -->
+    <!-- USERS -> ROLES (M:1) -->
+    <line x1="300" y1="90" x2="360" y2="70" class="rel"/>
+    <text x="310" y="72" class="mult">N</text>
+    <text x="352" y="80" class="mult">1</text>
+
+    <!-- USERS -> PROMPTS (1:N) -->
+    <line x1="200" y1="160" x2="200" y2="200" class="rel"/>
+    <text x="210" y="182" class="mult">1</text>
+    <text x="190" y="206" class="mult">N</text>
+
+    <!-- PROMPTS -> VERSIONES (1:N) -->
+    <line x1="360" y1="260" x2="420" y2="260" class="rel"/>
+    <text x="385" y="252" class="mult">1</text>
+    <text x="405" y="278" class="mult">N</text>
+
+    <!-- PROMPTS <-> ETIQUETAS via PROMPT_ETIQUETAS (N:M) -->
+    <line x1="160" y1="395" x2="300" y2="395" class="rel"/>
+    <text x="220" y="385" class="mult">N</text>
+    <text x="272" y="415" class="mult">N</text>
+
+    <!-- PROMPTS -> COMENTARIOS (1:N) -->
+    <line x1="200" y1="320" x2="200" y2="470" class="rel"/>
+    <text x="210" y="392" class="mult">1</text>
+    <text x="190" y="478" class="mult">N</text>
+
+    <!-- PROMPTS -> CALIFICACIONES (1:N) -->
+    <line x1="360" y1="320" x2="420" y2="400" class="rel"/>
+    <text x="385" y="350" class="mult">1</text>
+    <text x="405" y="410" class="mult">N</text>
+
+    <!-- ROLES <-> PERMISOS via ROLE_PERMISO (N:M) -->
+    <line x1="500" y1="90" x2="640" y2="90" class="rel"/>
+    <text x="570" y="80" class="mult">N</text>
+    <text x="622" y="110" class="mult">N</text>
+
+    <!-- PROMPTS -> ACCESOS_COMPARTIDOS (1:N) -->
+    <line x1="460" y1="260" x2="720" y2="260" class="rel"/>
+    <text x="590" y="252" class="mult">1</text>
+    <text x="700" y="278" class="mult">N</text>
+
+    <!-- Legend -->
+    <g transform="translate(40,590)">
+      <rect x="0" y="0" width="980" height="110" rx="6" fill="#fff" stroke="#ddd"/>
+      <text x="12" y="22" class="legend">Leyenda:</text>
+      <text x="12" y="44" class="legend">- PK: clave primaria</text>
+      <text x="12" y="64" class="legend">- FK: clave foránea</text>
+      <text x="12" y="84" class="legend">- 1:N: relación uno a muchos; N:M: relación muchos a muchos</text>
+
+      <text x="420" y="44" class="legend">Archivos fuente: migraciones en <tspan font-weight="700">database/migrations</tspan></text>
+      <text x="420" y="64" class="legend">Si quieres, puedo exportar este SVG a PNG o generar un PDF.</text>
+    </g>
+  </svg>
+</body>
+</html>
