@@ -1,0 +1,49 @@
+{
+  "name": "Laravel 12 (PHP 8.4 & Node 24)",
+  // 1. Usamos la imagen oficial de DevContainers para PHP 8.4 (versión Bookworm de Debian)
+  "image": "mcr.microsoft.com/devcontainers/php:8.4-bookworm",
+
+  "features": {
+    // 2. Instalamos Node.js. 
+    // NOTA: Si la versión 24.12 no existe aún en los repositorios, cambia esto a "lts" o "22".
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "24.12" 
+    },
+    // 3. Cliente de Git actualizado
+    "ghcr.io/devcontainers/features/git:1": {},
+    // 4. Utilidades comunes (zip, unzip, curl, etc.)
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true
+    }
+  },
+
+  // 5. Instalar librerías adicionales del sistema operativo (necesario para SQLite CLI y extensiones PHP)
+  // libsqlite3-dev es necesario para compilar drivers si fuera necesario, sqlite3 es el cliente.
+  "updateContentCommand": "apt-get update && apt-get install -y sqlite3 libsqlite3-dev iputils-ping",
+
+  // 6. Comandos que corren después de crear el contenedor
+  // - Copia el .env
+  // - Instala dependencias
+  // - Crea el archivo SQLite si no existe
+  // - Genera la key y corre migraciones
+  "postCreateCommand": "cp -n .env.example .env || true && composer install && npm install && touch database/database.sqlite && php artisan key:generate && php artisan migrate",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client", // Inteligencia para PHP
+        "laravel.vscode-laravel",              // Utilidades oficiales Laravel
+        "bradlc.vscode-tailwindcss",           // Si usas Tailwind
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php"
+      }
+    }
+  },
+
+  // Mapeamos el puerto 8000 (PHP server) y 5173 (Vite/Node)
+  "forwardPorts": [8000, 5173]
+}
